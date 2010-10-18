@@ -23,8 +23,13 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "deep_cloneable.gemspec",
+     "init.rb",
      "lib/deep_cloneable.rb",
-     "test/test_deep_cloneable.rb"
+     "test/database.yml",
+     "test/schema.rb",
+     "test/test_deep_cloneable.rb",
+     "test/test_helper.rb"
   ]
   s.homepage = %q{http://github.com/moiristo/deep_cloneable}
   s.rdoc_options = ["--charset=UTF-8"]
