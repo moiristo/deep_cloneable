@@ -5,12 +5,11 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "deep_cloneable"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{This gem gives every ActiveRecord::Base object the possibility to do a deep clone.}
+    gem.description = %Q{Extends the functionality of ActiveRecord::Base#clone to perform a deep clone that includes user specified associations. }
     gem.email = "r.j.delange@nedforce.nl"
     gem.homepage = "http://github.com/moiristo/deep_cloneable"
     gem.authors = ["Reinier de Lange"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

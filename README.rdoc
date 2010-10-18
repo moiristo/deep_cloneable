@@ -1,6 +1,47 @@
-= deep_cloneable
+= Deep_cloneable
 
-Description goes here.
+This gem gives every ActiveRecord::Base object the possibility to do a deep clone. It is a rails3 upgrade of the deep_cloning plugin (http://github.com/openminds/deep_cloning).
+
+== Requirements
+
+* Activerecord, tested with Rails 3.
+
+== Installation
+ 
+* Install by adding the gem to your Gemfile
+
+  gem 'deep_cloneable'
+ 
+* Rails 2:
+
+  gem install deep_cloneable
+
+And include the gem in your apps config
+
+  config.gem 'deep_cloneable'
+
+* Or install as a plugin if you must:
+
+  ./script/plugin install git://github.com/moiristo/deep_cloneable.git
+
+== Example
+
+=== Cloning a model without an attribute
+   pirate.clone :except => :name
+ 
+=== Cloning a model without multiple attributes
+   pirate.clone :except => [:name, :nick_name]
+=== Cloning one single association
+   pirate.clone :include => :mateys
+
+=== Cloning multiple associations
+   pirate.clone :include => [:mateys, :treasures]
+
+=== Cloning really deep
+   pirate.clone :include => {:treasures => :gold_pieces}
+
+=== Cloning really deep with multiple associations
+   pirate.clone :include => [:mateys, {:treasures => :gold_pieces}]
 
 == Note on Patches/Pull Requests
  
