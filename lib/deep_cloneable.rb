@@ -26,10 +26,13 @@ class ActiveRecord::Base
     def clone(options = {})
       kopy = super()
     
+      deep_exceptions = {}
       if options[:except]
-        Array(options[:except]).each do |attribute|
-          kopy.send(:write_attribute, attribute, attributes_from_column_definition[attribute.to_s])
+        exceptions = Array(options[:except])
+        exceptions.each do |attribute|
+          kopy.send(:write_attribute, attribute, attributes_from_column_definition[attribute.to_s]) unless attribute.kind_of?(Hash)
         end
+        deep_exceptions = exceptions.select{|e| e.kind_of?(Hash) }.inject({}){|m,h| m.merge(h) }
       end
     
       if options[:include]
@@ -38,12 +41,21 @@ class ActiveRecord::Base
             deep_associations = association[association.keys.first]
             association = association.keys.first
           end
+          
           opts = deep_associations.blank? ? {} : {:include => deep_associations}
-          cloned_object = case self.class.reflect_on_association(association).macro
+          opts.merge!(:exclude => deep_exceptions[association]) if deep_exceptions[association]
+      
+          association_reflection = self.class.reflect_on_association(association)          
+          cloned_object = case association_reflection.macro
                           when :belongs_to, :has_one
                             self.send(association) && self.send(association).clone(opts)
                           when :has_many, :has_and_belongs_to_many
-                            self.send(association).collect { |obj| obj.clone(opts) }
+                            fk = association_reflection.options[:foreign_key] || self.class.to_s.underscore
+                            self.send(association).collect do |obj| 
+                              tmp = obj.clone(opts)
+                              tmp.send("#{fk}=", kopy)
+                              tmp
+                            end
                           end
           kopy.send("#{association}=", cloned_object)
         end

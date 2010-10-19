@@ -68,4 +68,12 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert clone.save
     assert_not_equal clone.parrot, @jack.parrot
   end
+  
+  def test_should_pass_nested_exceptions
+    clone = @jack.clone(:include => :parrot, :except => [:name, { :parrot => [:name] }])
+    assert clone.save
+    assert_not_equal clone.parrot, @jack.parrot
+    assert_not_nil @jack.parrot.name
+    assert_nil clone.parrot.name    
+  end
 end

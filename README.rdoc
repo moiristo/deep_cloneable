@@ -25,12 +25,7 @@ And include the gem in your apps config
   ./script/plugin install git://github.com/moiristo/deep_cloneable.git
 
 == Example
-
-=== Cloning a model without an attribute
-   pirate.clone :except => :name
  
-=== Cloning a model without multiple attributes
-   pirate.clone :except => [:name, :nick_name]
 === Cloning one single association
    pirate.clone :include => :mateys
 
@@ -42,6 +37,15 @@ And include the gem in your apps config
 
 === Cloning really deep with multiple associations
    pirate.clone :include => [:mateys, {:treasures => :gold_pieces}]
+   
+=== Cloning a model without an attribute
+   pirate.clone :except => :name
+ 
+=== Cloning a model without multiple attributes
+   pirate.clone :except => [:name, :nick_name]
+   
+=== Cloning a model without an attribute or nested multiple attributes   
+   pirate.clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
 
 == Note on Patches/Pull Requests
  
