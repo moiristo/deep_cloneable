@@ -49,7 +49,8 @@ If this is not an option for you, it is also possible to populate the dictionary
 
   dict = { :mateys => {} }
   pirate.mateys.each{|m| dict[:mateys][m] = m.clone }
-   
+  pirate.clone :include => [:mateys, {:treasures => [:matey, :gold_pieces], :dictionary => dict }]     
+  
 === Cloning a model without an attribute
    pirate.clone :except => :name
  
