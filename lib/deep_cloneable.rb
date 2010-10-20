@@ -17,7 +17,20 @@ class ActiveRecord::Base
     # 
     # ==== Cloning really deep with multiple associations
     #    pirate.clone :include => [:mateys, {:treasures => :gold_pieces}]
-    #    
+    #
+    # ==== Cloning really deep with multiple associations and a dictionary
+    #
+    # A dictionary ensures that models are not cloned multiple times when it is associated to nested models. 
+    # When using a dictionary, ensure recurring associations are cloned first:
+    #
+    #    pirate.clone :include => [:mateys, {:treasures => [:matey, :gold_pieces], :use_dictionary => true }]    
+    #
+    # If this is not an option for you, it is also possible to populate the dictionary manually in advance:
+    #
+    #    dict = { :mateys => {} }
+    #    pirate.mateys.each{|m| dict[:mateys][m] = m.clone }
+    #    pirate.clone :include => [:mateys, {:treasures => [:matey, :gold_pieces], :dictionary => dict }]    
+    #   
     # ==== Cloning a model without an attribute
     #    pirate.clone :except => :name
     #  
@@ -28,7 +41,16 @@ class ActiveRecord::Base
     #    pirate.clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
     # 
     def clone(options = {})
-      kopy = super()
+      dict = options[:dictionary]
+      dict ||= {} if options.delete(:use_dictionary)
+      
+      kopy = unless dict
+        super()
+      else
+        tableized_class = self.class.name.tableize.to_sym
+        dict[tableized_class] ||= {}
+        dict[tableized_class][self] ||= super()
+      end
 
       deep_exceptions = {}
       if options[:except]
@@ -48,6 +70,7 @@ class ActiveRecord::Base
           
           opts = deep_associations.blank? ? {} : {:include => deep_associations}
           opts.merge!(:except => deep_exceptions[association]) if deep_exceptions[association]
+          opts.merge!(:dictionary => dict) if dict
         
           association_reflection = self.class.reflect_on_association(association)          
           cloned_object = case association_reflection.macro

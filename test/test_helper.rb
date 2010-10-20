@@ -10,9 +10,9 @@ require 'active_record'
 require 'active_record/fixtures'
 require File.dirname(__FILE__) + '/../init.rb'
 
-class GoldPiece < ActiveRecord::Base; belongs_to :treasure end
-class Matey < ActiveRecord::Base; belongs_to :pirate end
-class Parrot < ActiveRecord::Base; belongs_to :pirate end
+class GoldPiece < ActiveRecord::Base; belongs_to :treasure  end
+class Matey < ActiveRecord::Base;     belongs_to :pirate    end
+class Parrot < ActiveRecord::Base;    belongs_to :pirate    end
 
 class Pirate < ActiveRecord::Base
   has_many :mateys
@@ -23,6 +23,7 @@ end
 
 class Treasure < ActiveRecord::Base
   belongs_to :pirate  
+  belongs_to :matey
   has_many :gold_pieces
 end
 

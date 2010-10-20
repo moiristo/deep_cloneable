@@ -7,7 +7,7 @@ class TestDeepCloneable < Test::Unit::TestCase
     @jack  = Pirate.create(:name => 'Jack Sparrow', :nick_name => 'Captain Jack', :age => 30)
     @polly = Parrot.create(:name => 'Polly', :pirate => @jack)
     @john = Matey.create(:name => 'John', :pirate => @jack)
-    @treasure = Treasure.create(:found_at => 'Isla del Muerte', :pirate => @jack)
+    @treasure = Treasure.create(:found_at => 'Isla del Muerte', :pirate => @jack, :matey => @john)
     @gold_piece = GoldPiece.create(:treasure => @treasure)
   end
 
@@ -76,4 +76,24 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert_not_nil @jack.parrot.name
     assert_nil clone.parrot.name    
   end
+  
+  def test_should_not_double_clone_when_using_dictionary
+    current_matey_count = Matey.count
+    clone = @jack.clone(:include => [:mateys, { :treasures => :matey }], :use_dictionary => true)
+    clone.save!
+
+    assert_equal current_matey_count + 1, Matey.count
+  end
+  
+  def test_should_not_double_clone_when_using_manual_dictionary
+    current_matey_count = Matey.count
+    
+    dict = { :mateys => {} }
+    @jack.mateys.each{|m| dict[:mateys][m] = m.clone }
+      
+    clone = @jack.clone(:include => [:mateys, { :treasures => :matey }], :dictionary => dict)
+    clone.save!
+
+    assert_equal current_matey_count + 1, Matey.count
+  end  
 end
