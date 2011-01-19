@@ -74,16 +74,20 @@ class ActiveRecord::Base
         
           association_reflection = self.class.reflect_on_association(association)          
           cloned_object = case association_reflection.macro
-                          when :belongs_to, :has_one
-                            self.send(association) && self.send(association).clone(opts)
-                          when :has_many, :has_and_belongs_to_many
-                            fk = association_reflection.options[:foreign_key] || self.class.to_s.underscore
-                            self.send(association).collect do |obj| 
-                              tmp = obj.clone(opts)
-                              tmp.send("#{fk}=", kopy)
-                              tmp
-                            end
-                          end
+            when :belongs_to, :has_one
+              self.send(association) && self.send(association).clone(opts)
+            when :has_many, :has_and_belongs_to_many
+              if association_reflection.options[:as]
+                fk = association_reflection.options[:as].to_s + "_id"
+              else
+                fk = association_reflection.options[:foreign_key] || self.class.to_s.underscore + "_id"
+              end
+              self.send(association).collect do |obj| 
+                tmp = obj.clone(opts)
+                tmp.send("#{fk}=", kopy)
+                tmp
+              end
+            end
           kopy.send("#{association}=", cloned_object)
         end
       end
