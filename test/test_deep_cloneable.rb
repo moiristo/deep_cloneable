@@ -9,6 +9,7 @@ class TestDeepCloneable < Test::Unit::TestCase
     @john = Matey.create(:name => 'John', :pirate => @jack)
     @treasure = Treasure.create(:found_at => 'Isla del Muerte', :pirate => @jack, :matey => @john)
     @gold_piece = GoldPiece.create(:treasure => @treasure)
+    @ship = BattleShip.create(:name => 'Black Pearl', :pirates => [@jack])
   end
 
   def test_single_clone_exception
@@ -32,6 +33,19 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert clone.save
     assert_equal 1, clone.mateys.size
   end
+  
+  def test_single_include_belongs_to_polymorphic_association
+    clone = @jack.clone(:include => :ship)
+    assert clone.save
+    assert_not_nil clone.ship
+    assert_not_equal @jack.ship, clone.ship
+  end
+  
+  def test_single_include_has_many_polymorphic_association    
+    clone = @ship.clone(:include => :pirates)
+    assert clone.save
+    assert clone.pirates.any?    
+  end  
   
   def test_multiple_include_association
     clone = @jack.clone(:include => [:mateys, :treasures])

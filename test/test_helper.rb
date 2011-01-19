@@ -10,11 +10,14 @@ require 'active_record'
 require 'active_record/fixtures'
 require File.dirname(__FILE__) + '/../init.rb'
 
-class GoldPiece < ActiveRecord::Base; belongs_to :treasure  end
-class Matey < ActiveRecord::Base;     belongs_to :pirate    end
-class Parrot < ActiveRecord::Base;    belongs_to :pirate    end
+class GoldPiece < ActiveRecord::Base;   belongs_to :treasure  end
+class Matey < ActiveRecord::Base;       belongs_to :pirate    end
+class Parrot < ActiveRecord::Base;      belongs_to :pirate    end
+class BattleShip < ActiveRecord::Base;  has_many   :pirates, :as => :ship end
 
 class Pirate < ActiveRecord::Base
+  belongs_to :ship, :polymorphic => true
+  
   has_many :mateys
   has_many :treasures
   has_many :gold_pieces, :through => :treasures

@@ -3,6 +3,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :name, :string
     t.column :nick_name, :string, :default => 'no nickname'
     t.column :age, :string
+    t.column :ship_id, :integer
   end
   
   create_table :parrots, :force => true do |t|
@@ -24,4 +25,8 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table :gold_pieces, :force => true do |t|
     t.column :treasure_id, :integer
   end
+  
+  create_table :battle_ships, :force => true do |t|
+    t.column :name, :string
+  end  
 end
