@@ -80,7 +80,7 @@ class ActiveRecord::Base
               if association_reflection.options[:as]
                 fk = association_reflection.options[:as].to_s + "_id"
               else
-                fk = association_reflection.options[:foreign_key] || self.class.to_s.underscore + "_id"
+                fk = association_reflection.options[:foreign_key] || self.class.to_s.underscore.sub(/([^\/]*\/)*/, '') + "_id"
               end
               self.send(association).collect do |obj| 
                 tmp = obj.clone(opts)
