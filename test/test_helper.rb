@@ -10,6 +10,15 @@ require 'active_record'
 require 'active_record/fixtures'
 require File.dirname(__FILE__) + '/../init.rb'
 
+module Animal
+  class Human < ActiveRecord::Base
+    has_many :pigs
+  end
+  class Pig < ActiveRecord::Base
+    belongs_to :human
+  end
+end
+
 class GoldPiece < ActiveRecord::Base;   belongs_to :treasure  end
 class Matey < ActiveRecord::Base;       belongs_to :pirate    end
 class Parrot < ActiveRecord::Base;      belongs_to :pirate    end
@@ -17,7 +26,7 @@ class BattleShip < ActiveRecord::Base;  has_many   :pirates, :as => :ship end
 
 class Pirate < ActiveRecord::Base
   belongs_to :ship, :polymorphic => true
-  
+
   has_many :mateys
   has_many :treasures
   has_many :gold_pieces, :through => :treasures
@@ -25,7 +34,7 @@ class Pirate < ActiveRecord::Base
 end
 
 class Treasure < ActiveRecord::Base
-  belongs_to :pirate  
+  belongs_to :pirate
   belongs_to :matey
   has_many :gold_pieces
 end
@@ -52,4 +61,4 @@ def load_schema
   end
   ActiveRecord::Base.establish_connection(config[db_adapter])
   load(File.dirname(__FILE__) + "/schema.rb")
-end 
+end

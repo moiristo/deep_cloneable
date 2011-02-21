@@ -29,4 +29,13 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table :battle_ships, :force => true do |t|
     t.column :name, :string
   end  
+  
+  create_table :pigs, :force => true do |t|
+    t.column :name, :string
+    t.column :human_id, :integer
+  end
+  
+  create_table :humen, :force => true do |t|
+    t.column :name, :string
+  end
 end
