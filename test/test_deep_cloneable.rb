@@ -118,5 +118,14 @@ class TestDeepCloneable < Test::Unit::TestCase
     clone_human = @human.clone :include => [:pigs]
     assert clone_human.save
     assert_equal 1, clone_human.pigs.count
+    
+    @human2 = Animal::Human.create :name => "John"
+    @pig2 = @human2.pigs.create :name => 'small pig'
+    
+    clone_human_2 = @human.clone :include => [:pigs]
+    assert clone_human_2.save
+    assert_equal 1, clone_human_2.pigs.count
   end
+  
+  
 end

@@ -7,7 +7,6 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 Gem.activate 'activerecord'
 require 'active_record'
-require 'active_record/fixtures'
 require File.dirname(__FILE__) + '/../init.rb'
 
 module Animal
