@@ -27,13 +27,13 @@ class Pirate < ActiveRecord::Base
   belongs_to :ship, :polymorphic => true
 
   has_many :mateys
-  has_many :treasures
+  has_many :treasures, :foreign_key => :owner
   has_many :gold_pieces, :through => :treasures
   has_one :parrot
 end
 
 class Treasure < ActiveRecord::Base
-  belongs_to :pirate
+  belongs_to :pirate, :foreign_key => :owner
   belongs_to :matey
   has_many :gold_pieces
 end

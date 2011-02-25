@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(:version => 1) do
   
   create_table :treasures, :force => true do |t|
     t.column :found_at, :string
-    t.column :pirate_id, :integer
+    t.column :owner, :integer
     t.column :matey_id, :integer    
   end
   

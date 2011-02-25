@@ -72,14 +72,18 @@ class ActiveRecord::Base
           opts.merge!(:except => deep_exceptions[association]) if deep_exceptions[association]
           opts.merge!(:dictionary => dict) if dict
         
-          association_reflection = self.class.reflect_on_association(association)          
+          association_reflection = self.class.reflect_on_association(association)
           cloned_object = case association_reflection.macro
             when :belongs_to, :has_one
               self.send(association) && self.send(association).clone(opts)
             when :has_many, :has_and_belongs_to_many
+              reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a| 
+                a.primary_key_name == association_reflection.primary_key_name
+              end.try(:name)
+              
               self.send(association).collect do |obj| 
                 tmp = obj.clone(opts)
-                tmp.send("#{association_reflection.primary_key_name}=", kopy)
+                tmp.send("#{reverse_association_name.to_s}=", kopy) if reverse_association_name
                 tmp
               end
             end
