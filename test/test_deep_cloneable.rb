@@ -61,6 +61,14 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert_equal 1, clone.gold_pieces.size
   end
 
+  def test_include_association_assignments
+    clone = @jack.clone(:include => :treasures)
+
+    clone.treasures.each do |treasure|
+      assert_equal clone, treasure.pirate
+    end
+  end
+
   def test_multiple_and_deep_include_association
     clone = @jack.clone(:include => {:treasures => :gold_pieces, :mateys => {}})
     assert clone.save
