@@ -78,7 +78,7 @@ class ActiveRecord::Base
               self.send(association) && self.send(association).clone(opts)
             when :has_many, :has_and_belongs_to_many
               reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a| 
-                a.primary_key_name == association_reflection.primary_key_name
+                a.primary_key_name.to_s == association_reflection.primary_key_name.to_s
               end.try(:name)
               
               self.send(association).collect do |obj| 

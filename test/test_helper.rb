@@ -27,7 +27,7 @@ class Pirate < ActiveRecord::Base
   belongs_to :ship, :polymorphic => true
 
   has_many :mateys
-  has_many :treasures, :foreign_key => :owner
+  has_many :treasures, :foreign_key => 'owner'
   has_many :gold_pieces, :through => :treasures
   has_one :parrot
 end
