@@ -84,6 +84,7 @@ class ActiveRecord::Base
               self.send(association).collect do |obj| 
                 tmp = obj.clone(opts)
                 tmp.send("#{reverse_association_name.to_s}=", kopy) if reverse_association_name
+                tmp.send("#{association_reflection.primary_key_name.to_s}=", nil)
                 tmp
               end
             end
