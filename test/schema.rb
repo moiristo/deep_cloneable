@@ -38,4 +38,14 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table :humen, :force => true do |t|
     t.column :name, :string
   end
+  
+  create_table :chickens, :force => true do |t|
+    t.column :name, :string
+  end  
+  
+  create_table :ownerships, :force => true do |t|
+    t.column :human_id, :integer
+    t.column :chicken_id, :integer    
+  end  
+  
 end

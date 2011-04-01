@@ -133,7 +133,17 @@ class TestDeepCloneable < Test::Unit::TestCase
     clone_human_2 = @human.clone :include => [:pigs]
     assert clone_human_2.save
     assert_equal 1, clone_human_2.pigs.count
-  end
+  end 
   
+  def test_should_clone_many_to_many_associations
+    @human = Animal::Human.create :name => "Michael"    
+    @chicken1 = Animal::Chicken.create :name => 'Chick1'
+    @chicken2 = Animal::Chicken.create :name => 'Chick2'    
+    @human.chickens << [@chicken1, @chicken2]
+    
+    clone_human = @human.clone :include => :chickens
+    assert clone_human.save
+    assert_equal 2, clone_human.chickens.count    
+  end 
   
 end
