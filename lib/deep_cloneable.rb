@@ -73,6 +73,8 @@ class ActiveRecord::Base
           opts.merge!(:dictionary => dict) if dict
         
           association_reflection = self.class.reflect_on_association(association)
+          raise AssociationNotFoundException.new("#{self.class}##{association}") if association_reflection.nil?
+                    
           cloned_object = case association_reflection.macro
             when :belongs_to, :has_one
               self.send(association) && self.send(association).clone(opts)
@@ -83,8 +85,8 @@ class ActiveRecord::Base
               
               self.send(association).collect do |obj| 
                 tmp = obj.clone(opts)
+                tmp.send("#{association_reflection.primary_key_name.to_s}=", nil)                
                 tmp.send("#{reverse_association_name.to_s}=", kopy) if reverse_association_name
-                tmp.send("#{association_reflection.primary_key_name.to_s}=", nil)
                 tmp
               end
             end
@@ -94,6 +96,8 @@ class ActiveRecord::Base
 
       return kopy
     end
+    
+    class AssociationNotFoundException < StandardError; end    
   end
   
   include DeepCloneable
