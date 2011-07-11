@@ -1,5 +1,7 @@
 class ActiveRecord::Base
   module DeepCloneable
+    @@rails31 = ActiveRecord::VERSION::MAJOR >= 3 && ActiveRecord::VERSION::MINOR > 0
+    
     # clones an ActiveRecord model. 
     # if passed the :include option, it will deep clone the given associations
     # if passed the :except option, it won't clone the given attributes
@@ -40,7 +42,9 @@ class ActiveRecord::Base
     # ==== Cloning a model without an attribute or nested multiple attributes   
     #    pirate.clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
     # 
-    def clone(options = {})
+    define_method (@@rails31 ? :dup : :clone) do |*args|
+      options = args[0] || {}
+      
       dict = options[:dictionary]
       dict ||= {} if options.delete(:use_dictionary)
       
@@ -77,15 +81,17 @@ class ActiveRecord::Base
                     
           cloned_object = case association_reflection.macro
             when :belongs_to, :has_one
-              self.send(association) && self.send(association).clone(opts)
+              self.send(association) && self.send(association).send(__method__, opts)
             when :has_many, :has_and_belongs_to_many
-              reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a| 
-                a.primary_key_name.to_s == association_reflection.primary_key_name.to_s
+              primary_key_name = (@@rails31 ? association_reflection.foreign_key : association_reflection.primary_key_name).to_s
+              
+              reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a|
+                  a.send(@@rails31 ? :foreign_key : :primary_key_name).to_s == primary_key_name
               end.try(:name)
               
               self.send(association).collect do |obj| 
-                tmp = obj.clone(opts)
-                tmp.send("#{association_reflection.primary_key_name.to_s}=", nil)                
+                tmp = obj.send(__method__, opts)
+                tmp.send("#{primary_key_name}=", nil)                
                 tmp.send("#{reverse_association_name.to_s}=", kopy) if reverse_association_name
                 tmp
               end
