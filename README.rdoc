@@ -4,7 +4,7 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 == Requirements
 
-* Activerecord, tested with Rails 3.
+* Activerecord, tested with AR 3 & 3.1.
 
 == Installation
  
@@ -60,6 +60,12 @@ If this is not an option for you, it is also possible to populate the dictionary
 === Cloning a model without an attribute or nested multiple attributes   
    pirate.clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
 
+== Contributors
+
+* Michael He
+* Indrek Juhkam
+* Mart Karu
+
 == Note on Patches/Pull Requests
  
 * Fork the project.
@@ -72,4 +78,4 @@ If this is not an option for you, it is also possible to populate the dictionary
 
 == Copyright
 
-Copyright (c) 2010 Reinier de Lange. See LICENSE for details.
+Copyright (c) 2011 Reinier de Lange. See LICENSE for details.
