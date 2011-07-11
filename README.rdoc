@@ -4,63 +4,55 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 == Requirements
 
-* Activerecord, tested with Rails 3.
-
-* Rails 3.1 users, please check out the 'rails31' branch.
+* Activerecord 3.1
 
 == Installation
- 
-* Install by adding the gem to your Gemfile
 
-  gem 'deep_cloneable'
- 
-* Rails 2:
+* In your Gemfile:
 
-  gem install deep_cloneable, '~> 1.2.4'
-
-And include the gem in your apps config
-
-  config.gem 'deep_cloneable'
-
-* Or install as a plugin if you must:
-
-  ./script/plugin install git://github.com/moiristo/deep_cloneable.git
+  gem 'deep_cloneable', '~> 1.3.0'
 
 == Example
  
 === Cloning one single association
-   pirate.clone :include => :mateys
+   pirate.dup :include => :mateys
 
 === Cloning multiple associations
-   pirate.clone :include => [:mateys, :treasures]
+   pirate.dup :include => [:mateys, :treasures]
 
 === Cloning really deep
-   pirate.clone :include => {:treasures => :gold_pieces}
+   pirate.dup :include => {:treasures => :gold_pieces}
 
 === Cloning really deep with multiple associations
-   pirate.clone :include => [:mateys, {:treasures => :gold_pieces}]
+   pirate.dup :include => [:mateys, {:treasures => :gold_pieces}]
 
 === Cloning really deep with multiple associations and a dictionary
 
 A dictionary ensures that models are not cloned multiple times when it is associated to nested models. 
 When using a dictionary, ensure recurring associations are cloned first:
 
-  pirate.clone :include => [:mateys, {:treasures => [:matey, :gold_pieces], :use_dictionary => true }]    
+  pirate.dup :include => [:mateys, {:treasures => [:matey, :gold_pieces], :use_dictionary => true }]    
 
 If this is not an option for you, it is also possible to populate the dictionary manually in advance:
 
   dict = { :mateys => {} }
-  pirate.mateys.each{|m| dict[:mateys][m] = m.clone }
-  pirate.clone :include => [:mateys, {:treasures => [:matey, :gold_pieces], :dictionary => dict }]     
+  pirate.mateys.each{|m| dict[:mateys][m] = m.dup }
+  pirate.dup :include => [:mateys, {:treasures => [:matey, :gold_pieces], :dictionary => dict }]     
   
 === Cloning a model without an attribute
-   pirate.clone :except => :name
+   pirate.dup :except => :name
  
 === Cloning a model without multiple attributes
-   pirate.clone :except => [:name, :nick_name]
+   pirate.dup :except => [:name, :nick_name]
    
 === Cloning a model without an attribute or nested multiple attributes   
-   pirate.clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
+   pirate.dup :include => :parrot, :except => [:name, { :parrot => [:name] }]
+
+== Contributors
+
+* Michael He
+* Indrek Juhkam
+* Mart Karu
 
 == Note on Patches/Pull Requests
  
