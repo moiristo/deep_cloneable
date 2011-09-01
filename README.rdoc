@@ -6,6 +6,8 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 * Activerecord, tested with Rails 3.
 
+* Rails 3.1 users, please check out the 'rails31' branch.
+
 == Installation
  
 * Install by adding the gem to your Gemfile
@@ -14,7 +16,7 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
  
 * Rails 2:
 
-  gem install deep_cloneable
+  gem install deep_cloneable, '~> 1.2.4'
 
 And include the gem in your apps config
 
@@ -72,4 +74,4 @@ If this is not an option for you, it is also possible to populate the dictionary
 
 == Copyright
 
-Copyright (c) 2010 Reinier de Lange. See LICENSE for details.
+Copyright (c) 2011 Reinier de Lange. See LICENSE for details.
