@@ -5,7 +5,6 @@ require 'pp'
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-Gem.activate 'activerecord'
 require 'active_record'
 require File.dirname(__FILE__) + '/../init.rb'
 

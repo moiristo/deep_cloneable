@@ -60,7 +60,7 @@ class ActiveRecord::Base
       if options[:except]
         exceptions = options[:except].nil? ? [] : [options[:except]].flatten
         exceptions.each do |attribute|
-          kopy.send(:write_attribute, attribute, attributes_from_column_definition[attribute.to_s]) unless attribute.kind_of?(Hash)
+          kopy.send(:write_attribute, attribute, self.class.column_defaults.dup[attribute.to_s]) unless attribute.kind_of?(Hash)
         end
         deep_exceptions = exceptions.select{|e| e.kind_of?(Hash) }.inject({}){|m,h| m.merge(h) }
       end

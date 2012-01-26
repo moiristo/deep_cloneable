@@ -4,6 +4,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :nick_name, :string, :default => 'no nickname'
     t.column :age, :string
     t.column :ship_id, :integer
+    t.column :ship_type, :string
   end
   
   create_table :parrots, :force => true do |t|
