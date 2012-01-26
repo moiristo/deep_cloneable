@@ -6,8 +6,6 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 * Activerecord, tested with Rails 3.
 
-* Rails 3.1 users, please check out the 'rails31' branch.
-
 == Installation
  
 * Install by adding the gem to your Gemfile
