@@ -1,7 +1,24 @@
 class ActiveRecord::Base
   module DeepCloneable
     @@rails31 = ActiveRecord::VERSION::MAJOR >= 3 && ActiveRecord::VERSION::MINOR > 0
-    
+
+    # ActiveRecord::Base has its own dup method for Ruby 1.8.7. We have to
+    # redefine it and put it in a module so that we can override it in a
+    # module and call the original with super().
+    if @@rails31 and !Object.respond_to? :initialize_dup
+      ActiveRecord::Base.class_eval do
+        module Dup
+          def dup
+            copy = super
+            copy.initialize_dup(self)
+            copy
+          end
+        end
+        remove_method :dup
+        include Dup
+      end
+    end
+
     # clones an ActiveRecord model. 
     # if passed the :include option, it will deep clone the given associations
     # if passed the :except option, it won't clone the given attributes
