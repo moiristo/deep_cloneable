@@ -34,7 +34,7 @@ end
 
 class GoldPiece < ActiveRecord::Base;   belongs_to :treasure  end
 class Matey < ActiveRecord::Base;       belongs_to :pirate    end
-class Parrot < ActiveRecord::Base;      belongs_to :pirate    end
+class Parrot < ActiveRecord::Base;      belongs_to :pirate; attr_accessor :cloned_from_id end
 class BattleShip < ActiveRecord::Base;  has_many   :pirates, :as => :ship end
 
 class Pirate < ActiveRecord::Base
@@ -44,6 +44,8 @@ class Pirate < ActiveRecord::Base
   has_many :treasures, :foreign_key => 'owner'
   has_many :gold_pieces, :through => :treasures
   has_one :parrot
+
+  attr_accessor :cloned_from_id
 end
 
 class Treasure < ActiveRecord::Base
