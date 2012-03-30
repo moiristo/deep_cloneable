@@ -50,6 +50,11 @@ If this is not an option for you, it is also possible to populate the dictionary
 === Cloning a model without an attribute or nested multiple attributes   
    pirate.dup :include => :parrot, :except => [:name, { :parrot => [:name] }]
 
+=== Cloning with a block
+   pirate.dup :include => :parrot do |original, kopy|
+     kopy.cloned_from_id = original.id if kopy.respond_to?(:cloned_from_id)
+   end
+
 == Contributors
 
 * Michael He

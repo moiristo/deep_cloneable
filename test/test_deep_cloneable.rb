@@ -150,4 +150,13 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert_equal 2, dup_human.chickens.count    
   end 
   
+  def test_should_dup_with_block
+    dup = @jack.send(@@clone_method, :include => :parrot) do |original, kopy|
+      kopy.cloned_from_id = original.id
+    end
+
+    assert dup.save
+    assert_equal @jack.id, dup.cloned_from_id
+    assert_equal @jack.parrot.id, dup.parrot.cloned_from_id
+  end
 end

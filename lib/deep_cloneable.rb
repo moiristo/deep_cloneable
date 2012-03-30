@@ -42,7 +42,7 @@ class ActiveRecord::Base
     # ==== Cloning a model without an attribute or nested multiple attributes   
     #    pirate.clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
     # 
-    define_method (@@rails31 ? :dup : :clone) do |*args|
+    define_method (@@rails31 ? :dup : :clone) do |*args, &block|
       options = args[0] || {}
       
       dict = options[:dictionary]
@@ -55,6 +55,8 @@ class ActiveRecord::Base
         dict[tableized_class] ||= {}
         dict[tableized_class][self] ||= super()
       end
+
+      block.call(self, kopy) if block
 
       deep_exceptions = {}
       if options[:except]
@@ -81,7 +83,7 @@ class ActiveRecord::Base
                     
           cloned_object = case association_reflection.macro
             when :belongs_to, :has_one
-              self.send(association) && self.send(association).send(__method__, opts)
+              self.send(association) && self.send(association).send(__method__, opts, &block)
             when :has_many, :has_and_belongs_to_many
               primary_key_name = (@@rails31 ? association_reflection.foreign_key : association_reflection.primary_key_name).to_s
               
@@ -90,7 +92,7 @@ class ActiveRecord::Base
               end.try(:name)
               
               self.send(association).collect do |obj| 
-                tmp = obj.send(__method__, opts)
+                tmp = obj.send(__method__, opts, &block)
                 tmp.send("#{primary_key_name}=", nil)                
                 tmp.send("#{reverse_association_name.to_s}=", kopy) if reverse_association_name
                 tmp
