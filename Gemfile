@@ -1,9 +1,10 @@
 source 'http://rubygems.org'
 
-gemspec
-
 gem 'rails'
-gem 'jeweler'
+
+group :development do
+  gem 'jeweler'
+end
 
 group :test do
   gem 'sqlite3'

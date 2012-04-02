@@ -1,8 +1,3 @@
-PATH
-  remote: .
-  specs:
-    deep_cloneable (1.3.1)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -94,7 +89,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  deep_cloneable!
   jeweler
   rails
   sqlite3
