@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :human_id, :integer
   end
   
-  create_table :human, :force => true do |t|
+  create_table :humen, :force => true do |t|
     t.column :name, :string
   end
   
