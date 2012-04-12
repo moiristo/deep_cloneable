@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :human_id, :integer
   end
   
-  create_table :humen, :force => true do |t|
+  create_table :human, :force => true do |t|
     t.column :name, :string
   end
   
@@ -46,6 +46,19 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table :ownerships, :force => true do |t|
     t.column :human_id, :integer
     t.column :chicken_id, :integer    
-  end  
-  
+  end
+
+  create_table :cars, :force => true do |t|
+    t.column :name, :string
+  end
+
+  create_table :people, :force => true do |t|
+    t.column :name, :string
+  end
+
+  create_table :cars_people, :id => false, :force => true do |t|
+    t.column :car_id, :integer
+    t.column :person_id, :integer
+  end
+
 end
