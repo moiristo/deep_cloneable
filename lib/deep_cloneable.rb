@@ -101,7 +101,7 @@ class ActiveRecord::Base
           cloned_object = case association_reflection.macro
             when :belongs_to, :has_one
               self.send(association) && self.send(association).send(__method__, opts, &block)
-            when :has_many, :has_and_belongs_to_many
+            when :has_many
               primary_key_name = (@@rails31 ? association_reflection.foreign_key : association_reflection.primary_key_name).to_s
               
               reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a|
@@ -114,7 +114,19 @@ class ActiveRecord::Base
                 tmp.send("#{reverse_association_name.to_s}=", kopy) if reverse_association_name
                 tmp
               end
-            end
+            when :has_and_belongs_to_many
+              primary_key_name = (@@rails31 ? association_reflection.foreign_key : association_reflection.primary_key_name).to_s
+                            
+              reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a|
+                (a.macro == :has_and_belongs_to_many) && (a.association_foreign_key.to_s == primary_key_name)
+              end.try(:name)
+
+              self.send(association).collect do |obj|
+                obj.send(reverse_association_name) << kopy
+                obj
+              end
+          end
+          
           kopy.send("#{association}=", cloned_object)
         end
       end

@@ -159,4 +159,24 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert_equal @jack.id, dup.cloned_from_id
     assert_equal @jack.parrot.id, dup.parrot.cloned_from_id
   end
+  
+  def test_should_dup_habtm_associations
+    @person1 = Person.create :name => "Bill"
+    @person2 = Person.create :name => "Ted"
+    @car1 = Car.create :name => 'Mustang'
+    @car2 = Car.create :name => 'Camaro'
+    @person1.cars << [@car1, @car2]
+    @person2.cars << [@car1, @car2]
+
+    dup_person = @person1.dup :include => :cars
+    assert dup_person.save
+
+    # did NOT dup the Car instances
+    assert_equal 2, Car.all.count
+
+    # did dup the correct join table rows
+    assert_equal dup_person.cars, @person1.cars
+    assert_equal 2, dup_person.cars.count
+  end
+  
 end

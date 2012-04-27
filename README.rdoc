@@ -62,6 +62,7 @@ If this is not an option for you, it is also possible to populate the dictionary
 * Mart Karu
 * Rolf Timmermans
 * Ilya Kuzmin
+* zozi
 
 == Note on Patches/Pull Requests
  
