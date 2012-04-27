@@ -1,5 +1,10 @@
 class ActiveRecord::Base
+      
   module DeepCloneable
+    def self.included(base) #:nodoc:
+      base.alias_method_chain :clone, :deep_clone
+    end
+      
     # clones an ActiveRecord model. 
     # if passed the :include option, it will deep clone the given associations
     # if passed the :except option, it won't clone the given attributes
@@ -40,16 +45,16 @@ class ActiveRecord::Base
     # ==== Cloning a model without an attribute or nested multiple attributes   
     #    pirate.clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
     # 
-    def clone(options = {})
+    def clone_with_deep_clone(options = {})
       dict = options[:dictionary]
       dict ||= {} if options.delete(:use_dictionary)
       
       kopy = unless dict
-        super()
+        clone_without_deep_clone
       else
         tableized_class = self.class.name.tableize.to_sym
         dict[tableized_class] ||= {}
-        dict[tableized_class][self] ||= super()
+        dict[tableized_class][self] ||= clone_without_deep_clone
       end
 
       deep_exceptions = {}
@@ -99,6 +104,10 @@ class ActiveRecord::Base
     
     class AssociationNotFoundException < StandardError; end    
   end
-  
+
   include DeepCloneable
+end
+
+class ActiveRecord::Reflection::AssociationReflection
+  def primary_key_name; foreign_key end if !respond_to?(:primary_key_name) && respond_to?(:foreign_key)
 end
