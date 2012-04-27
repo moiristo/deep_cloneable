@@ -146,6 +146,35 @@ class TestDeepCloneable < Test::Unit::TestCase
     clone_human = @human.clone :include => :ownerships
     assert clone_human.save
     assert_equal 2, clone_human.chickens.count    
-  end 
-  
+  end
+
+  # these class defs have to come after #load_schema to avoid
+  # ActiveRecord::ConnectionNotEstablished error
+  class Person < ActiveRecord::Base
+    has_and_belongs_to_many :cars
+  end
+
+  class Car < ActiveRecord::Base
+    has_and_belongs_to_many :people
+  end
+
+  def test_should_clone_habtm_associations
+    @person1 = Person.create :name => "Bill"
+    @person2 = Person.create :name => "Ted"
+    @car1 = Car.create :name => 'Mustang'
+    @car2 = Car.create :name => 'Camaro'
+    @person1.cars << [@car1, @car2]
+    @person2.cars << [@car1, @car2]
+
+    clone_person = @person1.clone :include => :cars
+    assert clone_person.save
+
+    # did NOT clone the Car instances
+    assert_equal 2, Car.all.count
+
+    # did clone the correct join table rows
+    assert_equal clone_person.cars, @person1.cars
+    assert_equal 2, clone_person.cars.count
+  end
+
 end

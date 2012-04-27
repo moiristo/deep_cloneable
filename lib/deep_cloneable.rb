@@ -76,23 +76,34 @@ class ActiveRecord::Base
           opts = deep_associations.blank? ? {} : {:include => deep_associations}
           opts.merge!(:except => deep_exceptions[association]) if deep_exceptions[association]
           opts.merge!(:dictionary => dict) if dict
-        
+
           association_reflection = self.class.reflect_on_association(association)
           raise AssociationNotFoundException.new("#{self.class}##{association}") if association_reflection.nil?
                     
           cloned_object = case association_reflection.macro
             when :belongs_to, :has_one
               self.send(association) && self.send(association).clone(opts)
-            when :has_many, :has_and_belongs_to_many
+
+            when :has_many
               reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a| 
                 a.primary_key_name.to_s == association_reflection.primary_key_name.to_s
               end.try(:name)
-              
+
               self.send(association).collect do |obj| 
                 tmp = obj.clone(opts)
                 tmp.send("#{association_reflection.primary_key_name.to_s}=", nil)                
                 tmp.send("#{reverse_association_name.to_s}=", kopy) if reverse_association_name
                 tmp
+              end
+
+            when :has_and_belongs_to_many
+              reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a|
+                (a.macro == :has_and_belongs_to_many) && (a.association_foreign_key.to_s == association_reflection.primary_key_name.to_s)
+              end.try(:name)
+
+              self.send(association).collect do |obj|
+                obj.send(:"#{reverse_association_name}") << kopy
+                obj
               end
             end
           kopy.send("#{association}=", cloned_object)
