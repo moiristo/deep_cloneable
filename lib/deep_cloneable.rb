@@ -122,7 +122,7 @@ class ActiveRecord::Base
               end.try(:name)
 
               self.send(association).collect do |obj|
-                obj.send(reverse_association_name) << kopy
+                obj.send(reverse_association_name).target << kopy
                 obj
               end
           end
