@@ -45,7 +45,7 @@ class ActiveRecord::Base
     # ==== Cloning a model without an attribute or nested multiple attributes   
     #    pirate.clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
     # 
-    def clone_with_deep_clone(options = {})
+    def clone_with_deep_clone(options = {}, &block)
       dict = options[:dictionary]
       dict ||= {} if options.delete(:use_dictionary)
       
@@ -56,6 +56,8 @@ class ActiveRecord::Base
         dict[tableized_class] ||= {}
         dict[tableized_class][self] ||= clone_without_deep_clone
       end
+      
+      block.call(self, kopy) if block
 
       deep_exceptions = {}
       if options[:except]
@@ -82,7 +84,7 @@ class ActiveRecord::Base
                     
           cloned_object = case association_reflection.macro
             when :belongs_to, :has_one
-              self.send(association) && self.send(association).clone(opts)
+              self.send(association) && self.send(association).clone(opts, &block)
 
             when :has_many
               reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a| 
@@ -90,7 +92,7 @@ class ActiveRecord::Base
               end.try(:name)
 
               self.send(association).collect do |obj| 
-                tmp = obj.clone(opts)
+                tmp = obj.clone(opts, &block)
                 tmp.send("#{association_reflection.primary_key_name.to_s}=", nil)                
                 tmp.send("#{reverse_association_name.to_s}=", kopy) if reverse_association_name
                 tmp
@@ -102,7 +104,7 @@ class ActiveRecord::Base
               end.try(:name)
 
               self.send(association).collect do |obj|
-                obj.send(:"#{reverse_association_name}") << kopy
+                obj.send(reverse_association_name) << kopy
                 obj
               end
             end
