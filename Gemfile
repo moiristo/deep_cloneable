@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails'
+gem 'activerecord', '>= 3.1'
 
 group :development do
   gem 'jeweler'

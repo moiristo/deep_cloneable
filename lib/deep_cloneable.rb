@@ -1,11 +1,9 @@
 class ActiveRecord::Base
   module DeepCloneable
-    @@rails31 = ActiveRecord::VERSION::MAJOR >= 3 && ActiveRecord::VERSION::MINOR > 0
-
     # ActiveRecord::Base has its own dup method for Ruby 1.8.7. We have to
     # redefine it and put it in a module so that we can override it in a
     # module and call the original with super().
-    if @@rails31 and !Object.respond_to? :initialize_dup
+    if !Object.respond_to? :initialize_dup
       ActiveRecord::Base.class_eval do
         module Dup
           def dup
@@ -59,7 +57,7 @@ class ActiveRecord::Base
     # ==== Cloning a model without an attribute or nested multiple attributes   
     #    pirate.clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
     # 
-    define_method (@@rails31 ? :dup : :clone) do |*args, &block|
+    define_method :dup do |*args, &block|
       options = args[0] || {}
       
       dict = options[:dictionary]
@@ -102,10 +100,10 @@ class ActiveRecord::Base
             when :belongs_to, :has_one
               self.send(association) && self.send(association).send(__method__, opts, &block)
             when :has_many
-              primary_key_name = (@@rails31 ? association_reflection.foreign_key : association_reflection.primary_key_name).to_s
+              primary_key_name = association_reflection.foreign_key.to_s
               
               reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a|
-                  a.send(@@rails31 ? :foreign_key : :primary_key_name).to_s == primary_key_name
+                a.foreign_key.to_s == primary_key_name
               end.try(:name)
               
               self.send(association).collect do |obj| 
@@ -115,7 +113,7 @@ class ActiveRecord::Base
                 tmp
               end
             when :has_and_belongs_to_many
-              primary_key_name = (@@rails31 ? association_reflection.foreign_key : association_reflection.primary_key_name).to_s
+              primary_key_name = association_reflection.foreign_key.to_s
                             
               reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a|
                 (a.macro == :has_and_belongs_to_many) && (a.association_foreign_key.to_s == primary_key_name)
