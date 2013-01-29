@@ -79,7 +79,7 @@ class ActiveRecord::Base
         exceptions.each do |attribute|
           if kopy.send(:instance_variables).include? attribute
             kopy.send(:instance_variable_set, attribute, nil)
-          else unless attribute.kind_of?(Hash)
+          else if !attribute.kind_of?(Hash)
             kopy.send(:write_attribute, attribute, self.class.column_defaults.dup[attribute.to_s])
           end
         end
