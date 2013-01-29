@@ -71,18 +71,21 @@ class ActiveRecord::Base
         dict[tableized_class][self] ||= super()
       end
 
-      block.call(self, kopy) if block
+      exceptions = []
 
-      deep_exceptions = {}
       if options[:except]
         exceptions = options[:except].nil? ? [] : [options[:except]].flatten
-        exceptions.each do |attribute|
-          if kopy.send(:instance_variables).include? attribute
-            kopy.send(:instance_variable_set, attribute, nil)
-          elsif !attribute.kind_of? Hash
-            kopy.send(:write_attribute, attribute, self.class.column_defaults.dup[attribute.to_s])
-          end
-        end
+        deep_exceptions = {}
+      end
+
+      exceptions.each do |attribute|
+        kopy.send(:instance_variable_set, attribute, nil) if kopy.send(:instance_variables).include? attribute
+      end
+
+      block.call(self, kopy) if block
+
+      exceptions.each do |attribute|
+        kopy.send(:write_attribute, attribute, self.class.column_defaults.dup[attribute.to_s]) unless attribute.kind_of? Hash
         deep_exceptions = exceptions.select{|e| e.kind_of?(Hash) }.inject({}){|m,h| m.merge(h) }
       end
 
