@@ -79,7 +79,10 @@ class ActiveRecord::Base
       end
 
       exceptions.each do |attribute|
-        kopy.send(:instance_variable_set, attribute, nil) if kopy.send(:instance_variables).include? attribute
+        if kopy.send(:instance_variables).include? attribute
+          kopy.send(:instance_variable_set, attribute, nil)
+          exceptions.delete(attribute)
+        end
       end
 
       block.call(self, kopy) if block
