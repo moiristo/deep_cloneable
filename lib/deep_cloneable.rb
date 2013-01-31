@@ -91,7 +91,7 @@ class ActiveRecord::Base
               
               self.send(association).collect do |obj| 
                 tmp = obj.send(__method__, opts)
-                tmp.send("#{primary_key_name}=", nil)                
+                tmp.send("#{primary_key_name}=", nil) if tmp.respond_to?("#{primary_key_name}=")
                 tmp.send("#{reverse_association_name.to_s}=", kopy) if reverse_association_name
                 tmp
               end
