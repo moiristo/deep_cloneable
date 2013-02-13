@@ -77,4 +77,4 @@ If this is not an option for you, it is also possible to populate the dictionary
 
 == Copyright
 
-Copyright (c) 2012 Reinier de Lange. See LICENSE for details.
+Copyright (c) 2013 Reinier de Lange. See LICENSE for details.
