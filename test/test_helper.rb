@@ -1,15 +1,12 @@
 require 'rubygems'
 require 'test/unit'
+require 'pp'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-gem "activerecord"
-require 'fileutils'
 require 'active_record'
-require 'deep_cloneable'
-require 'models'
-require 'pp'
+require File.dirname(__FILE__) + '/../init.rb'
 
 def load_schema
   config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
@@ -33,4 +30,6 @@ def load_schema
   end
   ActiveRecord::Base.establish_connection(config[db_adapter])
   load(File.dirname(__FILE__) + "/schema.rb")
+
+  require 'models'
 end

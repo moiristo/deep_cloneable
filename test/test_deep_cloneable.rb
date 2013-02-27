@@ -2,10 +2,10 @@ require File.dirname(__FILE__) + '/test_helper'
 
 class TestDeepCloneable < Test::Unit::TestCase
   load_schema
-  
-  @@clone_method = ActiveRecord::VERSION::MAJOR >= 3 && ActiveRecord::VERSION::MINOR > 0 ? :clone : :clone  
 
-  def setup    
+  @@clone_method = ActiveRecord::VERSION::MAJOR >= 3 && ActiveRecord::VERSION::MINOR > 0 ? :clone : :clone
+
+  def setup
     @jack  = Pirate.create(:name => 'Jack Sparrow', :nick_name => 'Captain Jack', :age => 30)
     @polly = Parrot.create(:name => 'Polly', :pirate => @jack)
     @john = Matey.create(:name => 'John', :pirate => @jack)
@@ -143,30 +143,30 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert clone_human.new_record?
     assert clone_human.save
     assert_equal 1, clone_human.pigs.count
-    
+
     @human2 = Animal::Human.create :name => "John"
     @pig2 = @human2.pigs.create :name => 'small pig'
-    
+
     clone_human_2 = @human.send(@@clone_method, :include => [:pigs])
     assert clone_human_2.new_record?
     assert clone_human_2.save
     assert_equal 1, clone_human_2.pigs.count
-  end 
-  
+  end
+
   def test_should_clone_many_to_many_associations
-    @human = Animal::Human.create :name => "Michael" 
-    @human2 = Animal::Human.create :name => "Jack"        
+    @human = Animal::Human.create :name => "Michael"
+    @human2 = Animal::Human.create :name => "Jack"
     @chicken1 = Animal::Chicken.create :name => 'Chick1'
-    @chicken2 = Animal::Chicken.create :name => 'Chick2'    
+    @chicken2 = Animal::Chicken.create :name => 'Chick2'
     @human.chickens << [@chicken1, @chicken2]
-    @human2.chickens << [@chicken1, @chicken2]    
-    
+    @human2.chickens << [@chicken1, @chicken2]
+
     clone_human = @human.send(@@clone_method, :include => :ownerships)
     assert clone_human.new_record?
     assert clone_human.save
-    assert_equal 2, clone_human.chickens.count    
-  end 
-  
+    assert_equal 2, clone_human.chickens.count
+  end
+
   def test_should_clone_with_block
     clone = @jack.send(@@clone_method, :include => :parrot) do |original, kopy|
       kopy.cloned_from_id = original.id
@@ -177,7 +177,7 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert_equal @jack.id, clone.cloned_from_id
     assert_equal @jack.parrot.id, clone.parrot.cloned_from_id
   end
-  
+
   def test_should_clone_habtm_associations
     @person1 = Person.create :name => "Bill"
     @person2 = Person.create :name => "Ted"
@@ -199,5 +199,61 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert_equal @person1.cars, clone_person.cars
     assert_equal 2, clone_person.cars.count
   end
-  
+
+  def test_parent_validations_run_on_save_after_clone
+    child = ChildWithValidation.create :name => 'Jimmy'
+    parent = ParentWithValidation.new :children => [child]
+    parent.save :validate => false
+
+    dup_parent = parent.clone :include => :children
+
+    assert !dup_parent.save
+    assert dup_parent.new_record?
+    assert !dup_parent.valid?
+    assert dup_parent.children.first.valid?
+    assert_equal dup_parent.errors, :name => ["can't be blank"]
+  end
+
+  def test_parent_validations_dont_run_on_save_after_clone
+    child = ChildWithValidation.create :name => 'Jimmy'
+    parent = ParentWithValidation.new :children => [child]
+    parent.save :validate => false
+
+    dup_parent = parent.clone :include => :children, :validate => false
+
+    assert dup_parent.save
+    assert !dup_parent.new_record?
+    assert !dup_parent.valid?
+    assert dup_parent.children.first.valid?
+    assert_equal dup_parent.errors, :name => ["can't be blank"]
+  end
+
+  def test_child_validations_run_on_save_after_clone
+    child = ChildWithValidation.new
+    child.save :validate => false
+    parent = ParentWithValidation.create :name => 'John', :children => [child]
+
+    dup_parent = parent.clone :include => :children
+
+    assert !dup_parent.save
+    assert dup_parent.new_record?
+    assert !dup_parent.valid?
+    assert !dup_parent.children.first.valid?
+    assert_equal dup_parent.errors, :children => ["is invalid"]
+  end
+
+  def test_child_validations_run_on_save_after_clone
+    child = ChildWithValidation.new
+    child.save :validate => false
+    parent = ParentWithValidation.create :name => 'John', :children => [child]
+
+    dup_parent = parent.clone :include => :children, :validate => false
+
+    assert dup_parent.save
+    assert !dup_parent.new_record?
+    assert !dup_parent.valid?
+    assert !dup_parent.children.first.valid?
+    assert_equal dup_parent.errors, :children => ["is invalid"]
+  end
+
 end
