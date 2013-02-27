@@ -12,7 +12,7 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 * In your Gemfile:
 
-  gem 'deep_cloneable', '~> 1.4.0'
+  gem 'deep_cloneable', '~> 1.5.0'
 
 == Example
  
@@ -54,7 +54,10 @@ If this is not an option for you, it is also possible to populate the dictionary
    pirate.dup :include => :parrot do |original, kopy|
      kopy.cloned_from_id = original.id if kopy.respond_to?(:cloned_from_id)
    end
-
+   
+=== Cloning without validations
+   pirate.dup :include => {:treasures => :gold_pieces}, :validate => false
+   
 == Contributors
 
 * Michael He
