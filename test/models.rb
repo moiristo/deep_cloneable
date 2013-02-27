@@ -1,25 +1,26 @@
 module Animal
   class Human < ActiveRecord::Base
     has_many :pigs
-    
-    has_many :ownerships    
+
+    has_many :ownerships
     has_many :chickens, :through => :ownerships
   end
   class Pig < ActiveRecord::Base
     belongs_to :human
   end
-      
+
   class Chicken < ActiveRecord::Base
     has_many :ownerships
     has_many :humans, :through => :ownerships
-  end  
-  
+  end
+
   class Ownership < ActiveRecord::Base
     belongs_to :human
     belongs_to :chicken
-    
+
     validates_uniqueness_of :chicken_id, :scope => :human_id
-  end  
+  end
+
 end
 
 class GoldPiece < ActiveRecord::Base;   belongs_to :treasure  end
@@ -50,4 +51,14 @@ end
 
 class Car < ActiveRecord::Base
   has_and_belongs_to_many :people
+end
+
+class ChildWithValidation < ActiveRecord::Base
+  belongs_to :parent, :class_name => 'ParentWithValidation'
+  validates :name, :presence => true
+end
+
+class ParentWithValidation < ActiveRecord::Base
+  has_many :children, :class_name => 'ChildWithValidation'
+  validates :name, :presence => true
 end
