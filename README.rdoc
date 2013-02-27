@@ -60,6 +60,25 @@ If this is not an option for you, it is also possible to populate the dictionary
 === Cloning a model without an attribute or nested multiple attributes   
    pirate.clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
 
+=== Cloning with a block
+   pirate.clone :include => :parrot do |original, kopy|
+     kopy.cloned_from_id = original.id if kopy.respond_to?(:cloned_from_id)
+   end
+   
+=== Cloning without validations
+   pirate.clone :include => {:treasures => :gold_pieces}, :validate => false   
+
+== Contributors
+
+* Michael He
+* Indrek Juhkam
+* Mart Karu
+* Rolf Timmermans
+* Ilya Kuzmin
+* zozi
+* fractious
+* Georges Gabereau
+
 == Note on Patches/Pull Requests
  
 * Fork the project.
@@ -72,4 +91,4 @@ If this is not an option for you, it is also possible to populate the dictionary
 
 == Copyright
 
-Copyright (c) 2011 Reinier de Lange. See LICENSE for details.
+Copyright (c) 2013 Reinier de Lange. See LICENSE for details.
