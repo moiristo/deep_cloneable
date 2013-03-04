@@ -8,11 +8,11 @@ class ActiveRecord::Base
         module Dup
           def dup
             copy = super
-            copy.initialize_dup(self)
+            copy.send(:initialize_dup, self)
             copy
           end
         end
-        remove_method :dup
+        remove_possible_method :dup
         include Dup
       end
     end
