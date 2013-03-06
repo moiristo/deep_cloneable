@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "deep_cloneable"
-  s.version = "1.4.1"
+  s.version = "1.5.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Reinier de Lange"]
-  s.date = "2012-08-06"
+  s.date = "2013-03-06"
   s.description = "Extends the functionality of ActiveRecord::Base#clone to perform a deep clone that includes user specified associations. "
   s.email = "r.j.delange@nedforce.nl"
   s.extra_rdoc_files = [
