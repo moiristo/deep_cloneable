@@ -62,3 +62,7 @@ class ParentWithValidation < ActiveRecord::Base
   has_many :children, :class_name => 'ChildWithValidation'
   validates :name, :presence => true
 end
+
+class Part < ActiveRecord::Base
+  has_many :child_parts, :class_name => 'Part', :foreign_key => 'parent_part_id'
+end
