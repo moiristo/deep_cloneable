@@ -258,4 +258,14 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert_equal dup_parent.errors.messages, :children => ["is invalid"]
   end
 
+  def test_self_join_has_many
+    parent_part = Part.create(:name => 'Parent')
+    child1 = Part.create(:name => 'Child 1', :parent_part_id => parent_part.id)
+    child2 = Part.create(:name => 'Child 2', :parent_part_id => parent_part.id)
+
+    dup_part = parent_part.dup :include => :child_parts
+    assert dup_part.save
+    assert_equal 2, dup_part.child_parts.size
+  end
+
 end
