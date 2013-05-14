@@ -112,8 +112,8 @@ class ActiveRecord::Base
             when :has_many
               primary_key_name = association_reflection.foreign_key.to_s
 
-              reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a|
-                a.foreign_key.to_s == primary_key_name
+              reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |reflection|
+                reflection.foreign_key.to_s == primary_key_name && reflection != association_reflection
               end.try(:name)
 
               self.send(association).collect do |obj|

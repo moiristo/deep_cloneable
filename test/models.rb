@@ -64,5 +64,6 @@ class ParentWithValidation < ActiveRecord::Base
 end
 
 class Part < ActiveRecord::Base
+  # belongs_to :parent_part, :class_name => 'Part' 
   has_many :child_parts, :class_name => 'Part', :foreign_key => 'parent_part_id'
 end
