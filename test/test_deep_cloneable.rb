@@ -3,8 +3,6 @@ require File.dirname(__FILE__) + '/test_helper'
 class TestDeepCloneable < Test::Unit::TestCase
   load_schema
 
-  @@clone_method = ActiveRecord::VERSION::MAJOR >= 3 && ActiveRecord::VERSION::MINOR > 0 ? :dup : :clone
-
   def setup
     @jack  = Pirate.create(:name => 'Jack Sparrow', :nick_name => 'Captain Jack', :age => 30)
     @polly = Parrot.create(:name => 'Polly', :pirate => @jack)
@@ -15,16 +13,16 @@ class TestDeepCloneable < Test::Unit::TestCase
   end
 
   def test_single_dup_exception
-    dup = @jack.send(@@clone_method, :except => :name)
+    dup = @jack.dup(:except => :name)
     assert dup.new_record?
     assert dup.save
-    assert_equal @jack.name, @jack.send(@@clone_method).name # Old behaviour
+    assert_equal @jack.name, @jack.dup.name
     assert_nil dup.name
     assert_equal @jack.nick_name, dup.nick_name
   end
 
   def test_multiple_dup_exception
-    dup = @jack.send(@@clone_method, :except => [:name, :nick_name])
+    dup = @jack.dup(:except => [:name, :nick_name])
     assert dup.new_record?
     assert dup.save
     assert_nil dup.name
@@ -33,14 +31,14 @@ class TestDeepCloneable < Test::Unit::TestCase
   end
 
   def test_single_include_association
-    dup = @jack.send(@@clone_method, :include => :mateys)
+    dup = @jack.dup(:include => :mateys)
     assert dup.new_record?
     assert dup.save
     assert_equal 1, dup.mateys.size
   end
 
   def test_single_include_belongs_to_polymorphic_association
-    dup = @jack.send(@@clone_method, :include => :ship)
+    dup = @jack.dup(:include => :ship)
     assert dup.new_record?
     assert dup.save
     assert_not_nil dup.ship
@@ -48,14 +46,14 @@ class TestDeepCloneable < Test::Unit::TestCase
   end
 
   def test_single_include_has_many_polymorphic_association
-    dup = @ship.send(@@clone_method, :include => :pirates)
+    dup = @ship.dup(:include => :pirates)
     assert dup.new_record?
     assert dup.save
     assert dup.pirates.any?
   end
 
   def test_multiple_include_association
-    dup = @jack.send(@@clone_method, :include => [:mateys, :treasures])
+    dup = @jack.dup(:include => [:mateys, :treasures])
     assert dup.new_record?
     assert dup.save
     assert_equal 1, dup.mateys.size
@@ -63,7 +61,7 @@ class TestDeepCloneable < Test::Unit::TestCase
   end
 
   def test_deep_include_association
-    dup = @jack.send(@@clone_method, :include => {:treasures => :gold_pieces})
+    dup = @jack.dup(:include => {:treasures => :gold_pieces})
     assert dup.new_record?
     assert dup.save
     assert_equal 1, dup.treasures.size
@@ -71,7 +69,7 @@ class TestDeepCloneable < Test::Unit::TestCase
   end
 
   def test_include_association_assignments
-    dup = @jack.send(@@clone_method, :include => :treasures)
+    dup = @jack.dup(:include => :treasures)
     assert dup.new_record?
 
     dup.treasures.each do |treasure|
@@ -80,7 +78,7 @@ class TestDeepCloneable < Test::Unit::TestCase
   end
 
   def test_multiple_and_deep_include_association
-    dup = @jack.send(@@clone_method, :include => {:treasures => :gold_pieces, :mateys => {}})
+    dup = @jack.dup(:include => {:treasures => :gold_pieces, :mateys => {}})
     assert dup.new_record?
     assert dup.save
     assert_equal 1, dup.treasures.size
@@ -89,7 +87,7 @@ class TestDeepCloneable < Test::Unit::TestCase
   end
 
   def test_multiple_and_deep_include_association_with_array
-    dup = @jack.send(@@clone_method, :include => [{:treasures => :gold_pieces}, :mateys])
+    dup = @jack.dup(:include => [{:treasures => :gold_pieces}, :mateys])
     assert dup.new_record?
     assert dup.save
     assert_equal 1, dup.treasures.size
@@ -98,14 +96,14 @@ class TestDeepCloneable < Test::Unit::TestCase
   end
 
   def test_with_belongs_to_relation
-    dup = @jack.send(@@clone_method, :include => :parrot)
+    dup = @jack.dup(:include => :parrot)
     assert dup.new_record?
     assert dup.save
     assert_not_equal dup.parrot, @jack.parrot
   end
 
   def test_should_pass_nested_exceptions
-    dup = @jack.send(@@clone_method, :include => :parrot, :except => [:name, { :parrot => [:name] }])
+    dup = @jack.dup(:include => :parrot, :except => [:name, { :parrot => [:name] }])
     assert dup.new_record?
     assert dup.save
     assert_not_equal dup.parrot, @jack.parrot
@@ -115,7 +113,7 @@ class TestDeepCloneable < Test::Unit::TestCase
 
   def test_should_not_double_dup_when_using_dictionary
     current_matey_count = Matey.count
-    dup = @jack.send(@@clone_method, :include => [:mateys, { :treasures => :matey }], :use_dictionary => true)
+    dup = @jack.dup(:include => [:mateys, { :treasures => :matey }], :use_dictionary => true)
     assert dup.new_record?
     dup.save!
 
@@ -126,9 +124,9 @@ class TestDeepCloneable < Test::Unit::TestCase
     current_matey_count = Matey.count
 
     dict = { :mateys => {} }
-    @jack.mateys.each{|m| dict[:mateys][m] = m.send(@@clone_method) }
+    @jack.mateys.each{|m| dict[:mateys][m] = m.dup }
 
-    dup = @jack.send(@@clone_method, :include => [:mateys, { :treasures => :matey }], :dictionary => dict)
+    dup = @jack.dup(:include => [:mateys, { :treasures => :matey }], :dictionary => dict)
     assert dup.new_record?
     dup.save!
 
@@ -139,7 +137,7 @@ class TestDeepCloneable < Test::Unit::TestCase
     @human = Animal::Human.create :name => "Michael"
     @pig = Animal::Pig.create :human => @human, :name => 'big pig'
 
-    dup_human = @human.send(@@clone_method, :include => [:pigs])
+    dup_human = @human.dup(:include => [:pigs])
     assert dup_human.new_record?
     assert dup_human.save
     assert_equal 1, dup_human.pigs.count
@@ -147,7 +145,7 @@ class TestDeepCloneable < Test::Unit::TestCase
     @human2 = Animal::Human.create :name => "John"
     @pig2 = @human2.pigs.create :name => 'small pig'
 
-    dup_human_2 = @human.send(@@clone_method, :include => [:pigs])
+    dup_human_2 = @human.dup(:include => [:pigs])
     assert dup_human_2.new_record?
     assert dup_human_2.save
     assert_equal 1, dup_human_2.pigs.count
@@ -161,14 +159,14 @@ class TestDeepCloneable < Test::Unit::TestCase
     @human.chickens << [@chicken1, @chicken2]
     @human2.chickens << [@chicken1, @chicken2]
 
-    dup_human = @human.send(@@clone_method, :include => :ownerships)
+    dup_human = @human.dup(:include => :ownerships)
     assert dup_human.new_record?
     assert dup_human.save
     assert_equal 2, dup_human.chickens.count
   end
 
   def test_should_dup_with_block
-    dup = @jack.send(@@clone_method, :include => :parrot) do |original, kopy|
+    dup = @jack.dup(:include => :parrot) do |original, kopy|
       kopy.cloned_from_id = original.id
     end
 
@@ -267,5 +265,16 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert dup_part.save
     assert_equal 2, dup_part.child_parts.size
   end
+  
+  # TODO. For now, we can use student.dup :include => { :student_assignments => :subject }. This will not set the
+  # :subjects association on Student, but this will be reloaded after a save (as in test_should_dup_many_to_many_associations).
+  # def test_should_include_has_many_through_associations
+  #   subject1 = Subject.create(:name => 'subject 1')
+  #   subject2 = Subject.create(:name => 'subject 2')
+  #   student = Student.create(:name => 'Parent', :subjects => [subject1, subject2])
+  # 
+  #   dup = student.dup :include => :subjects
+  #   assert_equal 2, dup.subjects.size
+  # end
 
 end

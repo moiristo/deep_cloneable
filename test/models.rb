@@ -67,3 +67,18 @@ class Part < ActiveRecord::Base
   # belongs_to :parent_part, :class_name => 'Part' 
   has_many :child_parts, :class_name => 'Part', :foreign_key => 'parent_part_id'
 end
+
+class Student < ActiveRecord::Base
+  has_many :student_assignments, :dependent => :destroy
+  has_many :subjects, :through => :student_assignments
+end 
+
+class Subject < ActiveRecord::Base
+  has_many :student_assignments, :dependent => :destroy
+  has_many :students, :through => :student_assignments
+end
+
+class StudentAssignment < ActiveRecord::Base
+  belongs_to :subject
+  belongs_to :student  
+end
