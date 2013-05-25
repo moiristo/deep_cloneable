@@ -1,12 +1,8 @@
 source 'http://rubygems.org'
 
+gem 'appraisal'
 gem 'activerecord', '>= 3.2'
-gem 'debugger'
+gem 'jeweler'
+gem 'sqlite3'
 
-group :development do
-  gem 'jeweler'
-end
-
-group :test do
-  gem 'sqlite3'
-end
+# gem 'debugger'

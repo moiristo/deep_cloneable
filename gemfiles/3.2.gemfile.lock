@@ -36,7 +36,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord (>= 3.2)
+  activerecord (~> 3.2)
   appraisal
   jeweler
   sqlite3

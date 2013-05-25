@@ -1,5 +1,7 @@
 = Deep_cloneable
 
+{<img src="https://travis-ci.org/moiristo/deep_cloneable.png" />}[https://travis-ci.org/moiristo/deep_cloneable]
+
 This gem gives every ActiveRecord::Base object the possibility to do a deep clone. It is a rails3 upgrade of the deep_cloning plugin (http://github.com/openminds/deep_cloning).
 
 == Requirements
@@ -71,6 +73,8 @@ If this is not an option for you, it is also possible to populate the dictionary
 * fractious
 * Georges Gabereau
 * Christophe Belpaire
+* Kevin Carter
+* fokcep
 
 == Note on Patches/Pull Requests
  

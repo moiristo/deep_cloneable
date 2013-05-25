@@ -266,15 +266,14 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert_equal 2, dup_part.child_parts.size
   end
   
-  # TODO. For now, we can use student.dup :include => { :student_assignments => :subject }. This will not set the
-  # :subjects association on Student, but this will be reloaded after a save (as in test_should_dup_many_to_many_associations).
-  # def test_should_include_has_many_through_associations
-  #   subject1 = Subject.create(:name => 'subject 1')
-  #   subject2 = Subject.create(:name => 'subject 2')
-  #   student = Student.create(:name => 'Parent', :subjects => [subject1, subject2])
-  # 
-  #   dup = student.dup :include => :subjects
-  #   assert_equal 2, dup.subjects.size
-  # end
+  def test_should_include_has_many_through_associations
+    subject1 = Subject.create(:name => 'subject 1')
+    subject2 = Subject.create(:name => 'subject 2')
+    student = Student.create(:name => 'Parent', :subjects => [subject1, subject2])
+  
+    dup = student.dup :include => :subjects
+    assert_equal 2, dup.subjects.size
+    assert_equal [[student, dup],[student, dup]], dup.subjects.map{|subject| subject.students }
+  end
 
 end

@@ -1,5 +1,6 @@
 require 'rubygems'
-require 'rake'
+require 'bundler/setup'
+require 'appraisal'
 
 begin
   require 'jeweler'

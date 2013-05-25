@@ -57,7 +57,7 @@ class ActiveRecord::Base
     # ==== Cloning a model without an attribute or nested multiple attributes
     #    pirate.clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
     #
-    define_method :dup do |*args, &block|
+    def dup *args, &block
       options = args[0] || {}
 
       dict = options[:dictionary]
@@ -89,9 +89,9 @@ class ActiveRecord::Base
             association = association.keys.first
           end
 
-          opts = deep_associations.blank? ? {} : {:include => deep_associations}
-          opts.merge!(:except => deep_exceptions[association]) if deep_exceptions[association]
-          opts.merge!(:dictionary => dict) if dict
+          dup_options = deep_associations.blank? ? {} : {:include => deep_associations}
+          dup_options.merge!(:except => deep_exceptions[association]) if deep_exceptions[association]
+          dup_options.merge!(:dictionary => dict) if dict
 
           association_reflection = self.class.reflect_on_association(association)
           raise AssociationNotFoundException.new("#{self.class}##{association}") if association_reflection.nil?
@@ -106,34 +106,11 @@ class ActiveRecord::Base
             end
           end
 
-          cloned_object = case association_reflection.macro
-            when :belongs_to, :has_one
-              self.send(association) && self.send(association).send(__method__, opts, &block)
-            when :has_many
-              primary_key_name = association_reflection.foreign_key.to_s
-
-              reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |reflection|
-                reflection.foreign_key.to_s == primary_key_name && reflection != association_reflection
-              end.try(:name)
-
-              self.send(association).collect do |obj|
-                tmp = obj.send(__method__, opts, &block)
-                tmp.send("#{primary_key_name}=", nil)
-                tmp.send("#{reverse_association_name.to_s}=", kopy) if reverse_association_name
-                tmp
-              end
-            when :has_and_belongs_to_many
-              primary_key_name = association_reflection.foreign_key.to_s
-
-              reverse_association_name = association_reflection.klass.reflect_on_all_associations.detect do |a|
-                (a.macro == :has_and_belongs_to_many) && (a.association_foreign_key.to_s == primary_key_name)
-              end.try(:name)
-
-              self.send(association).collect do |obj|
-                obj.send(reverse_association_name).target << kopy
-                obj
-              end
-          end
+          cloned_object = send(
+            "dup_#{association_reflection.macro}_#{association_reflection.class.name.demodulize.underscore.gsub('_reflection', '')}", 
+            { :reflection => association_reflection, :association => association, :copy => kopy, :dup_options => dup_options },
+            &block
+          )
 
           kopy.send("#{association}=", cloned_object)
         end
@@ -141,7 +118,55 @@ class ActiveRecord::Base
 
       return kopy
     end
+    
+  private
+  
+    def dup_belongs_to_association options, &block
+      self.send(options[:association]) && self.send(options[:association]).dup(options[:dup_options], &block)
+    end  
+  
+    def dup_has_one_association options, &block
+      dup_belongs_to_association options, &block
+    end
+    
+    def dup_has_many_association options, &block
+      primary_key_name = options[:reflection].foreign_key.to_s
 
+      reverse_association_name = options[:reflection].klass.reflect_on_all_associations.detect do |reflection|
+        reflection.foreign_key.to_s == primary_key_name && reflection != options[:reflection]
+      end.try(:name)
+
+      self.send(options[:association]).collect do |obj|
+        tmp = obj.dup(options[:dup_options], &block)
+        tmp.send("#{primary_key_name}=", nil)
+        tmp.send("#{reverse_association_name.to_s}=", options[:copy]) if reverse_association_name
+        tmp
+      end      
+    end
+        
+    def dup_has_many_through options, &block
+      dup_join_association(
+        options.merge(:macro => :has_many, :primary_key_name => options[:reflection].through_reflection.foreign_key.to_s), 
+        &block)
+    end
+    
+    def dup_has_and_belongs_to_many_association options, &block
+      dup_join_association(
+        options.merge(:macro => :has_and_belongs_to_many, :primary_key_name => options[:reflection].foreign_key.to_s), 
+        &block)
+    end
+    
+    def dup_join_association options, &block
+      reverse_association_name = options[:reflection].klass.reflect_on_all_associations.detect do |reflection|
+        (reflection.macro == options[:macro]) && (reflection.association_foreign_key.to_s == options[:primary_key_name])
+      end.try(:name)
+
+      self.send(options[:association]).collect do |obj|
+        obj.send(reverse_association_name).target << options[:copy]
+        obj
+      end       
+    end
+    
     class AssociationNotFoundException < StandardError; end
   end
 
