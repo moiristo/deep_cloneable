@@ -1,6 +1,6 @@
 = Deep_cloneable
 
-{<img src="https://travis-ci.org/moiristo/deep_cloneable.png" />}[https://travis-ci.org/moiristo/deep_cloneable]
+{<img src="https://travis-ci.org/moiristo/deep_cloneable.png?branch=master" alt="Build Status" />}[https://travis-ci.org/moiristo/deep_cloneable]
 
 This gem gives every ActiveRecord::Base object the possibility to do a deep clone. It is a rails3 upgrade of the deep_cloning plugin (http://github.com/openminds/deep_cloning).
 
