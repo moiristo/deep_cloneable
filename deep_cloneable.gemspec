@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "deep_cloneable"
-  s.version = "1.5.1"
+  s.version = "1.5.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Reinier de Lange"]
-  s.date = "2013-03-06"
+  s.date = "2013-06-10"
   s.description = "Extends the functionality of ActiveRecord::Base#clone to perform a deep clone that includes user specified associations. "
   s.email = "r.j.delange@nedforce.nl"
   s.extra_rdoc_files = [
@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
+    ".travis.yml",
+    "Appraisals",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE",
@@ -25,6 +27,12 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "deep_cloneable.gemspec",
+    "gemfiles/3.0.gemfile",
+    "gemfiles/3.0.gemfile.lock",
+    "gemfiles/3.1.gemfile",
+    "gemfiles/3.1.gemfile.lock",
+    "gemfiles/3.2.gemfile",
+    "gemfiles/3.2.gemfile.lock",
     "init.rb",
     "lib/deep_cloneable.rb",
     "test/database.yml",
@@ -35,22 +43,28 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/moiristo/deep_cloneable"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.24"
+  s.rubygems_version = "1.8.25"
   s.summary = "This gem gives every ActiveRecord::Base object the possibility to do a deep clone."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<activerecord>, [">= 3.1"])
-      s.add_development_dependency(%q<jeweler>, [">= 0"])
+      s.add_runtime_dependency(%q<appraisal>, [">= 0"])
+      s.add_runtime_dependency(%q<activerecord>, [">= 3.2"])
+      s.add_runtime_dependency(%q<jeweler>, [">= 0"])
+      s.add_runtime_dependency(%q<sqlite3>, [">= 0"])
     else
-      s.add_dependency(%q<activerecord>, [">= 3.1"])
+      s.add_dependency(%q<appraisal>, [">= 0"])
+      s.add_dependency(%q<activerecord>, [">= 3.2"])
       s.add_dependency(%q<jeweler>, [">= 0"])
+      s.add_dependency(%q<sqlite3>, [">= 0"])
     end
   else
-    s.add_dependency(%q<activerecord>, [">= 3.1"])
+    s.add_dependency(%q<appraisal>, [">= 0"])
+    s.add_dependency(%q<activerecord>, [">= 3.2"])
     s.add_dependency(%q<jeweler>, [">= 0"])
+    s.add_dependency(%q<sqlite3>, [">= 0"])
   end
 end
 
