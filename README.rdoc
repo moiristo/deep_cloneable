@@ -37,13 +37,15 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 A dictionary ensures that models are not cloned multiple times when it is associated to nested models. 
 When using a dictionary, ensure recurring associations are cloned first:
 
-  pirate.dup :include => [:mateys, {:treasures => [:matey, :gold_pieces], :use_dictionary => true }]    
+  pirate.dup :include => [:mateys, {:treasures => [:matey, :gold_pieces]}], :use_dictionary => true    
 
 If this is not an option for you, it is also possible to populate the dictionary manually in advance:
 
   dict = { :mateys => {} }
   pirate.mateys.each{|m| dict[:mateys][m] = m.dup }
-  pirate.dup :include => [:mateys, {:treasures => [:matey, :gold_pieces], :dictionary => dict }]     
+  pirate.dup :include => [:mateys, {:treasures => [:matey, :gold_pieces]}], :dictionary => dict
+
+When an object isn't found in the dictionary, it will be populated. By passing in an empty dictionary you can populate it automatically and reuse it in subsequent dups to avoid creating multiples of the same object where you have overlapping associations.
   
 === Cloning a model without an attribute
    pirate.dup :except => :name
