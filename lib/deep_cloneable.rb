@@ -92,6 +92,7 @@ class ActiveRecord::Base
           dup_options = deep_associations.blank? ? {} : {:include => deep_associations}
           dup_options.merge!(:except => deep_exceptions[association]) if deep_exceptions[association]
           dup_options.merge!(:dictionary => dict) if dict
+          dup_options.merge!(:dup_habtm => options[:dup_habtm]) if options[:dup_habtm]
 
           association_reflection = self.class.reflect_on_association(association)
           raise AssociationNotFoundException.new("#{self.class}##{association}") if association_reflection.nil?
@@ -162,9 +163,13 @@ class ActiveRecord::Base
       end.try(:name)
 
       self.send(options[:association]).collect do |obj|
-        obj.send(reverse_association_name).target << options[:copy]
+        if options[:dup_options][:dup_habtm]
+          obj = obj.dup(options[:dup_options], &block)
+        else
+          obj.send(reverse_association_name).target << options[:copy]
+        end
         obj
-      end       
+      end
     end
     
     class AssociationNotFoundException < StandardError; end

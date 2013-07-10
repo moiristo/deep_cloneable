@@ -190,10 +190,11 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert_equal [@person1, @person2, dup_person], @car1.people
     assert_equal [@person1, @person2, dup_person], @car2.people
 
+    cars_before_save = Car.count
     assert dup_person.save
 
     # did NOT dup the Car instances
-    assert_equal 2, Car.all.count
+    assert_equal cars_before_save, Car.count
 
     # did dup the correct join table rows
     assert_equal @person1.cars, dup_person.cars
@@ -274,6 +275,28 @@ class TestDeepCloneable < Test::Unit::TestCase
     dup = student.dup :include => :subjects
     assert_equal 2, dup.subjects.size
     assert_equal [[student, dup],[student, dup]], dup.subjects.map{|subject| subject.students }
+  end
+
+  def test_dup_habtm_option
+    person1 = Person.create :name => "Bill"
+    person2 = Person.create :name => "Ted"
+    car1 = Car.create :name => 'Mustang'
+    car2 = Car.create :name => 'Camaro'
+    person1.cars << [car1, car2]
+    person2.cars << [car1, car2]
+
+    dup_person = person1.dup :include => :cars, :dup_habtm => true
+
+    assert dup_person.new_record?
+    assert dup_person.cars.all?(&:new_record?)
+
+    assert dup_person.save
+
+    # DID save new car instances
+    assert dup_person.cars.all?(&:persisted?)
+
+    # didn't create multiple join table records per relationship
+    assert_equal dup_person.cars.count, dup_person.cars.uniq.count
   end
 
 end
