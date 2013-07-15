@@ -199,6 +199,17 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert_equal @person1.cars, dup_person.cars
     assert_equal 2, dup_person.cars.count
   end
+  
+  def test_should_dup_joined_association
+    subject1 = Subject.create(:name => 'subject 1')
+    subject2 = Subject.create(:name => 'subject 2')
+    student = Student.create(:name => 'Parent', :subjects => [subject1, subject2])
+  
+    dup = student.dup :include => { :student_assignments => :subject }
+    dup.save # Subjects will have been set after save
+    assert_equal 2, dup.subjects.size
+    [subject1, subject2].each{|subject| assert !dup.subjects.include?(subject) }
+  end
 
   def test_parent_validations_run_on_save_after_clone
     child = ChildWithValidation.create :name => 'Jimmy'
