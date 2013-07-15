@@ -17,46 +17,7 @@ class ActiveRecord::Base
       end
     end
 
-    # clones an ActiveRecord model.
-    # if passed the :include option, it will deep clone the given associations
-    # if passed the :except option, it won't clone the given attributes
-    #
-    # === Usage:
-    #
-    # ==== Cloning one single association
-    #    pirate.clone :include => :mateys
-    #
-    # ==== Cloning multiple associations
-    #    pirate.clone :include => [:mateys, :treasures]
-    #
-    # ==== Cloning really deep
-    #    pirate.clone :include => {:treasures => :gold_pieces}
-    #
-    # ==== Cloning really deep with multiple associations
-    #    pirate.clone :include => [:mateys, {:treasures => :gold_pieces}]
-    #
-    # ==== Cloning really deep with multiple associations and a dictionary
-    #
-    # A dictionary ensures that models are not cloned multiple times when it is associated to nested models.
-    # When using a dictionary, ensure recurring associations are cloned first:
-    #
-    #    pirate.clone :include => [:mateys, {:treasures => [:matey, :gold_pieces], :use_dictionary => true }]
-    #
-    # If this is not an option for you, it is also possible to populate the dictionary manually in advance:
-    #
-    #    dict = { :mateys => {} }
-    #    pirate.mateys.each{|m| dict[:mateys][m] = m.clone }
-    #    pirate.clone :include => [:mateys, {:treasures => [:matey, :gold_pieces], :dictionary => dict }]
-    #
-    # ==== Cloning a model without an attribute
-    #    pirate.clone :except => :name
-    #
-    # ==== Cloning a model without multiple attributes
-    #    pirate.clone :except => [:name, :nick_name]
-    #
-    # ==== Cloning a model without an attribute or nested multiple attributes
-    #    pirate.clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
-    #
+    # Deep dups an ActiveRecord model. See README.rdoc
     def dup *args, &block
       options = args[0] || {}
 
