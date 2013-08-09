@@ -2,9 +2,7 @@ source 'http://rubygems.org'
 
 gem 'activerecord', '>= 3.2'
 
-group :test do
-  gem 'appraisal'
-  gem 'jeweler'
-  gem 'sqlite3'
-  # gem 'debugger'
-end
+gem 'appraisal', :group => :test
+gem 'jeweler', :group => :test
+gem 'sqlite3', :group => :test
+# gem 'debugger', :group => :test
