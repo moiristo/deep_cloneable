@@ -31,6 +31,8 @@ Gem::Specification.new do |s|
     "gemfiles/3.1.gemfile.lock",
     "gemfiles/3.2.gemfile",
     "gemfiles/3.2.gemfile.lock",
+    "gemfiles/4.0.gemfile",
+    "gemfiles/4.0.gemfile.lock",
     "init.rb",
     "lib/deep_cloneable.rb",
     "test/database.yml",
@@ -41,7 +43,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/moiristo/deep_cloneable"
   s.require_paths = ["lib"]
-  s.rubygems_version = "2.0.2"
+  s.rubygems_version = "2.0.6"
   s.summary = "This gem gives every ActiveRecord::Base object the possibility to do a deep clone."
 
   if s.respond_to? :specification_version then
