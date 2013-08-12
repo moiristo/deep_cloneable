@@ -17,13 +17,6 @@ GEM
       rake
     arel (2.2.3)
     builder (3.0.4)
-    columnize (0.3.6)
-    debugger (1.6.1)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.2.3)
-    debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.2.3)
     git (1.2.5)
     i18n (0.6.4)
     jeweler (1.8.4)
@@ -44,8 +37,8 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (~> 3.1.0)
-  activesupport (~> 3.1.0)
+  activesupport (>= 3.1.0)
   appraisal
-  debugger
   jeweler
+  rdoc (>= 2.4.2)
   sqlite3
