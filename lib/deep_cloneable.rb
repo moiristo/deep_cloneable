@@ -1,7 +1,7 @@
 class ActiveRecord::Base
   module DeepCloneable
     
-    if ActiveRecord::VERSION::MAJOR == 3 && ActiveRecord::VERSION::MINOR == 1
+    if ActiveRecord::VERSION::MAJOR < 4
       ActiveRecord::Base.class_eval do
         protected :initialize_dup
         module Dup
