@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/test_helper'
 
 class TestDeepCloneable < Test::Unit::TestCase
-  load_schema
 
   def setup
     @jack  = Pirate.create(:name => 'Jack Sparrow', :nick_name => 'Captain Jack', :age => 30)

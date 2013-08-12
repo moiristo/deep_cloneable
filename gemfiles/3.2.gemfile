@@ -2,8 +2,8 @@
 
 source "http://rubygems.org"
 
-gem "appraisal"
-gem "jeweler"
-gem "sqlite3"
-gem "activerecord", "~> 3.2"
+gem "appraisal", :group=>:test
+gem "sqlite3", :group=>:test
+gem "debugger", :group=>:test
+gem "activerecord", "~> 3.2.0"
 

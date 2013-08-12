@@ -1,14 +1,13 @@
 require 'rubygems'
 require 'test/unit'
 require 'pp'
-# require 'debugger'
+require 'debugger'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'active_record'
-require File.dirname(__FILE__) + '/../init.rb'
-require 'models'
+require 'active_support/buffered_logger'
 
 def load_schema
   config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
@@ -33,3 +32,7 @@ def load_schema
   ActiveRecord::Base.establish_connection(config[db_adapter])
   load(File.dirname(__FILE__) + "/schema.rb")
 end
+
+load_schema
+require File.dirname(__FILE__) + '/../init.rb'
+require 'models'
