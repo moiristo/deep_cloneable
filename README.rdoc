@@ -16,7 +16,7 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 * In your Gemfile:
 
-  gem 'deep_cloneable', '~> 1.5.4'
+  gem 'deep_cloneable', '~> 1.5.5'
 
 == Example
  
