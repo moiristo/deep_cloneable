@@ -9,6 +9,7 @@ ActiveRecord::Schema.define(:version => 1) do
 
   create_table :parrots, :force => true do |t|
     t.column :name, :string
+    t.column :age, :integer
     t.column :pirate_id, :integer
   end
 

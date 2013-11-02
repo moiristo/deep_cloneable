@@ -4,7 +4,7 @@ class TestDeepCloneable < Test::Unit::TestCase
 
   def setup
     @jack  = Pirate.create(:name => 'Jack Sparrow', :nick_name => 'Captain Jack', :age => 30)
-    @polly = Parrot.create(:name => 'Polly', :pirate => @jack)
+    @polly = Parrot.create(:name => 'Polly', :age => 2, :pirate => @jack)
     @john = Matey.create(:name => 'John', :pirate => @jack)
     @treasure = Treasure.create(:found_at => 'Isla del Muerte', :pirate => @jack, :matey => @john)
     @gold_piece = GoldPiece.create(:treasure => @treasure)
@@ -27,6 +27,28 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert_nil dup.name
     assert_equal 'no nickname', dup.nick_name
     assert_equal @jack.age, dup.age
+  end
+
+  def test_single_dup_onliness
+    dup = @jack.dup(:only => :name)
+    assert dup.new_record?
+    assert dup.save
+    assert_equal @jack.name, dup.name
+    assert_equal 'no nickname', dup.nick_name
+    assert_nil dup.age
+    assert_nil dup.ship_id
+    assert_nil dup.ship_type
+  end
+
+  def test_multiple_dup_onliness
+    dup = @jack.dup(:only => [:name, :nick_name])
+    assert dup.new_record?
+    assert dup.save
+    assert_equal @jack.name, dup.name
+    assert_equal @jack.nick_name, dup.nick_name
+    assert_nil dup.age
+    assert_nil dup.ship_id
+    assert_nil dup.ship_type
   end
 
   def test_single_include_association
@@ -106,8 +128,18 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert dup.new_record?
     assert dup.save
     assert_not_equal dup.parrot, @jack.parrot
+    assert_equal dup.parrot.age, @jack.parrot.age
     assert_not_nil @jack.parrot.name
     assert_nil dup.parrot.name
+  end
+
+  def test_should_pass_nested_onlinesses
+    dup = @jack.dup(:include => :parrot, :only => [:name, { :parrot => [:name] }])
+    assert dup.new_record?
+    assert dup.save
+    assert_not_equal dup.parrot, @jack.parrot
+    assert_equal dup.parrot.name, @jack.parrot.name
+    assert_nil dup.parrot.age
   end
 
   def test_should_not_double_dup_when_using_dictionary
