@@ -42,6 +42,17 @@ class ActiveRecord::Base
         deep_exceptions = exceptions.select{|e| e.kind_of?(Hash) }.inject({}){|m,h| m.merge(h) }
       end
 
+      deep_onlinesses = {}
+      if options[:only]
+        onlinesses = options[:only].nil? ? [] : [options[:only]].flatten
+        object_attrs = kopy.attributes.keys.collect{ |s| s.to_sym }
+        exceptions = object_attrs - onlinesses
+        exceptions.each do |attribute|
+          kopy.send(:write_attribute, attribute, self.class.column_defaults.dup[attribute.to_s]) unless attribute.kind_of?(Hash)
+        end
+        deep_onlinesses = onlinesses.select{|e| e.kind_of?(Hash) }.inject({}){|m,h| m.merge(h) }
+      end
+
       if options[:include]
         Array(options[:include]).each do |association, deep_associations|
           if (association.kind_of? Hash)
@@ -51,6 +62,7 @@ class ActiveRecord::Base
 
           dup_options = deep_associations.blank? ? {} : {:include => deep_associations}
           dup_options.merge!(:except => deep_exceptions[association]) if deep_exceptions[association]
+          dup_options.merge!(:only => deep_onlinesses[association]) if deep_onlinesses[association]
           dup_options.merge!(:dictionary => dict) if dict
 
           association_reflection = self.class.reflect_on_association(association)
