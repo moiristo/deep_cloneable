@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.authors = ["Reinier de Lange"]
   s.date = "2013-11-05"
   s.description = "Extends the functionality of ActiveRecord::Base#clone to perform a deep clone that includes user specified associations. "
+  s.license = 'MIT'
   s.email = "r.j.delange@nedforce.nl"
   s.extra_rdoc_files = [
     "LICENSE",
