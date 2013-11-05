@@ -52,7 +52,7 @@ When an object isn't found in the dictionary, it will be populated. By passing i
  
 === Cloning a model without multiple attributes
    pirate.dup :except => [:name, :nick_name]
-   
+
 === Cloning a model without an attribute or nested multiple attributes   
    pirate.dup :include => :parrot, :except => [:name, { :parrot => [:name] }]
 
@@ -63,6 +63,16 @@ When an object isn't found in the dictionary, it will be populated. By passing i
    
 === Cloning without validations
    pirate.dup :include => {:treasures => :gold_pieces}, :validate => false
+
+=== Cloning a model with only explicitly assigned attribute
+   pirate.dup :only => :name
+   
+=== Cloning a model with only multiple explicitly assigned attributes
+   pirate.dup :only => [:name, :nick_name]  
+
+=== Cloning a model with explicitly assigned attributes or nested multiple attributes   
+   pirate.dup :include => :parrot, :only => [:name, { :parrot => [:name] }]
+
    
 == Contributors
 
