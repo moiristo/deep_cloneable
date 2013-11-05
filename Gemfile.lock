@@ -1,26 +1,31 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activemodel (3.1.12)
-      activesupport (= 3.1.12)
-      builder (~> 3.0.0)
-      i18n (~> 0.6)
-    activerecord (3.1.12)
-      activemodel (= 3.1.12)
-      activesupport (= 3.1.12)
-      arel (~> 2.2.3)
-      tzinfo (~> 0.3.29)
-    activesupport (3.1.12)
-      multi_json (~> 1.0)
+    activemodel (4.0.1)
+      activesupport (= 4.0.1)
+      builder (~> 3.1.0)
+    activerecord (4.0.1)
+      activemodel (= 4.0.1)
+      activerecord-deprecated_finders (~> 1.0.2)
+      activesupport (= 4.0.1)
+      arel (~> 4.0.0)
+    activerecord-deprecated_finders (1.0.3)
+    activesupport (4.0.1)
+      i18n (~> 0.6, >= 0.6.4)
+      minitest (~> 4.2)
+      multi_json (~> 1.3)
+      thread_safe (~> 0.1)
+      tzinfo (~> 0.3.37)
     addressable (2.3.5)
     appraisal (0.5.2)
       bundler
       rake
-    arel (2.2.3)
-    builder (3.0.4)
+    arel (4.0.1)
+    atomic (1.1.14)
+    builder (3.1.4)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
-    git (1.2.5)
+    git (1.2.6)
     github_api (0.10.1)
       addressable
       faraday (~> 0.8.1)
@@ -28,11 +33,11 @@ GEM
       multi_json (~> 1.4)
       nokogiri (~> 1.5.2)
       oauth2
-    hashie (2.0.5)
-    highline (1.6.19)
+    hashie (2.0.4)
+    highline (1.6.20)
     httpauth (0.2.0)
-    i18n (0.6.4)
-    jeweler (1.8.6)
+    i18n (0.6.5)
+    jeweler (1.8.8)
       builder
       bundler (~> 1.0)
       git (>= 1.2.5)
@@ -41,10 +46,11 @@ GEM
       nokogiri (= 1.5.10)
       rake
       rdoc
-    json (1.8.0)
+    json (1.8.1)
     jwt (0.1.8)
       multi_json (>= 1.5)
-    multi_json (1.7.9)
+    minitest (4.7.5)
+    multi_json (1.8.2)
     multi_xml (0.5.5)
     multipart-post (1.2.0)
     nokogiri (1.5.10)
@@ -59,8 +65,10 @@ GEM
     rake (10.1.0)
     rdoc (4.0.1)
       json (~> 1.4)
-    sqlite3 (1.3.7)
-    tzinfo (0.3.37)
+    sqlite3 (1.3.8)
+    thread_safe (0.1.3)
+      atomic
+    tzinfo (0.3.38)
 
 PLATFORMS
   ruby

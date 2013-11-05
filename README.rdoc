@@ -16,7 +16,7 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 * In your Gemfile:
 
-  gem 'deep_cloneable', '~> 1.5.5'
+  gem 'deep_cloneable', '~> 1.6.0'
 
 == Example
  
@@ -72,21 +72,6 @@ When an object isn't found in the dictionary, it will be populated. By passing i
 
 === Cloning a model with explicitly assigned attributes or nested multiple attributes   
    pirate.dup :include => :parrot, :only => [:name, { :parrot => [:name] }]
-
-   
-== Contributors
-
-* Michael He
-* Indrek Juhkam
-* Mart Karu
-* Rolf Timmermans
-* Ilya Kuzmin
-* zozi
-* fractious
-* Georges Gabereau
-* Christophe Belpaire
-* Kevin Carter
-* fokcep
 
 == Note on Patches/Pull Requests
  
