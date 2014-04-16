@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/test_helper'
 
-class TestDeepCloneable < Test::Unit::TestCase
+class TestDeepCloneable < MiniTest::Unit::TestCase
 
   def setup
     @jack  = Pirate.create(:name => 'Jack Sparrow', :nick_name => 'Captain Jack', :age => 30)
@@ -62,8 +62,8 @@ class TestDeepCloneable < Test::Unit::TestCase
     dup = @jack.dup(:include => :ship)
     assert dup.new_record?
     assert dup.save
-    assert_not_nil dup.ship
-    assert_not_equal @jack.ship, dup.ship
+    refute_nil dup.ship
+    refute_equal @jack.ship, dup.ship
   end
 
   def test_single_include_has_many_polymorphic_association
@@ -120,16 +120,16 @@ class TestDeepCloneable < Test::Unit::TestCase
     dup = @jack.dup(:include => :parrot)
     assert dup.new_record?
     assert dup.save
-    assert_not_equal dup.parrot, @jack.parrot
+    refute_equal dup.parrot, @jack.parrot
   end
 
   def test_should_pass_nested_exceptions
     dup = @jack.dup(:include => :parrot, :except => [:name, { :parrot => [:name] }])
     assert dup.new_record?
     assert dup.save
-    assert_not_equal dup.parrot, @jack.parrot
+    refute_equal dup.parrot, @jack.parrot
     assert_equal dup.parrot.age, @jack.parrot.age
-    assert_not_nil @jack.parrot.name
+    refute_nil @jack.parrot.name
     assert_nil dup.parrot.name
   end
 
@@ -137,7 +137,7 @@ class TestDeepCloneable < Test::Unit::TestCase
     dup = @jack.dup(:include => :parrot, :only => [:name, { :parrot => [:name] }])
     assert dup.new_record?
     assert dup.save
-    assert_not_equal dup.parrot, @jack.parrot
+    refute_equal dup.parrot, @jack.parrot
     assert_equal dup.parrot.name, @jack.parrot.name
     assert_nil dup.parrot.age
   end
@@ -230,12 +230,12 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert_equal @person1.cars, dup_person.cars
     assert_equal 2, dup_person.cars.count
   end
-  
+
   def test_should_dup_joined_association
     subject1 = Subject.create(:name => 'subject 1')
     subject2 = Subject.create(:name => 'subject 2')
     student = Student.create(:name => 'Parent', :subjects => [subject1, subject2])
-  
+
     dup = student.dup :include => { :student_assignments => :subject }
     dup.save # Subjects will have been set after save
     assert_equal 2, dup.subjects.size
@@ -307,12 +307,12 @@ class TestDeepCloneable < Test::Unit::TestCase
     assert dup_part.save
     assert_equal 2, dup_part.child_parts.size
   end
-  
+
   def test_should_include_has_many_through_associations
     subject1 = Subject.create(:name => 'subject 1')
     subject2 = Subject.create(:name => 'subject 2')
     student = Student.create(:name => 'Parent', :subjects => [subject1, subject2])
-  
+
     dup = student.dup :include => :subjects
     assert_equal 2, dup.subjects.size
     assert_equal [[student, dup],[student, dup]], dup.subjects.map{|subject| subject.students }

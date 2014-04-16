@@ -1,5 +1,6 @@
 require 'rubygems'
-require 'test/unit'
+require 'yaml'
+require 'minitest/autorun'
 #require 'pp'
 #require 'debugger'
 
@@ -7,11 +8,16 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'active_record'
-require 'active_support/buffered_logger'
 
 def load_schema
   config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
-  ActiveRecord::Base.logger = ActiveSupport::BufferedLogger.new(File.dirname(__FILE__) + "/debug.log")
+
+  if defined?(ActiveSupport::BufferedLogger)
+    ActiveRecord::Base.logger = ActiveSupport::BufferedLogger.new(File.dirname(__FILE__) + "/debug.log")
+  else
+    ActiveRecord::Base.logger = ActiveSupport::Logger.new(File.dirname(__FILE__) + "/debug.log")
+  end
+
   db_adapter = ENV['DB']
   # no db passed, try one of these fine config-free DBs before bombing.
   db_adapter ||= begin

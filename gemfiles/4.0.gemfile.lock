@@ -41,5 +41,6 @@ DEPENDENCIES
   activerecord (~> 4.0.0)
   activesupport (>= 3.1.0)
   appraisal
+  minitest
   rdoc (>= 2.4.2)
   sqlite3

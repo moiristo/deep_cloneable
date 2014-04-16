@@ -78,5 +78,6 @@ DEPENDENCIES
   activesupport (>= 3.1.0)
   appraisal
   jeweler
+  minitest
   rdoc (>= 2.4.2)
   sqlite3
