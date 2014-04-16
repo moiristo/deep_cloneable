@@ -54,12 +54,21 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :name, :string
   end
 
+  create_table :coins, :force => true do |t|
+    t.column :value, :integer
+  end
+
   create_table :people, :force => true do |t|
     t.column :name, :string
   end
 
   create_table :cars_people, :id => false, :force => true do |t|
     t.column :car_id, :integer
+    t.column :person_id, :integer
+  end
+
+  create_table :coins_people, :id => false, :force => true do |t|
+    t.column :coin_id, :integer
     t.column :person_id, :integer
   end
 
@@ -76,10 +85,10 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :name, :string
     t.column :parent_part_id, :integer
   end
-  
+
   create_table :students, :force => true do |t|
     t.column :name, :string
-  end  
+  end
 
   create_table :subjects, :force => true do |t|
     t.column :name, :string
@@ -87,6 +96,6 @@ ActiveRecord::Schema.define(:version => 1) do
 
   create_table :student_assignments, :force => true do |t|
     t.column :student_id, :integer
-    t.column :subject_id, :integer    
-  end  
+    t.column :subject_id, :integer
+  end
 end

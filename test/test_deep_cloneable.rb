@@ -231,6 +231,17 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal 2, dup_person.cars.count
   end
 
+  def test_should_dup_habtm_associations_with_missing_reverse_association
+    @coin = Coin.create :value => 1
+    @person = Person.create :name => "Bill"
+    @coin.people << @person
+
+    dup = @coin.dup :include => :people
+    assert dup.new_record?
+    assert_equal [@person], @coin.people
+    assert dup.save
+  end
+
   def test_should_dup_joined_association
     subject1 = Subject.create(:name => 'subject 1')
     subject2 = Subject.create(:name => 'subject 2')

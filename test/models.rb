@@ -53,6 +53,10 @@ class Car < ActiveRecord::Base
   has_and_belongs_to_many :people
 end
 
+class Coin < ActiveRecord::Base
+  has_and_belongs_to_many :people
+end
+
 class ChildWithValidation < ActiveRecord::Base
   belongs_to :parent, :class_name => 'ParentWithValidation'
   validates :name, :presence => true
@@ -64,14 +68,14 @@ class ParentWithValidation < ActiveRecord::Base
 end
 
 class Part < ActiveRecord::Base
-  # belongs_to :parent_part, :class_name => 'Part' 
+  # belongs_to :parent_part, :class_name => 'Part'
   has_many :child_parts, :class_name => 'Part', :foreign_key => 'parent_part_id'
 end
 
 class Student < ActiveRecord::Base
   has_many :student_assignments, :dependent => :destroy
   has_many :subjects, :through => :student_assignments
-end 
+end
 
 class Subject < ActiveRecord::Base
   has_many :student_assignments, :dependent => :destroy
@@ -80,5 +84,5 @@ end
 
 class StudentAssignment < ActiveRecord::Base
   belongs_to :subject
-  belongs_to :student  
+  belongs_to :student
 end
