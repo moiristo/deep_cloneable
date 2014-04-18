@@ -5,13 +5,12 @@
 
 Gem::Specification.new do |s|
   s.name = "deep_cloneable"
-  s.version = "1.6.0"
+  s.version = "1.6.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Reinier de Lange"]
-  s.date = "2013-11-05"
+  s.date = "2014-04-18"
   s.description = "Extends the functionality of ActiveRecord::Base#clone to perform a deep clone that includes user specified associations. "
-  s.license = 'MIT'
   s.email = "r.j.delange@nedforce.nl"
   s.extra_rdoc_files = [
     "LICENSE",
@@ -34,6 +33,8 @@ Gem::Specification.new do |s|
     "gemfiles/3.2.gemfile.lock",
     "gemfiles/4.0.gemfile",
     "gemfiles/4.0.gemfile.lock",
+    "gemfiles/4.1.gemfile",
+    "gemfiles/4.1.gemfile.lock",
     "init.rb",
     "lib/deep_cloneable.rb",
     "test/database.yml",
