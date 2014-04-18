@@ -16,7 +16,7 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 * In your Gemfile:
 
-  gem 'deep_cloneable', '~> 1.6.0'
+  gem 'deep_cloneable', '~> 1.6.1'
 
 == Example
 
@@ -85,4 +85,4 @@ When an object isn't found in the dictionary, it will be populated. By passing i
 
 == Copyright
 
-Copyright (c) 2013 Reinier de Lange. See LICENSE for details.
+Copyright (c) 2014 Reinier de Lange. See LICENSE for details.
