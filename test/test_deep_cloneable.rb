@@ -329,4 +329,14 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal [[student, dup],[student, dup]], dup.subjects.map{|subject| subject.students }
   end
 
+  def test_should_dup_unsaved_objects
+    jack = Pirate.new(:name => 'Jack Sparrow', :nick_name => 'Captain Jack', :age => 30)
+    jack.mateys.build(:name => 'John')
+
+    dup = jack.dup(:include => :mateys)
+    assert dup.new_record?
+    assert_equal 1, dup.mateys.size
+    assert_equal 'John', dup.mateys.first.name
+  end
+
 end
