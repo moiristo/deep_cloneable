@@ -17,18 +17,18 @@ class ActiveRecord::Base
     end
 
     # Deep dups an ActiveRecord model. See README.rdoc
-    def dup *args, &block
+    def deep_clone *args, &block
       options = args[0] || {}
 
       dict = options[:dictionary]
       dict ||= {} if options.delete(:use_dictionary)
 
       kopy = unless dict
-        super()
+        dup()
       else
         tableized_class = self.class.name.tableize.to_sym
         dict[tableized_class] ||= {}
-        dict[tableized_class][self] ||= super()
+        dict[tableized_class][self] ||= dup()
       end
 
       block.call(self, kopy) if block
@@ -94,7 +94,7 @@ class ActiveRecord::Base
   private
 
     def dup_belongs_to_association options, &block
-      self.send(options[:association]) && self.send(options[:association]).dup(options[:dup_options], &block)
+      self.send(options[:association]) && self.send(options[:association]).deep_clone(options[:dup_options], &block)
     end
 
     def dup_has_one_association options, &block
@@ -109,7 +109,7 @@ class ActiveRecord::Base
       end.try(:name)
 
       self.send(options[:association]).collect do |obj|
-        tmp = obj.dup(options[:dup_options], &block)
+        tmp = obj.deep_clone(options[:dup_options], &block)
         tmp.send("#{primary_key_name}=", nil)
         tmp.send("#{reverse_association_name.to_s}=", options[:copy]) if reverse_association_name
         tmp
