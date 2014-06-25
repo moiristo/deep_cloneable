@@ -339,15 +339,4 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal 'John', deep_clone.mateys.first.name
   end
 
-  def test_should_deep_clone_via_dup
-    deep_clone = @jack.dup(:include => :parrot) do |original, kopy|
-      kopy.cloned_from_id = original.id
-    end
-
-    assert deep_clone.new_record?
-    assert deep_clone.save
-    assert_equal @jack.id, deep_clone.cloned_from_id
-    assert_equal @jack.parrot.id, deep_clone.parrot.cloned_from_id
-  end
-
 end

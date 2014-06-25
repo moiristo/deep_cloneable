@@ -1,21 +1,6 @@
 class ActiveRecord::Base
   module DeepCloneable
 
-    if ActiveRecord::VERSION::MAJOR < 4
-      ActiveRecord::Base.class_eval do
-        protected :initialize_dup
-        module Dup
-          def dup
-            copy = super
-            copy.send(:initialize_dup, self)
-            copy
-          end
-        end
-        remove_possible_method :dup
-        include Dup
-      end
-    end
-
     # Deep dups an ActiveRecord model. See README.rdoc
     def deep_clone *args, &block
       options = args[0] || {}
@@ -89,12 +74,6 @@ class ActiveRecord::Base
       end
 
       return kopy
-    end
-
-    def dup *args, &block
-      return super() if args.empty? && !block
-      ActiveSupport::Deprecation.warn("Calling dup with arguments or blocks is deprecated and will be removed in deep_cloneable 2. Use method 'deep_clone' instead.")
-      deep_clone *args, &block
     end
 
   private
