@@ -16,7 +16,11 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 * In your Gemfile:
 
-  gem 'deep_cloneable', '~> 1.6.1'
+  gem 'deep_cloneable', '~> 1.7.0'
+
+== Note
+
+Version 1.7.0 deprecates the use of the method 'dup' for deep cloning. Please update your code to use 'deep_clone' instead. The dup method will be removed in deep_cloneable 2.0.0.
 
 == Example
 
