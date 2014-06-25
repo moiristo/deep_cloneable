@@ -125,6 +125,8 @@ class ActiveRecord::Base
     end
 
     class AssociationNotFoundException < StandardError; end
+
+    ActiveRecord::Base.class_eval { protected :initialize_dup } if ActiveRecord::VERSION::MAJOR == 3 && ActiveRecord::VERSION::MINOR == 1
   end
 
   include DeepCloneable
