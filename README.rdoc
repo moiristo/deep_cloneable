@@ -21,57 +21,57 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 == Example
 
 === Cloning one single association
-   pirate.dup :include => :mateys
+   pirate.deep_clone :include => :mateys
 
 === Cloning multiple associations
-   pirate.dup :include => [:mateys, :treasures]
+   pirate.deep_clone :include => [:mateys, :treasures]
 
 === Cloning really deep
-   pirate.dup :include => {:treasures => :gold_pieces}
+   pirate.deep_clone :include => {:treasures => :gold_pieces}
 
 === Cloning really deep with multiple associations
-   pirate.dup :include => [:mateys, {:treasures => :gold_pieces}]
+   pirate.deep_clone :include => [:mateys, {:treasures => :gold_pieces}]
 
 === Cloning really deep with multiple associations and a dictionary
 
 A dictionary ensures that models are not cloned multiple times when it is associated to nested models.
 When using a dictionary, ensure recurring associations are cloned first:
 
-  pirate.dup :include => [:mateys, {:treasures => [:matey, :gold_pieces]}], :use_dictionary => true
+  pirate.deep_clone :include => [:mateys, {:treasures => [:matey, :gold_pieces]}], :use_dictionary => true
 
 If this is not an option for you, it is also possible to populate the dictionary manually in advance:
 
   dict = { :mateys => {} }
-  pirate.mateys.each{|m| dict[:mateys][m] = m.dup }
-  pirate.dup :include => [:mateys, {:treasures => [:matey, :gold_pieces]}], :dictionary => dict
+  pirate.mateys.each{|m| dict[:mateys][m] = m.deep_clone }
+  pirate.deep_clone :include => [:mateys, {:treasures => [:matey, :gold_pieces]}], :dictionary => dict
 
-When an object isn't found in the dictionary, it will be populated. By passing in an empty dictionary you can populate it automatically and reuse it in subsequent dups to avoid creating multiples of the same object where you have overlapping associations.
+When an object isn't found in the dictionary, it will be populated. By passing in an empty dictionary you can populate it automatically and reuse it in subsequent deep_clones to avoid creating multiples of the same object where you have overlapping associations.
 
 === Cloning a model without an attribute
-   pirate.dup :except => :name
+   pirate.deep_clone :except => :name
 
 === Cloning a model without multiple attributes
-   pirate.dup :except => [:name, :nick_name]
+   pirate.deep_clone :except => [:name, :nick_name]
 
 === Cloning a model without an attribute or nested multiple attributes
-   pirate.dup :include => :parrot, :except => [:name, { :parrot => [:name] }]
+   pirate.deep_clone :include => :parrot, :except => [:name, { :parrot => [:name] }]
 
 === Cloning with a block
-   pirate.dup :include => :parrot do |original, kopy|
+   pirate.deep_clone :include => :parrot do |original, kopy|
      kopy.cloned_from_id = original.id if kopy.respond_to?(:cloned_from_id)
    end
 
 === Cloning without validations
-   pirate.dup :include => {:treasures => :gold_pieces}, :validate => false
+   pirate.deep_clone :include => {:treasures => :gold_pieces}, :validate => false
 
 === Cloning a model with only explicitly assigned attribute
-   pirate.dup :only => :name
+   pirate.deep_clone :only => :name
 
 === Cloning a model with only multiple explicitly assigned attributes
-   pirate.dup :only => [:name, :nick_name]
+   pirate.deep_clone :only => [:name, :nick_name]
 
 === Cloning a model with explicitly assigned attributes or nested multiple attributes
-   pirate.dup :include => :parrot, :only => [:name, { :parrot => [:name] }]
+   pirate.deep_clone :include => :parrot, :only => [:name, { :parrot => [:name] }]
 
 == Note on Patches/Pull Requests
 
