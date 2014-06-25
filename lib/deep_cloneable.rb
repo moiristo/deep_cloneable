@@ -91,6 +91,12 @@ class ActiveRecord::Base
       return kopy
     end
 
+    def dup *args, &block
+      return super() if args.empty? && !block
+      ActiveSupport::Deprecation.warn("Calling dup with arguments or blocks is deprecated and will be removed in deep_cloneable 2. Use method 'deep_clone' instead.")
+      deep_clone *args, &block
+    end
+
   private
 
     def dup_belongs_to_association options, &block
