@@ -295,7 +295,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal deep_clone_parent.errors.messages, :children => ["is invalid"]
   end
 
-  def test_child_validations_run_on_save_after_clone
+  def test_child_validations_run_on_save_after_clone_without_validation
     child = ChildWithValidation.new
     child.save :validate => false
     parent = ParentWithValidation.create :name => 'John', :children => [child]
