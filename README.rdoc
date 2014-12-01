@@ -65,6 +65,9 @@ When an object isn't found in the dictionary, it will be populated. By passing i
      kopy.cloned_from_id = original.id if kopy.respond_to?(:cloned_from_id)
    end
 
+*Note*: Using deep_clone with a block will also pass the associated objects that are being cloned to the block, 
+so be sure to check whether the object actually responds to your method of choice.
+
 === Cloning without validations
    pirate.deep_clone :include => {:treasures => :gold_pieces}, :validate => false
 
