@@ -1,28 +1,26 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activemodel (4.0.8)
-      activesupport (= 4.0.8)
-      builder (~> 3.1.0)
-    activerecord (4.0.8)
-      activemodel (= 4.0.8)
-      activerecord-deprecated_finders (~> 1.0.2)
-      activesupport (= 4.0.8)
-      arel (~> 4.0.0)
-    activerecord-deprecated_finders (1.0.3)
-    activesupport (4.0.8)
-      i18n (~> 0.6, >= 0.6.9)
-      minitest (~> 4.2)
-      multi_json (~> 1.3)
+    activemodel (4.2.0.rc3)
+      activesupport (= 4.2.0.rc3)
+      builder (~> 3.1)
+    activerecord (4.2.0.rc3)
+      activemodel (= 4.2.0.rc3)
+      activesupport (= 4.2.0.rc3)
+      arel (~> 6.0)
+    activesupport (4.2.0.rc3)
+      i18n (>= 0.7.0.beta1, < 0.8)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
       thread_safe (~> 0.1)
-      tzinfo (~> 0.3.37)
+      tzinfo (~> 1.1)
     addressable (2.3.6)
     appraisal (1.0.2)
       bundler
       rake
       thor (>= 0.14.0)
-    arel (4.0.2)
-    builder (3.1.4)
+    arel (6.0.0)
+    builder (3.2.2)
     faraday (0.8.9)
       multipart-post (~> 1.2.0)
     git (1.2.8)
@@ -35,7 +33,7 @@ GEM
       oauth2
     hashie (3.3.2)
     highline (1.6.21)
-    i18n (0.6.11)
+    i18n (0.7.0.beta1)
     jeweler (2.0.1)
       builder
       bundler (>= 1.0)
@@ -47,7 +45,7 @@ GEM
       rdoc
     json (1.8.1)
     jwt (1.2.0)
-    minitest (4.7.5)
+    minitest (5.5.0)
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (1.2.0)
@@ -65,13 +63,14 @@ GEM
     sqlite3 (1.3.10)
     thor (0.19.1)
     thread_safe (0.3.4)
-    tzinfo (0.3.42)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord (~> 4.0.0)
+  activerecord (~> 4.2.0.rc3)
   appraisal
   jeweler
   minitest

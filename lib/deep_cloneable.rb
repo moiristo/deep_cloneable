@@ -63,8 +63,11 @@ class ActiveRecord::Base
             end
           end
 
+          association_type = association_reflection.macro
+          association_type = "#{association_type}_through" if association_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
+
           cloned_object = send(
-            "dup_#{association_reflection.macro}_#{association_reflection.class.name.demodulize.underscore.gsub('_reflection', '')}",
+            "dup_#{association_type}_association",
             { :reflection => association_reflection, :association => association, :copy => kopy, :dup_options => dup_options },
             &block
           )
@@ -101,7 +104,7 @@ class ActiveRecord::Base
       end
     end
 
-    def dup_has_many_through options, &block
+    def dup_has_many_through_association options, &block
       dup_join_association(
         options.merge(:macro => :has_many, :primary_key_name => options[:reflection].through_reflection.foreign_key.to_s),
         &block)

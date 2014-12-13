@@ -2,7 +2,7 @@
 
 source "http://rubygems.org"
 
-gem "activerecord", "~> 3.2.0"
+gem "activerecord", "~> 4.2.0.rc3"
 gem "minitest", :group => :test
 gem "appraisal", :group => :test
 gem "sqlite3", :group => :test

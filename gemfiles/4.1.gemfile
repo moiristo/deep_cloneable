@@ -2,9 +2,13 @@
 
 source "http://rubygems.org"
 
-gem "minitest", :group=>:test
-gem "appraisal", :group=>:test
-gem "sqlite3", :group=>:test
-gem "rdoc", ">= 2.4.2", :group=>:test
 gem "activerecord", "~> 4.1.0"
+gem "minitest", :group => :test
+gem "appraisal", :group => :test
+gem "sqlite3", :group => :test
+gem "rdoc", ">= 2.4.2", :group => :test
+gem "nokogiri", "~> 1.5.0", :group => :test
 
+group :test do
+  gem "jeweler"
+end
