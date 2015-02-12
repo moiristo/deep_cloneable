@@ -11,6 +11,7 @@ begin
     gem.email = "r.j.delange@nedforce.nl"
     gem.homepage = "http://github.com/moiristo/deep_cloneable"
     gem.authors = ["Reinier de Lange"]
+    gem.license = "MIT"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

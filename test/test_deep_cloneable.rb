@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/test_helper'
+require 'test_helper'
 
 class TestDeepCloneable < MiniTest::Unit::TestCase
 
@@ -337,6 +337,28 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert deep_clone.new_record?
     assert_equal 1, deep_clone.mateys.size
     assert_equal 'John', deep_clone.mateys.first.name
+  end
+
+  def test_should_reject_copies_if_conditionals_are_passed
+    subject1 = Subject.create(:name => 'subject 1')
+    subject2 = Subject.create(:name => 'subject 2')
+    student = Student.create(:name => 'Parent', :subjects => [subject1, subject2])
+
+    deep_clone = student.deep_clone :include => { :subjects => { :if => lambda{|subject| subject.name == 'subject 2' } } }
+    assert_equal 1, deep_clone.subjects.size
+    assert_equal 'subject 2', deep_clone.subjects.first.name
+
+    deep_clone = @jack.deep_clone(:include => {
+      :treasures => { :gold_pieces => { :unless => lambda{|piece| piece.is_a?(Parrot) } } },
+      :mateys => { :if => lambda{|matey| matey.is_a?(GoldPiece) } }
+    })
+
+    assert deep_clone.new_record?
+    assert deep_clone.save
+    assert_equal 1, deep_clone.treasures.size
+    assert_equal 1, deep_clone.gold_pieces.size
+    assert_equal 0, deep_clone.mateys.size
+
   end
 
 end

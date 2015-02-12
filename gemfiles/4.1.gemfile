@@ -3,6 +3,7 @@
 source "http://rubygems.org"
 
 gem "activerecord", "~> 4.1.0"
+gem "i18n", "~> 0.6.5"
 gem "minitest", :group => :test
 gem "appraisal", :group => :test
 gem "sqlite3", :group => :test

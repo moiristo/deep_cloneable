@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Reinier de Lange"]
-  s.date = "2014-12-17"
+  s.date = "2015-02-12"
   s.description = "Extends the functionality of ActiveRecord::Base#clone to perform a deep clone that includes user specified associations. "
   s.email = "r.j.delange@nedforce.nl"
   s.extra_rdoc_files = [
@@ -48,7 +48,8 @@ Gem::Specification.new do |s|
     "test/test_helper.rb"
   ]
   s.homepage = "http://github.com/moiristo/deep_cloneable"
-  s.rubygems_version = "2.4.2"
+  s.licenses = ["MIT"]
+  s.rubygems_version = "2.4.3"
   s.summary = "This gem gives every ActiveRecord::Base object the possibility to do a deep clone."
 
   if s.respond_to? :specification_version then

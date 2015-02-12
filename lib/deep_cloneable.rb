@@ -39,13 +39,20 @@ class ActiveRecord::Base
       end
 
       if options[:include]
-        Array(options[:include]).each do |association, deep_associations|
-          if (association.kind_of? Hash)
-            deep_associations = association[association.keys.first]
+        Array(options[:include]).each do |association, conditions_or_deep_associations|
+          conditions = {}
+
+          if association.kind_of? Hash
+            conditions_or_deep_associations = association[association.keys.first]
             association = association.keys.first
           end
 
-          dup_options = deep_associations.blank? ? {} : {:include => deep_associations}
+          if conditions_or_deep_associations.kind_of?(Hash)
+            conditions[:if]     = conditions_or_deep_associations.delete(:if)     if conditions_or_deep_associations[:if]
+            conditions[:unless] = conditions_or_deep_associations.delete(:unless) if conditions_or_deep_associations[:unless]
+          end
+
+          dup_options = conditions_or_deep_associations.blank? ? {} : {:include => conditions_or_deep_associations}
           dup_options.merge!(:except => deep_exceptions[association]) if deep_exceptions[association]
           dup_options.merge!(:only => deep_onlinesses[association]) if deep_onlinesses[association]
           dup_options.merge!(:dictionary => dict) if dict
@@ -66,13 +73,13 @@ class ActiveRecord::Base
           association_type = association_reflection.macro
           association_type = "#{association_type}_through" if association_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
 
-          cloned_object = send(
+          duped_object = send(
             "dup_#{association_type}_association",
-            { :reflection => association_reflection, :association => association, :copy => kopy, :dup_options => dup_options },
+            { :reflection => association_reflection, :association => association, :copy => kopy, :conditions => conditions, :dup_options => dup_options },
             &block
           )
 
-          kopy.send("#{association}=", cloned_object)
+          kopy.send("#{association}=", duped_object)
         end
       end
 
@@ -82,7 +89,9 @@ class ActiveRecord::Base
   private
 
     def dup_belongs_to_association options, &block
-      self.send(options[:association]) && self.send(options[:association]).deep_clone(options[:dup_options], &block)
+      object = self.send(options[:association])
+      object = nil if options[:conditions].any? && evaluate_conditions(object, options[:conditions])
+      object && object.deep_clone(options[:dup_options], &block)
     end
 
     def dup_has_one_association options, &block
@@ -96,8 +105,11 @@ class ActiveRecord::Base
         reflection.foreign_key.to_s == primary_key_name && reflection != options[:reflection]
       end.try(:name)
 
-      self.send(options[:association]).collect do |obj|
-        tmp = obj.deep_clone(options[:dup_options], &block)
+      objects = self.send(options[:association])
+      objects = objects.select{|object| evaluate_conditions(object, options[:conditions]) } if options[:conditions].any?
+
+      objects.collect do |object|
+        tmp = object.deep_clone(options[:dup_options], &block)
         tmp.send("#{primary_key_name}=", nil)
         tmp.send("#{reverse_association_name.to_s}=", options[:copy]) if reverse_association_name
         tmp
@@ -121,10 +133,17 @@ class ActiveRecord::Base
         (reflection.macro == options[:macro]) && (reflection.association_foreign_key.to_s == options[:primary_key_name])
       end.try(:name)
 
-      self.send(options[:association]).collect do |obj|
-        obj.send(reverse_association_name).target << options[:copy] if reverse_association_name
-        obj
+      objects = self.send(options[:association])
+      objects = objects.select{|object| evaluate_conditions(object, options[:conditions]) } if options[:conditions].any?
+
+      objects.collect do |object|
+        object.send(reverse_association_name).target << options[:copy] if reverse_association_name
+        object
       end
+    end
+
+    def evaluate_conditions object, conditions
+      (conditions[:if] && conditions[:if].call(object)) || (conditions[:unless] && !conditions[:unless].call(object))
     end
 
     class AssociationNotFoundException < StandardError; end

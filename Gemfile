@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'activerecord', '>= 3.1.0', '< 5.0.0'
+gem 'i18n', '~> 0.6.5'
 
 gem 'minitest', :group => :test
 gem 'appraisal', :group => :test

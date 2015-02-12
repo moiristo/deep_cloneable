@@ -15,5 +15,6 @@ appraise '4.1' do
 end
 
 appraise '4.2' do
-  gem 'activerecord', '~> 4.2.0.rc3'
+  gem 'activerecord', '~> 4.2.0'
+  gem 'i18n', '~> 0.7.0'
 end

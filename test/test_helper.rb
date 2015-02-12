@@ -1,5 +1,7 @@
 require 'rubygems'
 require 'yaml'
+
+gem 'minitest'
 require 'minitest/autorun'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
