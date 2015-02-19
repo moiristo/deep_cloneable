@@ -11,9 +11,7 @@ class ActiveRecord::Base
       kopy = unless dict
         dup()
       else
-        tableized_class = self.class.name.tableize.to_sym
-        dict[tableized_class] ||= {}
-        dict[tableized_class][self] ||= dup()
+        find_in_dict_or_clone(dict)
       end
 
       block.call(self, kopy) if block
@@ -86,6 +84,15 @@ class ActiveRecord::Base
       return kopy
     end
 
+  protected
+
+    def find_in_dict_or_clone(dict, clone_on_miss = true)
+      tableized_class = self.class.name.tableize.to_sym
+      dict[tableized_class] ||= {}
+      dict_val = dict[tableized_class][self]
+      dict_val.nil? && clone_on_miss ? dict[tableized_class][self] = self.dup() : dict_val
+    end
+    
   private
 
     def dup_belongs_to_association options, &block
@@ -137,7 +144,12 @@ class ActiveRecord::Base
       objects = objects.select{|object| evaluate_conditions(object, options[:conditions]) } if options[:conditions].any?
 
       objects.collect do |object|
-        object.send(reverse_association_name).target << options[:copy] if reverse_association_name
+        dict = options[:dup_options][:dictionary]
+        if(dict && object.find_in_dict_or_clone(dict, false))
+          object = object.deep_clone(options[:dup_options], &block)
+        else
+          object.send(reverse_association_name).target << options[:copy] if reverse_association_name
+        end
         object
       end
     end

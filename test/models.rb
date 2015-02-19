@@ -86,3 +86,18 @@ class StudentAssignment < ActiveRecord::Base
   belongs_to :subject
   belongs_to :student
 end
+
+class Building < ActiveRecord::Base
+  has_many :apartments
+  has_many :contractors
+end
+
+class Apartment < ActiveRecord::Base
+  belongs_to :building
+  has_and_belongs_to_many :contractors
+end
+
+class Contractor < ActiveRecord::Base
+  belongs_to :building
+  has_and_belongs_to_many :apartments
+end

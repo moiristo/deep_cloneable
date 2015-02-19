@@ -361,4 +361,28 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
 
   end
 
+  def test_should_find_in_dict_for_habtm
+    apt = Apartment.create(:number => "101")
+    contractor = Contractor.create(:name => "contractor", :apartments => [apt])
+
+    apt.contractors = [contractor]
+    apt.save!
+
+    building = Building.create(:name => "Tall Building", :contractors => [contractor], :apartments => [apt])
+
+    deep_clone = building.deep_clone(:include => [
+      :apartments,
+      {
+        :contractors => [
+          :apartments
+        ]
+      }
+    ],
+    :use_dictionary => true
+                                    )
+    deep_clone.save!
+  
+    assert_equal deep_clone.contractors.first.apartments.first.id, deep_clone.apartments.first.id
+    assert_equal deep_clone.apartments.first.contractors.first.id, deep_clone.contractors.first.id
+  end
 end
