@@ -98,4 +98,23 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :student_id, :integer
     t.column :subject_id, :integer
   end
+
+  create_table :buildings, :force => true do |t|
+    t.column :name, :string
+  end
+
+  create_table :apartments, :force => true do |t|
+    t.column :number, :string
+    t.column :building_id, :integer
+  end
+
+  create_table :contractors, :force => true do |t|
+    t.column :name, :string
+    t.column :building_id, :integer
+  end
+
+  create_table :apartments_contractors, :force => true do |t|
+    t.column :apartment_id, :integer
+    t.column :contractor_id, :integer
+  end
 end
