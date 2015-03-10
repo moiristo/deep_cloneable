@@ -46,7 +46,7 @@ GEM
     json (1.8.2)
     jwt (1.2.1)
     minitest (5.5.1)
-    multi_json (1.10.1)
+    multi_json (1.11.0)
     multi_xml (0.5.5)
     multipart-post (1.2.0)
     nokogiri (1.5.11)
@@ -72,6 +72,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord (~> 4.1.0)
   appraisal
+  highline (~> 1.6.0)
   i18n (~> 0.6.5)
   jeweler
   minitest
