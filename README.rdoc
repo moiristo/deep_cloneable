@@ -82,6 +82,7 @@ so be sure to check whether the object actually responds to your method of choic
 
 === Conditional cloning
    pirate.deep_clone(:include => [{:treasures => { :gold_pieces => { :if => lambda{|piece| piece.is_a?(Parrot) } } } }, :mateys => { :unless => lambda{|matey| matey.is_a?(GoldPiece) } } ])
+   ship.deep_clone(:include => [:pirates => [:treasures, :mateys, :if => lambda {|pirate| pirate.name == 'Jack Sparrow'}]])
 
 == Note on Patches/Pull Requests
 

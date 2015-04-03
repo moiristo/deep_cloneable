@@ -48,6 +48,8 @@ class ActiveRecord::Base
           if conditions_or_deep_associations.kind_of?(Hash)
             conditions[:if]     = conditions_or_deep_associations.delete(:if)     if conditions_or_deep_associations[:if]
             conditions[:unless] = conditions_or_deep_associations.delete(:unless) if conditions_or_deep_associations[:unless]
+          elsif conditions_or_deep_associations.kind_of?(Array)
+            conditions_or_deep_associations.delete_if {|entry| conditions.merge!(entry) if entry.is_a?(Hash) && (entry.key?(:if) || entry.key?(:unless)) }
           end
 
           dup_options = conditions_or_deep_associations.blank? ? {} : {:include => conditions_or_deep_associations}
