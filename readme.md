@@ -124,4 +124,4 @@ end
 
 ### Copyright
 
-Copyright &copy; 2015 Reinier de Lange. See LICENSE for details.
+Copyright &copy; 2016 Reinier de Lange. See LICENSE for details.
