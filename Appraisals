@@ -1,9 +1,11 @@
 appraise '3.1' do
   gem 'activerecord', '~> 3.1.0'
+  gem "addressable", "~> 2.3.8"
 end
 
 appraise '3.2' do
   gem 'activerecord', '~> 3.2.0'
+  gem "addressable", "~> 2.3.8"
 end
 
 appraise '4.0' do
