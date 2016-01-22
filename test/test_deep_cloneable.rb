@@ -32,6 +32,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   def test_single_deep_clone_onliness
     deep_clone = @jack.deep_clone(:only => :name)
     assert deep_clone.new_record?
+    assert deep_clone.piastres, []
     assert deep_clone.save
     assert_equal @jack.name, deep_clone.name
     assert_equal 'no nickname', deep_clone.nick_name
@@ -43,6 +44,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   def test_multiple_deep_clone_onliness
     deep_clone = @jack.deep_clone(:only => [:name, :nick_name])
     assert deep_clone.new_record?
+    assert deep_clone.piastres, []
     assert deep_clone.save
     assert_equal @jack.name, deep_clone.name
     assert_equal @jack.nick_name, deep_clone.nick_name
@@ -136,6 +138,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   def test_should_pass_nested_onlinesses
     deep_clone = @jack.deep_clone(:include => :parrot, :only => [:name, { :parrot => [:name] }])
     assert deep_clone.new_record?
+    assert deep_clone.piastres, []
     assert deep_clone.save
     refute_equal deep_clone.parrot, @jack.parrot
     assert_equal deep_clone.parrot.name, @jack.parrot.name
