@@ -20,7 +20,7 @@ class ActiveRecord::Base
       if options[:except]
         exceptions = options[:except].nil? ? [] : [options[:except]].flatten
         exceptions.each do |attribute|
-          kopy.send(:write_attribute, attribute, self.class.column_defaults.dup[attribute.to_s]) unless attribute.kind_of?(Hash)
+          dup_default_attribute_value_to(kopy, attribute, self) unless attribute.kind_of?(Hash)
         end
         deep_exceptions = exceptions.select{|e| e.kind_of?(Hash) }.inject({}){|m,h| m.merge(h) }
       end
@@ -31,7 +31,7 @@ class ActiveRecord::Base
         object_attrs = kopy.attributes.keys.collect{ |s| s.to_sym }
         exceptions = object_attrs - onlinesses
         exceptions.each do |attribute|
-          kopy.send(:write_attribute, attribute, self.class.column_defaults.dup[attribute.to_s]) unless attribute.kind_of?(Hash)
+          dup_default_attribute_value_to(kopy, attribute, self) unless attribute.kind_of?(Hash)
         end
         deep_onlinesses = onlinesses.select{|e| e.kind_of?(Hash) }.inject({}){|m,h| m.merge(h) }
       end
@@ -96,6 +96,10 @@ class ActiveRecord::Base
     end
 
   private
+
+    def dup_default_attribute_value_to(kopy, attribute, origin)
+      kopy.send(:raw_write_attribute, attribute, origin.class.column_defaults.dup[attribute.to_s])
+    end
 
     def dup_belongs_to_association options, &block
       object = self.send(options[:association])
