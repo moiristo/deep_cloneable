@@ -5,6 +5,7 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :age, :string
     t.column :ship_id, :integer
     t.column :ship_type, :string
+    t.column :piastres, :text, :default => [].to_yaml
   end
 
   create_table :parrots, :force => true do |t|

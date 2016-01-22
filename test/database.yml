@@ -1,6 +1,6 @@
 sqlite: 
-  adapter: sqlite 
+  adapter: sqlite
   database: ":memory:"
-sqlite3: 
-  adapter: sqlite3 
+sqlite3:
+  adapter: sqlite3
   database: ":memory:"

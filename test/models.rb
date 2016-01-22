@@ -36,6 +36,8 @@ class Pirate < ActiveRecord::Base
   has_many :gold_pieces, :through => :treasures
   has_one :parrot
 
+  serialize :piastres
+
   attr_accessor :cloned_from_id
 end
 
