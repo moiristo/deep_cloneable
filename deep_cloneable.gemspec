@@ -56,12 +56,12 @@ Gem::Specification.new do |s|
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<activerecord>, ["< 5.0.0", ">= 3.1.0"])
+      s.add_runtime_dependency(%q<activerecord>, ["< 5.2.0", ">= 3.1.0"])
     else
-      s.add_dependency(%q<activerecord>, ["< 5.0.0", ">= 3.1.0"])
+      s.add_dependency(%q<activerecord>, ["< 5.2.0", ">= 3.1.0"])
     end
   else
-    s.add_dependency(%q<activerecord>, ["< 5.0.0", ">= 3.1.0"])
+    s.add_dependency(%q<activerecord>, ["< 5.2.0", ">= 3.1.0"])
   end
 end
 
