@@ -63,12 +63,13 @@ class ActiveRecord::Base
       dict = options[:dictionary]
       dict ||= {} if options.delete(:use_dictionary)
 
-      kopy = unless dict
-        super()
-      else
+      kopy = if dict
         tableized_class = self.class.name.tableize.to_sym
         dict[tableized_class] ||= {}
-        dict[tableized_class][self] ||= super()
+        dict[tableized_class][self.id] ||= {}
+        dict[tableized_class][self.id][self] ||= super()
+      else
+        super()
       end
 
       block.call(self, kopy) if block
@@ -123,25 +124,34 @@ class ActiveRecord::Base
   private
   
     def dup_belongs_to_association options, &block
-      self.send(options[:association]) && self.send(options[:association]).dup(options[:dup_options], &block)
-    end  
+      dict = options[:dup_options][:dictionary]
+      foreign_key_name = options[:reflection].foreign_key
+      klass_name = options[:reflection].klass.name.tableize.to_sym
+
+      fetch_from_dictionary(dict, klass_name, self.send(foreign_key_name)) ||
+        (self.send(options[:association]) && self.send(options[:association]).dup(options[:dup_options], &block))
+    end
   
     def dup_has_one_association options, &block
       dup_belongs_to_association options, &block
     end
     
     def dup_has_many_association options, &block
-      primary_key_name = options[:reflection].foreign_key.to_s
+      foreign_key_name = options[:reflection].foreign_key.to_s
 
       reverse_association_name = options[:reflection].klass.reflect_on_all_associations.detect do |reflection|
-        reflection.foreign_key.to_s == primary_key_name && reflection != options[:reflection]
+        reflection.foreign_key.to_s == foreign_key_name && reflection != options[:reflection]
       end.try(:name)
 
+      dict = options[:dup_options][:dictionary]
+
       self.send(options[:association]).collect do |obj|
-        tmp = obj.dup(options[:dup_options], &block)
-        tmp.send("#{primary_key_name}=", nil)
-        tmp.send("#{reverse_association_name.to_s}=", options[:copy]) if reverse_association_name
-        tmp
+        fetch_from_dictionary(dict, obj.class.name.tableize.to_sym, obj.id) || begin
+          tmp = obj.dup(options[:dup_options], &block)
+          tmp.send("#{foreign_key_name}=", nil)
+          tmp.send("#{reverse_association_name.to_s}=", options[:copy]) if reverse_association_name
+          tmp
+        end
       end      
     end
         
@@ -162,14 +172,22 @@ class ActiveRecord::Base
         (reflection.macro == options[:macro]) && (reflection.association_foreign_key.to_s == options[:primary_key_name])
       end.try(:name)
 
+      dict = options[:dup_options][:dictionary]
+
       self.send(options[:association]).collect do |obj|
-        if options[:dup_options][:dup_habtm]
-          obj = obj.dup(options[:dup_options], &block)
-        else
-          obj.send(reverse_association_name).target << options[:copy]
+        fetch_from_dictionary(dict, obj.class.name.tableize.to_sym, obj.id) || begin
+          if options[:dup_options][:dup_habtm]
+            obj = obj.dup(options[:dup_options], &block)
+          else
+            obj.send(reverse_association_name).target << options[:copy]
+          end
+          obj
         end
-        obj
       end
+    end
+
+    def fetch_from_dictionary(dict, klass, id)
+      dict && dict[klass] && dict[klass][id] && dict[klass][id].values.first
     end
     
     class AssociationNotFoundException < StandardError; end
