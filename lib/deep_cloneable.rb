@@ -108,8 +108,15 @@ class ActiveRecord::Base
             end
           end
 
+          association_method =
+            if association_reflection.options[:through]
+              "dup_#{association_reflection.macro}_through"
+            else
+              "dup_#{association_reflection.macro}_association"
+            end
+
           cloned_object = send(
-            "dup_#{association_reflection.macro}_#{association_reflection.class.name.demodulize.underscore.gsub('_reflection', '')}", 
+            association_method,
             { :reflection => association_reflection, :association => association, :copy => kopy, :dup_options => dup_options },
             &block
           )
