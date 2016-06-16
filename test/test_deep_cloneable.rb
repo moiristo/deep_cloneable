@@ -400,4 +400,10 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal deep_clone.contractors.first.apartments.first.id, deep_clone.apartments.first.id
     assert_equal deep_clone.apartments.first.contractors.first.id, deep_clone.contractors.first.id
   end
+
+  def test_should_not_make_attributes_dirty_for_exceptions
+    deep_clone = @jack.deep_clone(:except => :name)
+    assert_nil deep_clone.name
+    refute deep_clone.name_changed?
+  end
 end
