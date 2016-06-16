@@ -84,6 +84,3 @@ DEPENDENCIES
   rake (~> 10.4)
   rdoc (>= 2.4.2)
   sqlite3
-
-BUNDLED WITH
-   1.11.2

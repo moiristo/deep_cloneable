@@ -100,7 +100,7 @@ class ActiveRecord::Base
   private
 
     def dup_default_attribute_value_to(kopy, attribute, origin)
-      kopy.send(:raw_write_attribute, attribute, origin.class.column_defaults.dup[attribute.to_s])
+      kopy[attribute] = origin.class.column_defaults.dup[attribute.to_s]
     end
 
     def dup_belongs_to_association options, &block
