@@ -112,6 +112,17 @@ end
 
 *Note*: Using `deep_clone` with a block will also pass the associated objects that are being cloned to the block, so be sure to check whether the object actually responds to your method of choice.
 
+### Cloning models with files associated through Carrierwave
+
+If you are cloning models that have associated files through Carrierwave these will not get transferred automatically. To overcome the issue you need to explicitly set the file attribute.
+
+Easiest solution is to add the code in a clone block as described above.
+```ruby
+pirate.deep_clone include: :parrot do |original, kopy|
+  kopy.thumbnail = original.thumbnail
+end
+```
+
 ### Note on Patches/Pull Requests
 
 * Fork the project.
