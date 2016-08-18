@@ -41,6 +41,7 @@ class ActiveRecord::Base
       if options[:include]
         Array(options[:include]).each do |association, conditions_or_deep_associations|
           conditions = {}
+          scope = nil
 
           if association.kind_of? Hash
             conditions_or_deep_associations = association[association.keys.first]
@@ -50,6 +51,7 @@ class ActiveRecord::Base
           if conditions_or_deep_associations.kind_of?(Hash)
             conditions[:if]     = conditions_or_deep_associations.delete(:if)     if conditions_or_deep_associations[:if]
             conditions[:unless] = conditions_or_deep_associations.delete(:unless) if conditions_or_deep_associations[:unless]
+            scope               = conditions_or_deep_associations.delete(:scope)  if conditions_or_deep_associations[:scope]
           elsif conditions_or_deep_associations.kind_of?(Array)
             conditions_or_deep_associations.delete_if {|entry| conditions.merge!(entry) if entry.is_a?(Hash) && (entry.key?(:if) || entry.key?(:unless)) }
           end
@@ -77,7 +79,7 @@ class ActiveRecord::Base
 
           duped_object = send(
             "dup_#{association_type}_association",
-            { :reflection => association_reflection, :association => association, :copy => kopy, :conditions => conditions, :dup_options => dup_options },
+            { :reflection => association_reflection, :association => association, :copy => kopy, :conditions => conditions, :dup_options => dup_options, :scope => scope },
             &block
           )
 
@@ -121,6 +123,7 @@ class ActiveRecord::Base
       end.try(:name)
 
       objects = self.send(options[:association])
+      objects = objects.send(options[:scope]) if options[:scope]
       objects = objects.select{|object| evaluate_conditions(object, options[:conditions]) } if options[:conditions].any?
 
       objects.collect do |object|
@@ -149,6 +152,7 @@ class ActiveRecord::Base
       end.try(:name)
 
       objects = self.send(options[:association])
+      objects = objects.send(options[:scope]) if options[:scope]
       objects = objects.select{|object| evaluate_conditions(object, options[:conditions]) } if options[:conditions].any?
 
       objects.collect do |object|
