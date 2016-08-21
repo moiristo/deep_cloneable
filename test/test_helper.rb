@@ -10,6 +10,8 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'active_record'
 
+I18n.enforce_available_locales = true
+
 def load_schema
   config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
 
