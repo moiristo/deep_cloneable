@@ -363,6 +363,18 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal 0, deep_clone.mateys.size
   end
 
+  def test_should_properly_read_conditions_in_arrays
+    subject1 = Subject.create(:name => 'subject 1')
+    subject2 = Subject.create(:name => 'subject 2')
+    student = Student.create(:name => 'Parent', :subjects => [subject1, subject2])
+
+    deep_clone = student.deep_clone(:include => [:subjects => [:if => lambda{|subject| false }] ])
+    assert deep_clone.subjects.none?
+
+    deep_clone = student.deep_clone(:include => [:subjects => [:if => lambda{|subject| true }] ])
+    assert_equal 2, deep_clone.subjects.size
+  end
+
   def test_should_reject_copies_if_conditionals_are_passed_with_associations
     deep_clone = @ship.deep_clone(:include => [:pirates => [:treasures, :mateys, { :unless => lambda {|pirate| pirate.name == 'Jack Sparrow'} }]])
 
