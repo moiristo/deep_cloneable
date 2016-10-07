@@ -25,8 +25,18 @@ end
 
 class GoldPiece < ActiveRecord::Base;   belongs_to :treasure  end
 class Matey < ActiveRecord::Base;       belongs_to :pirate    end
-class Parrot < ActiveRecord::Base;      belongs_to :pirate; attr_accessor :cloned_from_id end
 class BattleShip < ActiveRecord::Base;  has_many   :pirates, :as => :ship end
+
+class Parrot < ActiveRecord::Base
+  belongs_to :pirate
+  has_many :parrot_cages, :foreign_key => :owner_id, :inverse_of => :parrot, :class_name => 'Cage'
+  attr_accessor :cloned_from_id
+end
+
+class Cage < ActiveRecord::Base
+  belongs_to :parrot, :foreign_key => :owner_id, :inverse_of => :parrot_cages
+  belongs_to :pirate, :foreign_key => :owner_id, :inverse_of => :pirate_cages
+end
 
 class Pirate < ActiveRecord::Base
   belongs_to :ship, :polymorphic => true
@@ -35,6 +45,7 @@ class Pirate < ActiveRecord::Base
   has_many :treasures, :foreign_key => 'owner'
   has_many :gold_pieces, :through => :treasures
   has_one :parrot
+  has_many :pirate_cages, :inverse_of => :pirate, :foreign_key => :owner_id, :class_name => 'Cage'
 
   serialize :piastres
 
