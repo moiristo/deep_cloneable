@@ -25,6 +25,11 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :matey_id, :integer
   end
 
+  create_table :cages, :force => true do |t|
+    t.column :name, :string
+    t.column :owner_id, :integer
+  end
+
   create_table :gold_pieces, :force => true do |t|
     t.column :treasure_id, :integer
   end

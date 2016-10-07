@@ -100,6 +100,15 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     end
   end
 
+  def test_include_association_assignments_with_inverse_of
+    @jack.pirate_cages.build
+    deep_clone = @jack.deep_clone(:include => :pirate_cages)
+    assert deep_clone.new_record?
+    deep_clone.pirate_cages.each do |cage|
+      assert_equal deep_clone, cage.pirate
+    end
+  end
+
   def test_multiple_and_deep_include_association
     deep_clone = @jack.deep_clone(:include => {:treasures => :gold_pieces, :mateys => {}})
     assert deep_clone.new_record?

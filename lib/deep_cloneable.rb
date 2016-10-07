@@ -116,9 +116,13 @@ class ActiveRecord::Base
     def dup_has_many_association options, &block
       primary_key_name = options[:reflection].foreign_key.to_s
 
-      reverse_association_name = options[:reflection].klass.reflect_on_all_associations.detect do |reflection|
-        reflection.foreign_key.to_s == primary_key_name && reflection != options[:reflection]
-      end.try(:name)
+      if options[:reflection].inverse_of.present?
+        reverse_association_name = options[:reflection].inverse_of.name
+      else
+        reverse_association_name = options[:reflection].klass.reflect_on_all_associations.detect do |reflection|
+          reflection.foreign_key.to_s == primary_key_name && reflection != options[:reflection]
+        end.try(:name)
+      end
 
       objects = self.send(options[:association])
       objects = objects.select{|object| evaluate_conditions(object, options[:conditions]) } if options[:conditions].any?
@@ -144,9 +148,13 @@ class ActiveRecord::Base
     end
 
     def dup_join_association options, &block
-      reverse_association_name = options[:reflection].klass.reflect_on_all_associations.detect do |reflection|
-        (reflection.macro == options[:macro]) && (reflection.association_foreign_key.to_s == options[:primary_key_name])
-      end.try(:name)
+      if options[:reflection].inverse_of.present?
+        reverse_association_name = options[:reflection].inverse_of.name
+      else
+        reverse_association_name = options[:reflection].klass.reflect_on_all_associations.detect do |reflection|
+          (reflection.macro == options[:macro]) && (reflection.association_foreign_key.to_s == options[:primary_key_name])
+        end.try(:name)
+      end
 
       objects = self.send(options[:association])
       objects = objects.select{|object| evaluate_conditions(object, options[:conditions]) } if options[:conditions].any?
