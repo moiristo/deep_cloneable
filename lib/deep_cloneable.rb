@@ -39,7 +39,7 @@ class ActiveRecord::Base
       end
 
       if options[:include]
-        Array(options[:include]).each do |association, conditions_or_deep_associations|
+        normalized_includes_list(options[:include]).each do |association, conditions_or_deep_associations|
           conditions = {}
 
           if association.kind_of? Hash
@@ -172,6 +172,19 @@ class ActiveRecord::Base
 
     def evaluate_conditions object, conditions
       (conditions[:if] && conditions[:if].call(object)) || (conditions[:unless] && !conditions[:unless].call(object))
+    end
+    
+    def normalized_includes_list includes
+      list = []
+      Array(includes).each do |item|
+        if item.is_a?(Hash) && item.size > 1
+          item.each{|key, value| list << { key => value } }
+        else
+          list << item
+        end
+      end
+      
+      list
     end
 
     class AssociationNotFoundException < StandardError; end

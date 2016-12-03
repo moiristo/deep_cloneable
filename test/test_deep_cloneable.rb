@@ -126,6 +126,15 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal 1, deep_clone.gold_pieces.size
     assert_equal 1, deep_clone.mateys.size
   end
+  
+  def test_multiple_and_deep_include_association_with_array_and_multikey_hash
+    deep_clone = @jack.deep_clone(:include => [:parrot, {:treasures => :gold_pieces, :mateys => {}}])
+    assert deep_clone.new_record?
+    assert deep_clone.save
+    assert_equal 1, deep_clone.treasures.size
+    assert_equal 1, deep_clone.gold_pieces.size
+    assert_equal 1, deep_clone.mateys.size
+  end  
 
   def test_with_belongs_to_relation
     deep_clone = @jack.deep_clone(:include => :parrot)
@@ -427,4 +436,5 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_nil deep_clone.name
     refute deep_clone.name_changed?
   end
+  
 end
