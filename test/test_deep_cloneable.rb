@@ -406,6 +406,20 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal 1, deep_clone.pirates.size
   end
 
+  def test_should_reject_copies_if_conditionals_are_passed_with_associations
+    deep_clone = @ship.deep_clone(:include => [:pirates => {:treasures => [], :mateys => [], :unless => lambda {|pirate| pirate.name == 'Jack Sparrow'}}])
+
+    assert deep_clone.new_record?
+    assert deep_clone.save
+    assert_equal 0, deep_clone.pirates.size
+
+    deep_clone = @ship.deep_clone(:include => [:pirates => {:treasures => [], :mateys => [], :if => lambda {|pirate| pirate.name == 'Jack Sparrow'}}])
+    assert deep_clone.new_record?
+    assert deep_clone.save
+    assert_equal 1, deep_clone.pirates.size
+  end
+
+
   def test_should_find_in_dict_for_habtm
     apt = Apartment.create(:number => "101")
     contractor = Contractor.create(:name => "contractor", :apartments => [apt])
