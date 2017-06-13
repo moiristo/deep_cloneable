@@ -217,6 +217,21 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal 2, deep_clone_human.chickens.count
   end
 
+  def test_should_skip_missing_associations
+    @earth = Animal::Planet.create :name => 'Earth'
+    @human = Animal::Human.create :name => "Michael"
+    @chicken = Animal::Chicken.create :name => 'Chick', :humans => [@human], :planet => @earth, :humans => [@human]
+    @dove = Animal::Dove.create :name => 'Dovey', :planet => @earth
+
+    assert_raises ActiveRecord::Base::DeepCloneable::AssociationNotFoundException do
+      @earth.deep_clone(:include => { :birds => :ownerships })
+    end
+
+    deep_clone_earth = @earth.deep_clone(:include => { :birds => :ownerships }, :skip_missing_associations => true)
+    assert_equal 2, deep_clone_earth.birds.size
+    assert deep_clone_earth.birds.detect{|bird| bird.is_a?(Animal::Chicken) }.ownerships.any?
+  end
+
   def test_should_deep_clone_with_block
     deep_clone = @jack.deep_clone(:include => :parrot) do |original, kopy|
       kopy.cloned_from_id = original.id

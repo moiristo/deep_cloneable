@@ -47,8 +47,14 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :name, :string
   end
 
-  create_table :chickens, :force => true do |t|
+  create_table :planets, :force => true do |t|
     t.column :name, :string
+  end
+
+  create_table :birds, :force => true do |t|
+    t.column :name, :string
+    t.column :type, :string
+    t.column :planet_id, :integer
   end
 
   create_table :ownerships, :force => true do |t|

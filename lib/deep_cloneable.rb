@@ -54,34 +54,37 @@ class ActiveRecord::Base
             conditions_or_deep_associations.delete_if {|entry| conditions.merge!(entry) if entry.is_a?(Hash) && (entry.key?(:if) || entry.key?(:unless)) }
           end
 
-          dup_options = conditions_or_deep_associations.blank? ? {} : {:include => conditions_or_deep_associations}
+          dup_options = {}
+          dup_options.merge!(:include => conditions_or_deep_associations) if conditions_or_deep_associations.present?
           dup_options.merge!(:except => deep_exceptions[association]) if deep_exceptions[association]
           dup_options.merge!(:only => deep_onlinesses[association]) if deep_onlinesses[association]
           dup_options.merge!(:dictionary => dict) if dict
+          dup_options.merge!(:skip_missing_associations => options[:skip_missing_associations]) if options[:skip_missing_associations]
 
-          association_reflection = self.class.reflect_on_association(association)
-          raise AssociationNotFoundException.new("#{self.class}##{association}") if association_reflection.nil?
-
-          if options[:validate] == false
-            kopy.instance_eval do
-              # Force :validate => false on all saves.
-              def perform_validations(options={})
-                options[:validate] = false
-                super(options)
+          if association_reflection = self.class.reflect_on_association(association)
+            if options[:validate] == false
+              kopy.instance_eval do
+                # Force :validate => false on all saves.
+                def perform_validations(options={})
+                  options[:validate] = false
+                  super(options)
+                end
               end
             end
+
+            association_type = association_reflection.macro
+            association_type = "#{association_type}_through" if association_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
+
+            duped_object = send(
+              "dup_#{association_type}_association",
+              { :reflection => association_reflection, :association => association, :copy => kopy, :conditions => conditions, :dup_options => dup_options },
+              &block
+            )
+
+            kopy.send("#{association}=", duped_object)
+          elsif !options[:skip_missing_associations]
+            raise AssociationNotFoundException.new("#{self.class}##{association}")
           end
-
-          association_type = association_reflection.macro
-          association_type = "#{association_type}_through" if association_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
-
-          duped_object = send(
-            "dup_#{association_type}_association",
-            { :reflection => association_reflection, :association => association, :copy => kopy, :conditions => conditions, :dup_options => dup_options },
-            &block
-          )
-
-          kopy.send("#{association}=", duped_object)
         end
       end
 
