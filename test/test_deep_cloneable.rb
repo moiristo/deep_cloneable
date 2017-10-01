@@ -126,7 +126,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal 1, deep_clone.gold_pieces.size
     assert_equal 1, deep_clone.mateys.size
   end
-  
+
   def test_multiple_and_deep_include_association_with_array_and_multikey_hash
     deep_clone = @jack.deep_clone(:include => [:parrot, {:treasures => :gold_pieces, :mateys => {}}])
     assert deep_clone.new_record?
@@ -134,7 +134,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal 1, deep_clone.treasures.size
     assert_equal 1, deep_clone.gold_pieces.size
     assert_equal 1, deep_clone.mateys.size
-  end  
+  end
 
   def test_with_belongs_to_relation
     deep_clone = @jack.deep_clone(:include => :parrot)
@@ -421,6 +421,27 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal 1, deep_clone.pirates.size
   end
 
+  def test_should_reject_copies_if_conditionals_are_passed_with_nested_many_to_many_associations
+    @user = User.create :name => 'Jack'
+    @order1 = Order.create
+    @order2 = Order.create
+    @product1 = Product.create  :name => 'Paper'
+    @product2 = Product.create  :name => 'Ink'
+    @order2.products << [@product1, @product2]
+    @user.orders << [@order1, @order2]
+
+    deep_clone = @user.deep_clone(:include => [orders: [products: [{ :unless => lambda {|product| product.name == 'Ink' }}]]])
+
+    assert deep_clone.new_record?
+    assert deep_clone.save
+    assert_equal 1, deep_clone.orders.second.products.size
+
+    deep_clone = @user.deep_clone(:include => [orders: [products: [{ :if => lambda {|product| product.name == 'Ink'}}]]])
+    assert deep_clone.new_record?
+    assert deep_clone.save
+    assert_equal 1, deep_clone.orders.second.products.size
+  end
+
   def test_should_find_in_dict_for_habtm
     apt = Apartment.create(:number => "101")
     contractor = Contractor.create(:name => "contractor", :apartments => [apt])
@@ -451,5 +472,5 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_nil deep_clone.name
     refute deep_clone.name_changed?
   end
-  
+
 end

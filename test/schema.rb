@@ -129,4 +129,18 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :apartment_id, :integer
     t.column :contractor_id, :integer
   end
+
+  create_table :users, :force => true do |t|
+    t.column :name, :string
+    t.column :contractor_id, :integer
+  end
+
+  create_table :orders, :force => true do |t|
+    t.column :user_id, :integer
+  end
+
+  create_table :products, :force => true do |t|
+    t.column :name, :string
+    t.column :order_id, :integer
+  end
 end
