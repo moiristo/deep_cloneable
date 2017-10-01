@@ -430,13 +430,13 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     @order2.products << [@product1, @product2]
     @user.orders << [@order1, @order2]
 
-    deep_clone = @user.deep_clone(:include => [orders: [products: [{ :unless => lambda {|product| product.name == 'Ink' }}]]])
+    deep_clone = @user.deep_clone(:include => [:orders => [:products => [{ :unless => lambda {|product| product.name == 'Ink' }}]]])
 
     assert deep_clone.new_record?
     assert deep_clone.save
     assert_equal 1, deep_clone.orders.second.products.size
 
-    deep_clone = @user.deep_clone(:include => [orders: [products: [{ :if => lambda {|product| product.name == 'Ink'}}]]])
+    deep_clone = @user.deep_clone(:include => [:orders => [:products => [{ :if => lambda {|product| product.name == 'Ink'}}]]])
     assert deep_clone.new_record?
     assert deep_clone.save
     assert_equal 1, deep_clone.orders.second.products.size
