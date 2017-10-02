@@ -127,3 +127,16 @@ class Contractor < ActiveRecord::Base
   belongs_to :building
   has_and_belongs_to_many :apartments
 end
+
+class User < ActiveRecord::Base
+  has_many :orders
+end
+
+class Order < ActiveRecord::Base
+  belongs_to :user
+  has_many :products
+end
+
+class Product < ActiveRecord::Base
+  belongs_to :order
+end

@@ -48,9 +48,11 @@ class ActiveRecord::Base
           end
 
           if conditions_or_deep_associations.kind_of?(Hash)
+            conditions_or_deep_associations = conditions_or_deep_associations.dup
             conditions[:if]     = conditions_or_deep_associations.delete(:if)     if conditions_or_deep_associations[:if]
             conditions[:unless] = conditions_or_deep_associations.delete(:unless) if conditions_or_deep_associations[:unless]
           elsif conditions_or_deep_associations.kind_of?(Array)
+            conditions_or_deep_associations = conditions_or_deep_associations.dup
             conditions_or_deep_associations.delete_if {|entry| conditions.merge!(entry) if entry.is_a?(Hash) && (entry.key?(:if) || entry.key?(:unless)) }
           end
 
@@ -176,7 +178,7 @@ class ActiveRecord::Base
     def evaluate_conditions object, conditions
       (conditions[:if] && conditions[:if].call(object)) || (conditions[:unless] && !conditions[:unless].call(object))
     end
-    
+
     def normalized_includes_list includes
       list = []
       Array(includes).each do |item|
@@ -186,7 +188,7 @@ class ActiveRecord::Base
           list << item
         end
       end
-      
+
       list
     end
 
