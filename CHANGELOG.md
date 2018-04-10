@@ -1,11 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
- 
+
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 ### Added
+- Test with Ruby 2.4.4 and 2.5.1
+- Test with Rails 5.1 and 5.2
 - CHANGELOG.md
 
 ## [2.3.1] - 2017-10-03
@@ -22,7 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [2.2.2] - 2016-10-10
 ### Added
-- Documentation on cloning associated Carrierwave files 
+- Documentation on cloning associated Carrierwave files
 ### Changed
 - Use `inverse_of` when defined for finding the reverse association
 - Cache bundler in Travis
@@ -89,7 +91,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Update travis.yml with rails 4.0
 ### Fixed
-- Appraisals should load the correct major version of rails 
+- Appraisals should load the correct major version of rails
 - Exclude unsupported builds in Travis
 
 ## [1.5.3] - 2013-06-18
@@ -148,7 +150,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - `:except` option for excluding attributes
 ### Fixed
-- Set foreign keys properly 
+- Set foreign keys properly
 
 ## 1.0.0 - 2010-10-18
 ### Fixed
