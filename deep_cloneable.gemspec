@@ -28,8 +28,6 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "deep_cloneable.gemspec",
-    "gemfiles/3.1.gemfile",
-    "gemfiles/3.1.gemfile.lock",
     "gemfiles/3.2.gemfile",
     "gemfiles/3.2.gemfile.lock",
     "gemfiles/4.0.gemfile",
@@ -40,6 +38,10 @@ Gem::Specification.new do |s|
     "gemfiles/4.2.gemfile.lock",
     "gemfiles/5.0.gemfile",
     "gemfiles/5.0.gemfile.lock",
+    "gemfiles/5.1.gemfile",
+    "gemfiles/5.1.gemfile.lock",
+    "gemfiles/5.2.gemfile",
+    "gemfiles/5.2.gemfile.lock",
     "init.rb",
     "lib/deep_cloneable.rb",
     "readme.md",
@@ -58,12 +60,11 @@ Gem::Specification.new do |s|
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<activerecord>, ["< 5.2.0", ">= 3.1.0"])
+      s.add_runtime_dependency(%q<activerecord>, ["< 6", ">= 3.2.0"])
     else
-      s.add_dependency(%q<activerecord>, ["< 5.2.0", ">= 3.1.0"])
+      s.add_dependency(%q<activerecord>, ["< 6", ">= 3.2.0"])
     end
   else
-    s.add_dependency(%q<activerecord>, ["< 5.2.0", ">= 3.1.0"])
+    s.add_dependency(%q<activerecord>, ["< 6", ">= 3.2.0"])
   end
 end
-

@@ -1,24 +1,23 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activemodel (4.2.10)
-      activesupport (= 4.2.10)
-      builder (~> 3.1)
-    activerecord (4.2.10)
-      activemodel (= 4.2.10)
-      activesupport (= 4.2.10)
-      arel (~> 6.0)
-    activesupport (4.2.10)
-      i18n (~> 0.7)
+    activemodel (5.1.6)
+      activesupport (= 5.1.6)
+    activerecord (5.1.6)
+      activemodel (= 5.1.6)
+      activesupport (= 5.1.6)
+      arel (~> 8.0)
+    activesupport (5.1.6)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
       minitest (~> 5.1)
-      thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
     appraisal (2.2.0)
       bundler
       rake
       thor (>= 0.14.0)
-    arel (6.0.4)
+    arel (8.0.0)
     builder (3.2.3)
     concurrent-ruby (1.0.5)
     descendants_tracker (0.0.4)
@@ -35,7 +34,7 @@ GEM
       oauth2 (~> 1.0)
     hashie (3.5.7)
     highline (1.6.21)
-    i18n (0.9.5)
+    i18n (1.0.0)
       concurrent-ruby (~> 1.0)
     jeweler (2.3.9)
       builder
@@ -76,7 +75,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord (~> 4.2.3)
+  activerecord (~> 5.1.0)
   appraisal
   git (~> 1.2.9)
   highline (~> 1.6.0)
