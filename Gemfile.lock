@@ -10,7 +10,7 @@ GEM
       arel (~> 5.0.0)
     activesupport (4.1.15)
       i18n (~> 0.6, >= 0.6.9)
-      json (~> 1.7, >= 1.7.7)
+      json (~> 1.7, >= 1.8.6)
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
@@ -47,7 +47,7 @@ GEM
       rake
       rdoc
       semver2
-    json (1.8.3)
+    json (1.8.6)
     jwt (1.5.6)
     mime-types (2.99.3)
     minitest (5.9.0)
@@ -83,12 +83,14 @@ DEPENDENCIES
   highline (~> 1.6.0)
   i18n (~> 0.6.5)
   jeweler
+  json (~> 1.8.6)
   minitest
   nokogiri (~> 1.5.0)
+  psych (< 3)
   rack (~> 1.6)
   rake (~> 10.4)
-  rdoc (>= 2.4.2)
+  rdoc (~> 4.2.2)
   sqlite3
 
 BUNDLED WITH
-   1.14.6
+   1.16.1
