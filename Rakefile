@@ -8,7 +8,7 @@ begin
     gem.name = "deep_cloneable"
     gem.summary = %Q{This gem gives every ActiveRecord::Base object the possibility to do a deep clone.}
     gem.description = %Q{Extends the functionality of ActiveRecord::Base#dup to perform a deep clone that includes user specified associations. }
-    gem.email = "r.j.delange@nedforce.nl"
+    gem.email = "rjdelange@icloud.com"
     gem.homepage = "http://github.com/moiristo/deep_cloneable"
     gem.authors = ["Reinier de Lange"]
     gem.license = "MIT"
