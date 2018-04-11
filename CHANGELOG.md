@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.3.2] - 2018-04-11
 ### Added
 - Support for Ruby 2.4 and 2.5
 - Support for Rails 5.1 and 5.2
@@ -156,7 +158,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Convert existing code to a gem
 
-[Unreleased]: https://github.com/moiristo/deep_cloneable/compare/v2.3.1...HEAD
+[Unreleased]: https://github.com/moiristo/deep_cloneable/compare/v2.3.2...HEAD
+[2.3.2]: https://github.com/moiristo/deep_cloneable/compare/v2.3.1...v2.3.2
 [2.3.1]: https://github.com/moiristo/deep_cloneable/compare/v2.3.0...v2.3.1
 [2.3.0]: https://github.com/moiristo/deep_cloneable/compare/v2.2.2...v2.3.0
 [2.2.2]: https://github.com/moiristo/deep_cloneable/compare/v2.2.1...v2.2.2
