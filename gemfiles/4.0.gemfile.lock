@@ -17,7 +17,7 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
     addressable (2.4.0)
-    appraisal (2.1.0)
+    appraisal (2.2.0)
       bundler
       rake
       thor (>= 0.14.0)
@@ -28,13 +28,14 @@ GEM
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     git (1.2.9.1)
-    github_api (0.14.5)
+    github_api (0.16.0)
       addressable (~> 2.4.0)
       descendants_tracker (~> 0.0.4)
       faraday (~> 0.8, < 0.10)
       hashie (>= 3.4)
+      mime-types (>= 1.16, < 3.0)
       oauth2 (~> 1.0)
-    hashie (3.4.6)
+    hashie (3.5.7)
     highline (1.6.21)
     i18n (0.6.11)
     jeweler (2.1.1)
@@ -47,28 +48,28 @@ GEM
       rake
       rdoc
       semver
-    json (1.8.3)
-    jwt (1.5.4)
+    jwt (1.5.6)
+    mime-types (2.99.3)
     minitest (4.7.5)
-    multi_json (1.12.1)
-    multi_xml (0.5.5)
+    multi_json (1.13.1)
+    multi_xml (0.6.0)
     multipart-post (2.0.0)
     nokogiri (1.5.11)
-    oauth2 (1.2.0)
-      faraday (>= 0.8, < 0.10)
+    oauth2 (1.4.0)
+      faraday (>= 0.8, < 0.13)
       jwt (~> 1.0)
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
-    rack (1.6.4)
+    psych (2.2.4)
+    rack (1.6.9)
     rake (10.5.0)
-    rdoc (4.2.2)
-      json (~> 1.4)
+    rdoc (5.1.0)
     semver (1.0.1)
-    sqlite3 (1.3.11)
-    thor (0.19.1)
-    thread_safe (0.3.5)
-    tzinfo (0.3.51)
+    sqlite3 (1.3.13)
+    thor (0.20.0)
+    thread_safe (0.3.6)
+    tzinfo (0.3.54)
 
 PLATFORMS
   ruby
@@ -79,13 +80,14 @@ DEPENDENCIES
   git (~> 1.2.9)
   highline (~> 1.6.0)
   i18n (~> 0.6.5)
-  jeweler
+  jeweler (~> 2.1.1)
   minitest
   nokogiri (~> 1.5.0)
+  psych (< 3)
   rack (~> 1.6)
   rake (~> 10.4)
-  rdoc (>= 2.4.2)
+  rdoc (>= 2.4.2, < 6)
   sqlite3
 
 BUNDLED WITH
-   1.11.2
+   1.16.1

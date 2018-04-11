@@ -24,7 +24,6 @@ gemfile:
   - gemfiles/4.0.gemfile
   - gemfiles/4.1.gemfile
   - gemfiles/4.2.gemfile
-  - gemfiles/4.2_new.gemfile
   - gemfiles/5.0.gemfile
   - gemfiles/5.1.gemfile
   - gemfiles/5.2.gemfile
@@ -38,8 +37,6 @@ matrix:
     - rvm: 1.8.7
       gemfile: gemfiles/4.2.gemfile
     - rvm: 1.8.7
-      gemfile: gemfiles/4.2_new.gemfile
-    - rvm: 1.8.7
       gemfile: gemfiles/5.0.gemfile
     - rvm: 1.8.7
       gemfile: gemfiles/5.1.gemfile
@@ -52,15 +49,11 @@ matrix:
     - rvm: 1.9.2
       gemfile: gemfiles/4.2.gemfile
     - rvm: 1.9.2
-      gemfile: gemfiles/4.2_new.gemfile
-    - rvm: 1.9.2
       gemfile: gemfiles/5.0.gemfile
     - rvm: 1.9.2
       gemfile: gemfiles/5.1.gemfile
     - rvm: 1.9.2
       gemfile: gemfiles/5.2.gemfile
-    - rvm: 1.9.3
-      gemfile: gemfiles/4.2_new.gemfile
     - rvm: 1.9.3
       gemfile: gemfiles/5.0.gemfile
     - rvm: 1.9.3
@@ -68,15 +61,11 @@ matrix:
     - rvm: 1.9.3
       gemfile: gemfiles/5.2.gemfile
     - rvm: 2.0.0
-      gemfile: gemfiles/4.2_new.gemfile
-    - rvm: 2.0.0
       gemfile: gemfiles/5.0.gemfile
     - rvm: 2.0.0
       gemfile: gemfiles/5.1.gemfile
     - rvm: 2.0.0
       gemfile: gemfiles/5.2.gemfile
-    - rvm: 2.1.5
-      gemfile: gemfiles/4.2_new.gemfile
     - rvm: 2.1.5
       gemfile: gemfiles/5.0.gemfile
     - rvm: 2.1.5

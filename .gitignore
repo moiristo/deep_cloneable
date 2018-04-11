@@ -21,3 +21,4 @@ pkg
 ## PROJECT::SPECIFIC
 
 test/debug.log
+.bundle
