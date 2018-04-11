@@ -2,7 +2,7 @@
 
 source "http://rubygems.org"
 
-gem "activerecord", "~> 5.0.0"
+gem "activerecord", "~> 4.2.3"
 gem "i18n", "~> 0.7.0"
 gem "highline", "~> 1.6.0", :group => :test
 gem "rake", "~> 10.4", :group => :test
