@@ -118,6 +118,12 @@ class ActiveRecord::Base
       dup_belongs_to_association options, &block
     end
 
+    def dup_has_one_through_association options, &block
+      dup_join_association(
+          options.merge(:macro => :has_one, :primary_key_name => options[:reflection].through_reflection.foreign_key.to_s),
+          &block)
+    end
+
     def dup_has_many_association options, &block
       primary_key_name = options[:reflection].foreign_key.to_s
 
@@ -162,17 +168,23 @@ class ActiveRecord::Base
       end
 
       objects = self.send(options[:association])
-      objects = objects.select{|object| evaluate_conditions(object, options[:conditions]) } if options[:conditions].any?
 
-      objects.collect do |object|
+      condition_handler = lambda { |object| evaluate_conditions(object, options[:conditions]) }
+
+      if options[:conditions].any?
+        objects = objects.respond_to?(:select) ? objects.select(&condition_handler) : condition_handler.call(objects)
+      end
+
+      assoc_handler = lambda do |object|
         dict = options[:dup_options][:dictionary]
-        if(dict && object.find_in_dict_or_dup(dict, false))
+        if dict && object.find_in_dict_or_dup(dict, false)
           object = object.deep_clone(options[:dup_options], &block)
         else
           object.send(reverse_association_name).target << options[:copy] if reverse_association_name
         end
         object
       end
+      objects.respond_to?(:map) ? objects.map(&assoc_handler) : assoc_handler.call(objects)
     end
 
     def evaluate_conditions object, conditions
