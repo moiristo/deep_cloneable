@@ -368,7 +368,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   def test_should_include_has_one_through_associations
     organization = Organization.create(:name => 'organization')
     contractor = Contractor.create(:name => 'contractor')
-    Contract.create(number: 12345, :contractor => contractor, :organization => organization)
+    Contract.create(:number => 12345, :contractor => contractor, :organization => organization)
 
     deep_clone = organization.deep_clone(:include => :contractor)
     assert_equal organization.contractor, deep_clone.contractor
