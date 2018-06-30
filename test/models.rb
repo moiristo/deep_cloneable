@@ -126,6 +126,7 @@ end
 class Contractor < ActiveRecord::Base
   belongs_to :building
   has_and_belongs_to_many :apartments
+  has_one :contract
 end
 
 class User < ActiveRecord::Base
@@ -139,4 +140,14 @@ end
 
 class Product < ActiveRecord::Base
   belongs_to :order
+end
+
+class Contract < ActiveRecord::Base
+  belongs_to :contractor
+  belongs_to :organization
+end
+
+class Organization < ActiveRecord::Base
+  has_one :contract
+  has_one :contractor, through: :contract
 end

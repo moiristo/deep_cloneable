@@ -365,6 +365,15 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal [[student, deep_clone],[student, deep_clone]], deep_clone.subjects.map{|subject| subject.students }
   end
 
+  def test_should_include_has_one_through_associations
+    organization = Organization.create(name: 'organization')
+    contractor = Contractor.create(name: 'contractor')
+    Contract.create(number: 12345, contractor: contractor, organization: organization)
+
+    deep_clone = organization.deep_clone(include: :contractor)
+    assert_equal organization.contractor, deep_clone.contractor
+  end
+
   def test_should_deep_clone_unsaved_objects
     jack = Pirate.new(:name => 'Jack Sparrow', :nick_name => 'Captain Jack', :age => 30)
     jack.mateys.build(:name => 'John')
