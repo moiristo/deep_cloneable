@@ -120,7 +120,7 @@ class ActiveRecord::Base
 
     def dup_has_one_through_association options, &block
       dup_join_association(
-          options.merge(macro: :has_one, primary_key_name: options[:reflection].through_reflection.foreign_key.to_s),
+          options.merge(:macro => :has_one, primary_key_name: options[:reflection].through_reflection.foreign_key.to_s),
           &block)
     end
 
