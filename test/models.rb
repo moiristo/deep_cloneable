@@ -149,5 +149,5 @@ end
 
 class Organization < ActiveRecord::Base
   has_one :contract
-  has_one :contractor, through: :contract
+  has_one :contractor, :through => :contract
 end

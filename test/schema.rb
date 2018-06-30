@@ -144,11 +144,11 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column :order_id, :integer
   end
 
-  create_table :organizations, force: true do |t|
+  create_table :organizations, :force => true do |t|
     t.column :name, :string
   end
 
-  create_table :contracts, force: true do |t|
+  create_table :contracts, :force => true do |t|
     t.column :number, :string
     t.column :contractor_id, :integer
     t.column :organization_id, :integer
