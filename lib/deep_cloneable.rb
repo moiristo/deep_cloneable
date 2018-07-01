@@ -169,13 +169,13 @@ class ActiveRecord::Base
 
       objects = self.send(options[:association])
 
-      condition_handler = ->(object) { evaluate_conditions(object, options[:conditions]) }
+      condition_handler = lambda { |object| evaluate_conditions(object, options[:conditions]) }
 
       if options[:conditions].any?
         objects = objects.respond_to?(:select) ? objects.select(&condition_handler) : condition_handler.call(objects)
       end
 
-      assoc_handler = ->(object) do
+      assoc_handler = lambda do |object|
         dict = options[:dup_options][:dictionary]
         if dict && object.find_in_dict_or_dup(dict, false)
           object = object.deep_clone(options[:dup_options], &block)
