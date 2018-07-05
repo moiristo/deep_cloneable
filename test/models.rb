@@ -26,14 +26,12 @@ module Animal
     has_many :birds
   end
 
-
   class Ownership < ActiveRecord::Base
     belongs_to :human
     belongs_to :chicken
 
     validates_uniqueness_of :chicken_id, :scope => :human_id
   end
-
 end
 
 class GoldPiece < ActiveRecord::Base;   belongs_to :treasure  end
