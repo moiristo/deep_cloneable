@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class TestDeepCloneable < MiniTest::Unit::TestCase
-
   def setup
     @jack  = Pirate.create(:name => 'Jack Sparrow', :nick_name => 'Captain Jack', :age => 30)
     @polly = Parrot.create(:name => 'Polly', :age => 2, :pirate => @jack)
@@ -84,7 +83,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   end
 
   def test_deep_include_association
-    deep_clone = @jack.deep_clone(:include => {:treasures => :gold_pieces})
+    deep_clone = @jack.deep_clone(:include => { :treasures => :gold_pieces })
     assert deep_clone.new_record?
     assert deep_clone.save
     assert_equal 1, deep_clone.treasures.size
@@ -110,7 +109,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   end
 
   def test_multiple_and_deep_include_association
-    deep_clone = @jack.deep_clone(:include => {:treasures => :gold_pieces, :mateys => {}})
+    deep_clone = @jack.deep_clone(:include => { :treasures => :gold_pieces, :mateys => {} })
     assert deep_clone.new_record?
     assert deep_clone.save
     assert_equal 1, deep_clone.treasures.size
@@ -119,7 +118,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   end
 
   def test_multiple_and_deep_include_association_with_array
-    deep_clone = @jack.deep_clone(:include => [{:treasures => :gold_pieces}, :mateys])
+    deep_clone = @jack.deep_clone(:include => [{ :treasures => :gold_pieces }, :mateys])
     assert deep_clone.new_record?
     assert deep_clone.save
     assert_equal 1, deep_clone.treasures.size
@@ -128,7 +127,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   end
 
   def test_multiple_and_deep_include_association_with_array_and_multikey_hash
-    deep_clone = @jack.deep_clone(:include => [:parrot, {:treasures => :gold_pieces, :mateys => {}}])
+    deep_clone = @jack.deep_clone(:include => [:parrot, { :treasures => :gold_pieces, :mateys => {} }])
     assert deep_clone.new_record?
     assert deep_clone.save
     assert_equal 1, deep_clone.treasures.size
@@ -176,7 +175,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     current_matey_count = Matey.count
 
     dict = { :mateys => {} }
-    @jack.mateys.each{|m| dict[:mateys][m] = m.deep_clone }
+    @jack.mateys.each { |m| dict[:mateys][m] = m.deep_clone }
 
     deep_clone = @jack.deep_clone(:include => [:mateys, { :treasures => :matey }], :dictionary => dict)
     assert deep_clone.new_record?
@@ -186,7 +185,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   end
 
   def test_should_support_ar_class_under_module
-    @human = Animal::Human.create :name => "Michael"
+    @human = Animal::Human.create :name => 'Michael'
     @pig = Animal::Pig.create :human => @human, :name => 'big pig'
 
     deep_clone_human = @human.deep_clone(:include => [:pigs])
@@ -194,18 +193,18 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert deep_clone_human.save
     assert_equal 1, deep_clone_human.pigs.count
 
-    @human2 = Animal::Human.create :name => "John"
+    @human2 = Animal::Human.create :name => 'John'
     @pig2 = @human2.pigs.create :name => 'small pig'
 
-    deep_clone_human_2 = @human.deep_clone(:include => [:pigs])
-    assert deep_clone_human_2.new_record?
-    assert deep_clone_human_2.save
-    assert_equal 1, deep_clone_human_2.pigs.count
+    deep_clone_human2 = @human.deep_clone(:include => [:pigs])
+    assert deep_clone_human2.new_record?
+    assert deep_clone_human2.save
+    assert_equal 1, deep_clone_human2.pigs.count
   end
 
   def test_should_deep_clone_many_to_many_associations
-    @human = Animal::Human.create :name => "Michael"
-    @human2 = Animal::Human.create :name => "Jack"
+    @human = Animal::Human.create :name => 'Michael'
+    @human2 = Animal::Human.create :name => 'Jack'
     @chicken1 = Animal::Chicken.create :name => 'Chick1'
     @chicken2 = Animal::Chicken.create :name => 'Chick2'
     @human.chickens << [@chicken1, @chicken2]
@@ -219,8 +218,8 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
 
   def test_should_skip_missing_associations
     @earth = Animal::Planet.create :name => 'Earth'
-    @human = Animal::Human.create :name => "Michael"
-    @chicken = Animal::Chicken.create :name => 'Chick', :humans => [@human], :planet => @earth, :humans => [@human]
+    @human = Animal::Human.create :name => 'Michael'
+    @chicken = Animal::Chicken.create :name => 'Chick', :humans => [@human], :planet => @earth
     @dove = Animal::Dove.create :name => 'Dovey', :planet => @earth
 
     assert_raises ActiveRecord::Base::DeepCloneable::AssociationNotFoundException do
@@ -229,7 +228,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
 
     deep_clone_earth = @earth.deep_clone(:include => { :birds => :ownerships }, :skip_missing_associations => true)
     assert_equal 2, deep_clone_earth.birds.size
-    assert deep_clone_earth.birds.detect{|bird| bird.is_a?(Animal::Chicken) }.ownerships.any?
+    assert deep_clone_earth.birds.detect { |bird| bird.is_a?(Animal::Chicken) }.ownerships.any?
   end
 
   def test_should_deep_clone_with_block
@@ -244,8 +243,8 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   end
 
   def test_should_deep_clone_habtm_associations
-    @person1 = Person.create :name => "Bill"
-    @person2 = Person.create :name => "Ted"
+    @person1 = Person.create :name => 'Bill'
+    @person2 = Person.create :name => 'Ted'
     @car1 = Car.create :name => 'Mustang'
     @car2 = Car.create :name => 'Camaro'
     @person1.cars << [@car1, @car2]
@@ -269,7 +268,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
 
   def test_should_deep_clone_habtm_associations_with_missing_reverse_association
     @coin = Coin.create :value => 1
-    @person = Person.create :name => "Bill"
+    @person = Person.create :name => 'Bill'
     @coin.people << @person
 
     deep_clone = @coin.deep_clone :include => :people
@@ -286,7 +285,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     deep_clone = student.deep_clone :include => { :student_assignments => :subject }
     deep_clone.save # Subjects will have been set after save
     assert_equal 2, deep_clone.subjects.size
-    [subject1, subject2].each{|subject| assert !deep_clone.subjects.include?(subject) }
+    [subject1, subject2].each { |subject| assert !deep_clone.subjects.include?(subject) }
   end
 
   def test_parent_validations_run_on_save_after_clone
@@ -328,7 +327,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert deep_clone_parent.new_record?
     assert !deep_clone_parent.valid?
     assert !deep_clone_parent.children.first.valid?
-    assert_equal deep_clone_parent.errors.messages, :children => ["is invalid"]
+    assert_equal deep_clone_parent.errors.messages, :children => ['is invalid']
   end
 
   def test_child_validations_run_on_save_after_clone_without_validation
@@ -342,13 +341,13 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert !deep_clone_parent.new_record?
     assert !deep_clone_parent.valid?
     assert !deep_clone_parent.children.first.valid?
-    assert_equal deep_clone_parent.errors.messages, :children => ["is invalid"]
+    assert_equal deep_clone_parent.errors.messages, :children => ['is invalid']
   end
 
   def test_self_join_has_many
     parent_part = Part.create(:name => 'Parent')
-    child1 = Part.create(:name => 'Child 1', :parent_part_id => parent_part.id)
-    child2 = Part.create(:name => 'Child 2', :parent_part_id => parent_part.id)
+    Part.create(:name => 'Child 1', :parent_part_id => parent_part.id)
+    Part.create(:name => 'Child 2', :parent_part_id => parent_part.id)
 
     deep_clone_part = parent_part.deep_clone :include => :child_parts
     assert deep_clone_part.save
@@ -362,7 +361,16 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
 
     deep_clone = student.deep_clone :include => :subjects
     assert_equal 2, deep_clone.subjects.size
-    assert_equal [[student, deep_clone],[student, deep_clone]], deep_clone.subjects.map{|subject| subject.students }
+    assert_equal [[student, deep_clone], [student, deep_clone]], deep_clone.subjects.map(&:students)
+  end
+
+  def test_should_include_has_one_through_associations
+    organization = Organization.create(:name => 'organization')
+    contractor = Contractor.create(:name => 'contractor')
+    Contract.create(:number => 12_345, :contractor => contractor, :organization => organization)
+
+    deep_clone = organization.deep_clone(:include => :contractor)
+    assert_equal organization.contractor, deep_clone.contractor
   end
 
   def test_should_deep_clone_unsaved_objects
@@ -380,14 +388,14 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     subject2 = Subject.create(:name => 'subject 2')
     student = Student.create(:name => 'Parent', :subjects => [subject1, subject2])
 
-    deep_clone = student.deep_clone :include => { :subjects => { :if => lambda{|subject| subject.name == 'subject 2' } } }
+    deep_clone = student.deep_clone :include => { :subjects => { :if => lambda { |subject| subject.name == 'subject 2' } } }
     assert_equal 1, deep_clone.subjects.size
     assert_equal 'subject 2', deep_clone.subjects.first.name
 
     deep_clone = @jack.deep_clone(:include => {
-      :treasures => { :gold_pieces => { :unless => lambda{|piece| piece.is_a?(Parrot) } } },
-      :mateys => { :if => lambda{|matey| matey.is_a?(GoldPiece) } }
-    })
+                                    :treasures => { :gold_pieces => { :unless => lambda { |piece| piece.is_a?(Parrot) } } },
+                                    :mateys => { :if => lambda { |matey| matey.is_a?(GoldPiece) } }
+                                  })
 
     assert deep_clone.new_record?
     assert deep_clone.save
@@ -401,21 +409,21 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     subject2 = Subject.create(:name => 'subject 2')
     student = Student.create(:name => 'Parent', :subjects => [subject1, subject2])
 
-    deep_clone = student.deep_clone(:include => [:subjects => [:if => lambda{|subject| false }] ])
+    deep_clone = student.deep_clone(:include => [:subjects => [:if => lambda { |_subject| false }]])
     assert deep_clone.subjects.none?
 
-    deep_clone = student.deep_clone(:include => [:subjects => [:if => lambda{|subject| true }] ])
+    deep_clone = student.deep_clone(:include => [:subjects => [:if => lambda { |_subject| true }]])
     assert_equal 2, deep_clone.subjects.size
   end
 
   def test_should_reject_copies_if_conditionals_are_passed_with_associations
-    deep_clone = @ship.deep_clone(:include => [:pirates => [:treasures, :mateys, { :unless => lambda {|pirate| pirate.name == 'Jack Sparrow'} }]])
+    deep_clone = @ship.deep_clone(:include => [:pirates => [:treasures, :mateys, { :unless => lambda { |pirate| pirate.name == 'Jack Sparrow' } }]])
 
     assert deep_clone.new_record?
     assert deep_clone.save
     assert_equal 0, deep_clone.pirates.size
 
-    deep_clone = @ship.deep_clone(:include => [:pirates => [:treasures, :mateys, { :if => lambda {|pirate| pirate.name == 'Jack Sparrow'} }]])
+    deep_clone = @ship.deep_clone(:include => [:pirates => [:treasures, :mateys, { :if => lambda { |pirate| pirate.name == 'Jack Sparrow' } }]])
     assert deep_clone.new_record?
     assert deep_clone.save
     assert_equal 1, deep_clone.pirates.size
@@ -430,36 +438,36 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     @order2.products << [@product1, @product2]
     @user.orders << [@order1, @order2]
 
-    deep_clone = @user.deep_clone(:include => [:orders => [:products => [{ :unless => lambda {|product| product.name == 'Ink' }}]]])
+    deep_clone = @user.deep_clone(:include => [:orders => [:products => [{ :unless => lambda { |product| product.name == 'Ink' } }]]])
 
     assert deep_clone.new_record?
     assert deep_clone.save
     assert_equal 1, deep_clone.orders.second.products.size
 
-    deep_clone = @user.deep_clone(:include => [:orders => [:products => [{ :if => lambda {|product| product.name == 'Ink'}}]]])
+    deep_clone = @user.deep_clone(:include => [:orders => [:products => [{ :if => lambda { |product| product.name == 'Ink' } }]]])
     assert deep_clone.new_record?
     assert deep_clone.save
     assert_equal 1, deep_clone.orders.second.products.size
   end
 
   def test_should_find_in_dict_for_habtm
-    apt = Apartment.create(:number => "101")
-    contractor = Contractor.create(:name => "contractor", :apartments => [apt])
+    apt = Apartment.create(:number => '101')
+    contractor = Contractor.create(:name => 'contractor', :apartments => [apt])
 
     apt.contractors = [contractor]
     apt.save!
 
-    building = Building.create(:name => "Tall Building", :contractors => [contractor], :apartments => [apt])
+    building = Building.create(:name => 'Tall Building', :contractors => [contractor], :apartments => [apt])
 
     deep_clone = building.deep_clone(:include => [
-      :apartments,
-      {
-        :contractors => [
-          :apartments
-        ]
-      }
-    ],
-    :use_dictionary => true)
+                                       :apartments,
+                                       {
+                                         :contractors => [
+                                           :apartments
+                                         ]
+                                       }
+                                     ],
+                                     :use_dictionary => true)
 
     deep_clone.save!
 
@@ -472,5 +480,4 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_nil deep_clone.name
     refute deep_clone.name_changed?
   end
-
 end

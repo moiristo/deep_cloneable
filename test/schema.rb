@@ -90,7 +90,7 @@ ActiveRecord::Schema.define(:version => 1) do
 
   create_table :child_with_validations, :force => true do |t|
     t.column :name, :string
-    t.column :parent_with_validation_id, :integer
+    t.column :parent_id, :integer
   end
 
   create_table :parts, :force => true do |t|
@@ -142,5 +142,15 @@ ActiveRecord::Schema.define(:version => 1) do
   create_table :products, :force => true do |t|
     t.column :name, :string
     t.column :order_id, :integer
+  end
+
+  create_table :organizations, :force => true do |t|
+    t.column :name, :string
+  end
+
+  create_table :contracts, :force => true do |t|
+    t.column :number, :string
+    t.column :contractor_id, :integer
+    t.column :organization_id, :integer
   end
 end

@@ -26,14 +26,12 @@ module Animal
     has_many :birds
   end
 
-
   class Ownership < ActiveRecord::Base
     belongs_to :human
     belongs_to :chicken
 
     validates_uniqueness_of :chicken_id, :scope => :human_id
   end
-
 end
 
 class GoldPiece < ActiveRecord::Base;   belongs_to :treasure  end
@@ -89,7 +87,7 @@ class ChildWithValidation < ActiveRecord::Base
 end
 
 class ParentWithValidation < ActiveRecord::Base
-  has_many :children, :class_name => 'ChildWithValidation'
+  has_many :children, :class_name => 'ChildWithValidation', :foreign_key => 'parent_id'
   validates :name, :presence => true
 end
 
@@ -126,6 +124,7 @@ end
 class Contractor < ActiveRecord::Base
   belongs_to :building
   has_and_belongs_to_many :apartments
+  has_one :contract
 end
 
 class User < ActiveRecord::Base
@@ -139,4 +138,14 @@ end
 
 class Product < ActiveRecord::Base
   belongs_to :order
+end
+
+class Contract < ActiveRecord::Base
+  belongs_to :contractor
+  belongs_to :organization
+end
+
+class Organization < ActiveRecord::Base
+  has_one :contract
+  has_one :contractor, :through => :contract
 end
