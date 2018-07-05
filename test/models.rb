@@ -87,7 +87,7 @@ class ChildWithValidation < ActiveRecord::Base
 end
 
 class ParentWithValidation < ActiveRecord::Base
-  has_many :children, :class_name => 'ChildWithValidation'
+  has_many :children, :class_name => 'ChildWithValidation', :foreign_key => 'parent_id'
   validates :name, :presence => true
 end
 

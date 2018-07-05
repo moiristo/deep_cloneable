@@ -6,11 +6,11 @@ class ActiveRecord::Base
     def deep_clone(*args, &block)
       options = args[0] || {}
 
-      dict = options[:dictionary]
-      dict ||= {} if options.delete(:use_dictionary)
+      dictionary = options[:dictionary]
+      dictionary ||= {} if options.delete(:use_dictionary)
 
-      kopy = if dict
-               find_in_dict_or_dup(dict)
+      kopy = if dictionary
+               find_in_dictionary_or_dup(dictionary)
              else
                dup
              end
@@ -59,7 +59,7 @@ class ActiveRecord::Base
           dup_options[:include] = conditions_or_deep_associations if conditions_or_deep_associations.present?
           dup_options[:except] = deep_exceptions[association] if deep_exceptions[association]
           dup_options[:only] = deep_onlinesses[association] if deep_onlinesses[association]
-          dup_options[:dictionary] = dict if dict
+          dup_options[:dictionary] = dictionary if dictionary
           dup_options[:skip_missing_associations] = options[:skip_missing_associations] if options[:skip_missing_associations]
 
           if (association_reflection = self.class.reflect_on_association(association))
@@ -94,22 +94,17 @@ class ActiveRecord::Base
 
     protected
 
-    def find_in_dict_or_dup(dict, dup_on_miss = true)
+    def find_in_dictionary_or_dup(dictionary, dup_on_miss = true)
       tableized_class = self.class.name.tableize.to_sym
-      dict[tableized_class] ||= {}
-      dict_val = dict[tableized_class][self]
-      dict_val.nil? && dup_on_miss ? dict[tableized_class][self] = dup : dict_val
+      dictionary[tableized_class] ||= {}
+      dict_val = dictionary[tableized_class][self]
+      dict_val.nil? && dup_on_miss ? dictionary[tableized_class][self] = dup : dict_val
     end
 
     private
 
-    def dup_default_attribute_value_to(kopy, attribute, origin)
-      kopy[attribute] = origin.class.column_defaults.dup[attribute.to_s]
-    end
-
     def dup_belongs_to_association(options, &block)
-      object = send(options[:association])
-      object = nil if options[:conditions].any? && evaluate_conditions(object, options[:conditions])
+      object = deep_cloneable_object_for(options[:association], options[:conditions])
       object && object.deep_clone(options[:dup_options], &block)
     end
 
@@ -117,80 +112,77 @@ class ActiveRecord::Base
       dup_belongs_to_association options, &block
     end
 
-    def dup_has_one_through_association(options, &block)
-      dup_join_association(
-        options.merge(:macro => :has_one, :primary_key_name => options[:reflection].through_reflection.foreign_key.to_s),
-        &block
-      )
+    def dup_has_many_association(options, &block)
+      foreign_key = options[:reflection].foreign_key.to_s
+      reverse_association = find_reverse_association(options[:reflection], foreign_key, :belongs_to)
+      objects = deep_cloneable_objects_for(options[:association], options[:conditions])
+
+      objects.map do |object|
+        object = object.deep_clone(options[:dup_options], &block)
+        object.send("#{foreign_key}=", nil)
+        object.send("#{reverse_association.name}=", options[:copy]) if reverse_association
+        object
+      end
     end
 
-    def dup_has_many_association(options, &block)
-      primary_key_name = options[:reflection].foreign_key.to_s
+    def dup_has_one_through_association(options, &block)
+      foreign_key = options[:reflection].through_reflection.foreign_key.to_s
+      reverse_association = find_reverse_association(options[:reflection], foreign_key, :has_one, :association_foreign_key)
 
-      reverse_association_name = if options[:reflection].inverse_of.present?
-                                   options[:reflection].inverse_of.name
-                                 else
-                                   options[:reflection].klass.reflect_on_all_associations.detect do |reflection|
-                                     reflection.foreign_key.to_s == primary_key_name && reflection != options[:reflection]
-                                   end.try(:name)
-                                 end
-
-      objects = send(options[:association])
-      objects = objects.select { |object| evaluate_conditions(object, options[:conditions]) } if options[:conditions].any?
-
-      objects.collect do |object|
-        tmp = object.deep_clone(options[:dup_options], &block)
-        tmp.send("#{primary_key_name}=", nil)
-        tmp.send("#{reverse_association_name}=", options[:copy]) if reverse_association_name
-        tmp
-      end
+      object = deep_cloneable_object_for(options[:association], options[:conditions])
+      object && process_joined_object_for_deep_clone(object, options.merge(:reverse_association => reverse_association), &block)
     end
 
     def dup_has_many_through_association(options, &block)
-      dup_join_association(
-        options.merge(:macro => :has_many, :primary_key_name => options[:reflection].through_reflection.foreign_key.to_s),
-        &block
-      )
+      foreign_key = options[:reflection].through_reflection.foreign_key.to_s
+      reverse_association = find_reverse_association(options[:reflection], foreign_key, :has_many, :association_foreign_key)
+
+      objects = deep_cloneable_objects_for(options[:association], options[:conditions])
+      objects.map { |object| process_joined_object_for_deep_clone(object, options.merge(:reverse_association => reverse_association), &block) }
     end
 
     def dup_has_and_belongs_to_many_association(options, &block)
-      dup_join_association(
-        options.merge(:macro => :has_and_belongs_to_many, :primary_key_name => options[:reflection].foreign_key.to_s),
-        &block
-      )
+      foreign_key = options[:reflection].foreign_key.to_s
+      reverse_association = find_reverse_association(options[:reflection], foreign_key, :has_and_belongs_to_many, :association_foreign_key)
+
+      objects = deep_cloneable_objects_for(options[:association], options[:conditions])
+      objects.map { |object| process_joined_object_for_deep_clone(object, options.merge(:reverse_association => reverse_association), &block) }
     end
 
-    def dup_join_association(options, &block)
-      reverse_association_name = if options[:reflection].inverse_of.present?
-                                   options[:reflection].inverse_of.name
-                                 else
-                                   options[:reflection].klass.reflect_on_all_associations.detect do |reflection|
-                                     (reflection.macro == options[:macro]) && (reflection.association_foreign_key.to_s == options[:primary_key_name])
-                                   end.try(:name)
-                                 end
-
-      objects = send(options[:association])
-
-      condition_handler = ->(object) { evaluate_conditions(object, options[:conditions]) }
-
-      if options[:conditions].any?
-        objects = objects.respond_to?(:select) ? objects.select(&condition_handler) : condition_handler.call(objects)
-      end
-
-      assoc_handler = lambda do |object|
-        dict = options[:dup_options][:dictionary]
-        if dict && object.find_in_dict_or_dup(dict, false)
-          object = object.deep_clone(options[:dup_options], &block)
-        elsif reverse_association_name
-          object.send(reverse_association_name).target << options[:copy]
+    def find_reverse_association(source_reflection, primary_key_name, macro, matcher = :foreign_key)
+      if source_reflection.inverse_of.present?
+        source_reflection.inverse_of
+      else
+        source_reflection.klass.reflect_on_all_associations.detect do |reflection|
+          reflection != source_reflection && (macro.nil? || reflection.macro == macro) && (reflection.send(matcher).to_s == primary_key_name)
         end
-        object
       end
-      objects.respond_to?(:map) ? objects.map(&assoc_handler) : assoc_handler.call(objects)
+    end
+
+    def deep_cloneable_object_for(single_association, conditions)
+      object = send(single_association)
+      evaluate_conditions(object, conditions) && object
+    end
+
+    def deep_cloneable_objects_for(many_association, conditions)
+      send(many_association).select { |object| evaluate_conditions(object, conditions) }
+    end
+
+    def process_joined_object_for_deep_clone(object, options, &block)
+      if (dictionary = options[:dup_options][:dictionary]) && object.find_in_dictionary_or_dup(dictionary, false)
+        object = object.deep_clone(options[:dup_options], &block)
+      elsif options[:reverse_association]
+        object.send(options[:reverse_association].name).target << options[:copy]
+      end
+      object
     end
 
     def evaluate_conditions(object, conditions)
-      (conditions[:if] && conditions[:if].call(object)) || (conditions[:unless] && !conditions[:unless].call(object))
+      conditions.none? || (conditions[:if] && conditions[:if].call(object)) || (conditions[:unless] && !conditions[:unless].call(object))
+    end
+
+    def dup_default_attribute_value_to(kopy, attribute, origin)
+      kopy[attribute] = origin.class.column_defaults.dup[attribute.to_s]
     end
 
     def normalized_includes_list(includes)
