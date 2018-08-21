@@ -114,7 +114,9 @@ end
 
 *Note*: Using `deep_clone` with a block will also pass the associated objects that are being cloned to the block, so be sure to check whether the object actually responds to your method of choice.
 
-### Cloning models with files associated through Carrierwave
+### Cloning models with files
+
+#### Carrierwave
 
 If you are cloning models that have associated files through Carrierwave these will not get transferred automatically. To overcome the issue you need to explicitly set the file attribute.
 
@@ -122,6 +124,35 @@ Easiest solution is to add the code in a clone block as described above.
 ```ruby
 pirate.deep_clone include: :parrot do |original, kopy|
   kopy.thumbnail = original.thumbnail
+end
+```
+
+#### ActiveStorage
+
+For ActiveStorage, you have two options: you can either make a full copy, or share data blobs between two records. 
+
+##### Full copy example
+
+```ruby
+pirate.deep_clone include: :parrot do |original, kopy|
+  if kopy.is_a?(Pirate) && original.avatar.attached?
+    ActiveStorage::Downloader.new(original.avatar).download_blob_to_tempfile do |tempfile|
+      kopy.avatar.attach({
+        io: tempfile,
+        filename: original.avatar.blob.filename,
+        content_type: original.avatar.blob.content_type
+      })
+    end
+  end
+end
+```
+
+
+##### Shallow copy example
+
+```ruby
+pirate.deep_clone include: :parrot do |original, kopy|
+  kopy.avatar.attach(original.avatar.blob) if kopy.is_a?(Pirate) && original.avatar.attached?
 end
 ```
 
