@@ -19,7 +19,7 @@ class ActiveRecord::Base
 
       deep_exceptions = {}
       if options[:except]
-        exceptions = options[:except].nil? ? [] : [options[:except]].flatten
+        exceptions = Array(options[:except])
         exceptions.each do |attribute|
           dup_default_attribute_value_to(kopy, attribute, self) unless attribute.is_a?(Hash)
         end
