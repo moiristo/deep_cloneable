@@ -28,7 +28,7 @@ class ActiveRecord::Base
 
       deep_onlinesses = {}
       if options[:only]
-        onlinesses = options[:only].nil? ? [] : [options[:only]].flatten
+        onlinesses = Array(options[:only])
         object_attrs = kopy.attributes.keys.collect(&:to_sym)
         exceptions = object_attrs - onlinesses
         exceptions.each do |attribute|
