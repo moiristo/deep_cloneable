@@ -152,8 +152,28 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_nil deep_clone.parrot.name
   end
 
+  def test_should_pass_nested_exception_with_hash_value
+    deep_clone = @jack.deep_clone(:include => :parrot, :except => { :parrot => [:name] })
+    assert deep_clone.new_record?
+    assert deep_clone.save
+    refute_equal deep_clone.parrot, @jack.parrot
+    assert_equal deep_clone.parrot.age, @jack.parrot.age
+    refute_nil @jack.parrot.name
+    assert_nil deep_clone.parrot.name
+  end
+
   def test_should_pass_nested_onlinesses
     deep_clone = @jack.deep_clone(:include => :parrot, :only => [:name, { :parrot => [:name] }])
+    assert deep_clone.new_record?
+    assert deep_clone.piastres, []
+    assert deep_clone.save
+    refute_equal deep_clone.parrot, @jack.parrot
+    assert_equal deep_clone.parrot.name, @jack.parrot.name
+    assert_nil deep_clone.parrot.age
+  end
+
+  def test_should_pass_nested_onliness_with_hash_value
+    deep_clone = @jack.deep_clone(:include => :parrot, :only => { :parrot => [:name] })
     assert deep_clone.new_record?
     assert deep_clone.piastres, []
     assert deep_clone.save

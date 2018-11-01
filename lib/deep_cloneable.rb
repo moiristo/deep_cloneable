@@ -19,7 +19,7 @@ class ActiveRecord::Base
 
       deep_exceptions = {}
       if options[:except]
-        exceptions = Array(options[:except])
+        exceptions = array_wrap(options[:except])
         exceptions.each do |attribute|
           dup_default_attribute_value_to(kopy, attribute, self) unless attribute.is_a?(Hash)
         end
@@ -28,7 +28,7 @@ class ActiveRecord::Base
 
       deep_onlinesses = {}
       if options[:only]
-        onlinesses = Array(options[:only])
+        onlinesses = array_wrap(options[:only])
         object_attrs = kopy.attributes.keys.collect(&:to_sym)
         exceptions = object_attrs - onlinesses
         exceptions.each do |attribute|
@@ -196,6 +196,14 @@ class ActiveRecord::Base
       end
 
       list
+    end
+
+    def array_wrap(object)
+      if object.respond_to?(:to_ary)
+        object.to_ary || [object]
+      else
+        [object]
+      end
     end
 
     class AssociationNotFoundException < StandardError; end
