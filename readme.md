@@ -15,7 +15,7 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 * Add deep_cloneable to your Gemfile:
 
 ```ruby
-gem 'deep_cloneable', '~> 2.3.2'
+gem 'deep_cloneable', '~> 2.4.0'
 ```
 
 ## Upgrading from v1
@@ -129,7 +129,7 @@ end
 
 #### ActiveStorage
 
-For ActiveStorage, you have two options: you can either make a full copy, or share data blobs between two records. 
+For ActiveStorage, you have two options: you can either make a full copy, or share data blobs between two records.
 
 ##### Full copy example
 
@@ -176,4 +176,4 @@ pirate.deep_clone include: [:parrot, :rum], skip_missing_associations: true
 
 ### Copyright
 
-Copyright &copy; 2018 Reinier de Lange. See LICENSE for details.
+Copyright &copy; 2019 Reinier de Lange. See LICENSE for details.
