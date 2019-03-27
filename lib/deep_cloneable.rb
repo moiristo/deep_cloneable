@@ -161,7 +161,7 @@ class ActiveRecord::Base
 
     def deep_cloneable_object_for(single_association, conditions)
       object = send(single_association)
-      evaluate_conditions(object, conditions) && object
+      evaluate_conditions(object, conditions) ? object : nil
     end
 
     def deep_cloneable_objects_for(many_association, conditions)

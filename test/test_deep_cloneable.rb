@@ -436,6 +436,11 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal 2, deep_clone.subjects.size
   end
 
+  def test_should_set_association_to_nil_if_conditionals_fail
+    deep_clone = @jack.deep_clone(:include => { :ship => { :unless => lambda { |ship| ship.name == 'Black Pearl' }}})
+    assert_nil deep_clone.ship
+  end
+
   def test_should_reject_copies_if_conditionals_are_passed_with_associations
     deep_clone = @ship.deep_clone(:include => [:pirates => [:treasures, :mateys, { :unless => lambda { |pirate| pirate.name == 'Jack Sparrow' } }]])
 
