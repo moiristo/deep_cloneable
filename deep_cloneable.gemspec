@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new('>= 0'.freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ['lib'.freeze]
   s.authors = ['Reinier de Lange'.freeze]
-  s.date = '2019-01-10'
+  s.date = '2019-03-31'
   s.description = 'Extends the functionality of ActiveRecord::Base#dup to perform a deep clone that includes user specified associations. '.freeze
   s.email = 'rjdelange@icloud.com'.freeze
   s.extra_rdoc_files = [
@@ -46,6 +46,8 @@ Gem::Specification.new do |s|
     'gemfiles/5.1.gemfile.lock',
     'gemfiles/5.2.gemfile',
     'gemfiles/5.2.gemfile.lock',
+    'gemfiles/6.0.gemfile',
+    'gemfiles/6.0.gemfile.lock',
     'init.rb',
     'lib/deep_cloneable.rb',
     'readme.md',
@@ -57,18 +59,18 @@ Gem::Specification.new do |s|
   ]
   s.homepage = 'http://github.com/moiristo/deep_cloneable'.freeze
   s.licenses = ['MIT'.freeze]
-  s.rubygems_version = '2.7.6'.freeze
+  s.rubygems_version = '3.0.2'.freeze
   s.summary = 'This gem gives every ActiveRecord::Base object the possibility to do a deep clone.'.freeze
 
   if s.respond_to? :specification_version
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0')
-      s.add_runtime_dependency('activerecord'.freeze, ['< 6', '>= 3.1.0'])
+      s.add_runtime_dependency('activerecord'.freeze, ['>= 3.1.0', '< 7'])
     else
-      s.add_dependency('activerecord'.freeze, ['< 6', '>= 3.1.0'])
+      s.add_dependency('activerecord'.freeze, ['>= 3.1.0', '< 7'])
     end
   else
-    s.add_dependency('activerecord'.freeze, ['< 6', '>= 3.1.0'])
+    s.add_dependency('activerecord'.freeze, ['>= 3.1.0', '< 7'])
   end
 end
