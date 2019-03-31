@@ -37,6 +37,8 @@ class ActiveRecord::Base
         deep_onlinesses = onlinesses.select { |e| e.is_a?(Hash) }.inject({}) { |m, h| m.merge(h) }
       end
 
+      kopy.instance_eval { extend SkipValidations } if options[:validate] == false
+
       if options[:include]
         normalized_includes_list(options[:include]).each do |association, conditions_or_deep_associations|
           conditions = {}
@@ -60,19 +62,12 @@ class ActiveRecord::Base
           dup_options[:except] = deep_exceptions[association] if deep_exceptions[association]
           dup_options[:only] = deep_onlinesses[association] if deep_onlinesses[association]
           dup_options[:dictionary] = dictionary if dictionary
-          dup_options[:skip_missing_associations] = options[:skip_missing_associations] if options[:skip_missing_associations]
+
+          [:skip_missing_associations, :validate].each do |option|
+            dup_options[option] = options[option] if options.key?(option)
+          end
 
           if (association_reflection = self.class.reflect_on_association(association))
-            if options[:validate] == false
-              kopy.instance_eval do
-                # Force :validate => false on all saves.
-                def perform_validations(options = {})
-                  options[:validate] = false
-                  super(options)
-                end
-              end
-            end
-
             association_type = association_reflection.macro
             association_type = "#{association_type}_through" if association_reflection.is_a?(ActiveRecord::Reflection::ThroughReflection)
 
@@ -207,6 +202,13 @@ class ActiveRecord::Base
     end
 
     class AssociationNotFoundException < StandardError; end
+
+    module SkipValidations
+      def perform_validations(options = {})
+        options[:validate] = false
+        super(options)
+      end
+    end
 
     ActiveRecord::Base.class_eval { protected :initialize_dup } if ActiveRecord::VERSION::MAJOR == 3 && ActiveRecord::VERSION::MINOR == 1
   end

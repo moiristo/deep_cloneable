@@ -350,18 +350,19 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal deep_clone_parent.errors.messages, :children => ['is invalid']
   end
 
-  def test_child_validations_run_on_save_after_clone_without_validation
+  def test_child_validations_dont_run_on_save_after_clone_without_validation
     child = ChildWithValidation.new
     child.save :validate => false
     parent = ParentWithValidation.create :name => 'John', :children => [child]
 
     deep_clone_parent = parent.deep_clone :include => :children, :validate => false
+    deep_clone_child = deep_clone_parent.children.first
 
     assert deep_clone_parent.save
     assert !deep_clone_parent.new_record?
-    assert !deep_clone_parent.valid?
-    assert !deep_clone_parent.children.first.valid?
-    assert_equal deep_clone_parent.errors.messages, :children => ['is invalid']
+    assert !deep_clone_child.new_record?
+    assert !deep_clone_child.valid?
+    assert_equal deep_clone_child.errors.messages, :name => ["can't be blank"]
   end
 
   def test_self_join_has_many
@@ -437,7 +438,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   end
 
   def test_should_set_association_to_nil_if_conditionals_fail
-    deep_clone = @jack.deep_clone(:include => { :ship => { :unless => lambda { |ship| ship.name == 'Black Pearl' }}})
+    deep_clone = @jack.deep_clone(:include => { :ship => { :unless => lambda { |ship| ship.name == 'Black Pearl' } } })
     assert_nil deep_clone.ship
   end
 
