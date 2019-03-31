@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Support for Ruby 2.5.5
+- Support for Rails 6.0
 ### Changed
 - When using conditions, return `nil` instead of `false` as return value when a condition fails
 - Add the `validate` option to the list of passed dup options to ensure validations are never run on save
