@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
 gem 'activerecord', '>= 3.1.0', '< 6'
-
 gem 'git', '~> 1.2.9', :group => :test
 gem 'highline', '~> 1.6.0', :group => :test
 gem 'rack', '~> 1.6', :group => :test
