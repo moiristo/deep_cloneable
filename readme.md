@@ -18,7 +18,16 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 gem 'deep_cloneable', '~> 2.4.0'
 ```
 
-## Upgrading from v1
+## Upgrade details
+
+### Upgrading from v2 (v3 is currently Unreleased)
+
+There are two breaking changes that you might need to pay attention to:
+
+* When using an optional block (see below), the block used to be evaluated before `deep_cloneable` had performed its changes (inclusions, exclusions, includes). In v3, the block is evaluated after all processing has been done, just before the copy is about to be returned.
+* When a defined association is not found, `deep_cloneable` raises an exception. The exception class has changed namespace: the class definition used to be `ActiveRecord::Base::DeepCloneable::AssociationNotFoundException` and this has changed to `DeepCloneable::AssociationNotFoundException`.
+
+### Upgrading from v1
 
 The `dup` method with arguments has been replaced in deep_cloneable 2 by the method `deep_clone`. Please update your sources accordingly.
 
