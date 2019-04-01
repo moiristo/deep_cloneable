@@ -1,5 +1,6 @@
 require 'active_record'
 require 'active_support/lazy_load_hooks'
+require 'active_support/core_ext/array/wrap'
 
 require 'deep_cloneable/association_not_found_exception'
 require 'deep_cloneable/skip_validations'
