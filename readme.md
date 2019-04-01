@@ -158,7 +158,7 @@ end
 
 ### Skipping missing associations
 
-By default, deep_cloneable will throw a `ActiveRecord::Base::DeepCloneable::AssociationNotFoundException` error when an association cannot be found. You can also skip missing associations by specifying `skip_missing_associations` if needed, for example when you have associations on some (but not all) subclasses of an STI model:
+By default, deep_cloneable will throw a `DeepCloneable::AssociationNotFoundException` error when an association cannot be found. You can also skip missing associations by specifying `skip_missing_associations` if needed, for example when you have associations on some (but not all) subclasses of an STI model:
 
 ```ruby
 pirate.deep_clone include: [:parrot, :rum], skip_missing_associations: true

@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Support for Rails 6.0
 ### Changed
 - When using conditions, return `nil` instead of `false` as return value when a condition fails
+- Refactored gem structure and include in AR using lazy load hooks
+- Skip validations on save by using module `DeepCloneable::SkipValidations` instead of a code patch
+- Namespace of `ActiveRecord::Base::DeepCloneable::AssociationNotFoundException` changed to `DeepCloneable::AssociationNotFoundException`
+- Process optional block after all other processing has been finished
+### Fixed
 - Add the `validate` option to the list of passed dup options to ensure validations are never run on save
 
 ## [2.4.0] - 2019-01-10

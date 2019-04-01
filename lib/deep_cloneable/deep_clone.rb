@@ -13,8 +13,6 @@ module DeepCloneable
                dup
              end
 
-      yield(self, kopy) if block
-
       deep_exceptions = {}
       if options[:except]
         exceptions = Array.wrap(options[:except])
@@ -81,6 +79,8 @@ module DeepCloneable
           end
         end
       end
+
+      yield(self, kopy) if block
 
       kopy
     end
