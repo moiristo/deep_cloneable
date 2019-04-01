@@ -242,7 +242,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     @chicken = Animal::Chicken.create :name => 'Chick', :humans => [@human], :planet => @earth
     @dove = Animal::Dove.create :name => 'Dovey', :planet => @earth
 
-    assert_raises ActiveRecord::Base::DeepCloneable::AssociationNotFoundException do
+    assert_raises ::DeepCloneable::AssociationNotFoundException do
       @earth.deep_clone(:include => { :birds => :ownerships })
     end
 
