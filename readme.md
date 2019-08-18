@@ -15,12 +15,12 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 * Add deep_cloneable to your Gemfile:
 
 ```ruby
-gem 'deep_cloneable', '~> 2.4.0'
+gem 'deep_cloneable', '~> 3.0.0'
 ```
 
 ## Upgrade details
 
-### Upgrading from v2 (v3 is currently Unreleased)
+### Upgrading from v2
 
 There are two breaking changes that you might need to pay attention to:
 
