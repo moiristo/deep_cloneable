@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.0.0] - 2019-08-18
 ### Added
+- Support for Ruby 2.6.3
 - Support for Ruby 2.5.5
 - Support for Rails 6.0
 ### Changed
@@ -18,6 +19,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Process optional block after all other processing has been finished
 ### Fixed
 - Add the `validate` option to the list of passed dup options to ensure validations are never run on save
+### Removed
+- Official support for ruby 1.8.7, as it is not supported by Travis CI anymore
+- Official support for ruby 1.9.2, as it is not supported by Travis CI anymore
 
 ## [2.4.0] - 2019-01-10
 ### Added
