@@ -61,7 +61,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/moiristo/deep_cloneable".freeze
   s.licenses = ["MIT".freeze]
-  s.rubygems_version = "3.0.4".freeze
+  s.rubygems_version = "3.0.2".freeze
   s.summary = "This gem gives every ActiveRecord::Base object the possibility to do a deep clone.".freeze
 
   if s.respond_to? :specification_version then
