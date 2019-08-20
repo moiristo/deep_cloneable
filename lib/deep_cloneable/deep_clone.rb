@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DeepCloneable
   module DeepClone
     # Deep dups an ActiveRecord model. See README.rdoc

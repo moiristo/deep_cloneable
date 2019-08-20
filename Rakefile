@@ -1,25 +1,10 @@
+# frozen_string_literal: true
+
 require 'rubygems'
 require 'bundler/setup'
 require 'appraisal'
-
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = 'deep_cloneable'
-    gem.summary = %(This gem gives every ActiveRecord::Base object the possibility to do a deep clone.)
-    gem.description = %(Extends the functionality of ActiveRecord::Base#dup to perform a deep clone that includes user specified associations. )
-    gem.email = 'rjdelange@icloud.com'
-    gem.homepage = 'http://github.com/moiristo/deep_cloneable'
-    gem.authors = ['Reinier de Lange']
-    gem.license = 'MIT'
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts 'Jeweler (or a dependency) not available. Install it with: gem install jeweler'
-end
-
 require 'rake/testtask'
+
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/test_*.rb'

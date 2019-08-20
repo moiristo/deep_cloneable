@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Animal
   class Human < ActiveRecord::Base
     has_many :pigs

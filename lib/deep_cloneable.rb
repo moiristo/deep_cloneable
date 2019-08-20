@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_record'
 require 'active_support/lazy_load_hooks'
 require 'active_support/core_ext/array/wrap'
