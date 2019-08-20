@@ -119,8 +119,6 @@ pirate.deep_clone include: :parrot do |original, kopy|
 end
 ```
 
-*Note*: The block is invoked before attributes are excluded.
-
 *Note*: Using `deep_clone` with a block will also pass the associated objects that are being cloned to the block, so be sure to check whether the object actually responds to your method of choice.
 
 ### Cloning models with files
