@@ -6,13 +6,13 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 ## Requirements
 
-* Ruby 1.9.3, 2.0.0, 2.1.5, 2.2.2, 2.3.0, 2.4.4, 2.5.5 (tested)
-* Activerecord 3.1, 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2, 6.0 (tested)
-* Rails 2.x/3.0 users, please check out the 'rails2.x-3.0' branch
+- Ruby 1.9.3, 2.0.0, 2.1.5, 2.2.2, 2.3.0, 2.4.4, 2.5.5 (tested)
+- Activerecord 3.1, 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2, 6.0 (tested)
+- Rails 2.x/3.0 users, please check out the 'rails2.x-3.0' branch
 
 ## Installation
 
-* Add deep_cloneable to your Gemfile:
+- Add deep_cloneable to your Gemfile:
 
 ```ruby
 gem 'deep_cloneable', '~> 3.0.0'
@@ -24,8 +24,8 @@ gem 'deep_cloneable', '~> 3.0.0'
 
 There are two breaking changes that you might need to pay attention to:
 
-* When using an optional block (see below), the block used to be evaluated before `deep_cloneable` had performed its changes (inclusions, exclusions, includes). In v3, the block is evaluated after all processing has been done, just before the copy is about to be returned.
-* When a defined association is not found, `deep_cloneable` raises an exception. The exception class has changed namespace: the class definition used to be `ActiveRecord::Base::DeepCloneable::AssociationNotFoundException` and this has changed to `DeepCloneable::AssociationNotFoundException`.
+- When using an optional block (see below), the block used to be evaluated before `deep_cloneable` had performed its changes (inclusions, exclusions, includes). In v3, the block is evaluated after all processing has been done, just before the copy is about to be returned.
+- When a defined association is not found, `deep_cloneable` raises an exception. The exception class has changed namespace: the class definition used to be `ActiveRecord::Base::DeepCloneable::AssociationNotFoundException` and this has changed to `DeepCloneable::AssociationNotFoundException`.
 
 ### Upgrading from v1
 
@@ -33,7 +33,7 @@ The `dup` method with arguments has been replaced in deep_cloneable 2 by the met
 
 ## Usage
 
-The `deep_clone` method supports a couple options that can be specified by passing an options hash. Without options, the behaviour is the same as ActiveRecord's  [`dup`](http://apidock.com/rails/ActiveRecord/Core/dup) method.
+The `deep_clone` method supports a couple options that can be specified by passing an options hash. Without options, the behaviour is the same as ActiveRecord's [`dup`](http://apidock.com/rails/ActiveRecord/Core/dup) method.
 
 ### Association inclusion
 
@@ -85,6 +85,7 @@ pirate.deep_clone include: [ :mateys, { treasures: [ :matey, :gold_pieces ] } ],
 The `deep_clone` method supports both `except` and `only` for specifying which attributes should be duped:
 
 #### Exceptions
+
 ```ruby
 # Single exception
 pirate.deep_clone except: :name
@@ -97,6 +98,7 @@ pirate.deep_clone include: :parrot, except: [ :name, { parrot: [ :name ] } ]
 ```
 
 #### Inclusions
+
 ```ruby
 # Single attribute inclusion
 pirate.deep_clone only: :name
@@ -109,6 +111,19 @@ pirate.deep_clone include: :parrot, only: [ :name, { parrot: [ :name ] } ]
 
 ```
 
+### Pre- and postprocessor
+
+You can specify a pre- and/or a postprocessor to modify a duped object after duplication:
+
+```ruby
+pirate.deep_clone(include: :parrot, preprocessor: ->(original, kopy) { kopy.cloned_from_id = original.id if kopy.respond_to?(:cloned_from_id) })
+pirate.deep_clone(include: :parrot, postprocessor: ->(original, kopy) { kopy.cloned_from_id = original.id if kopy.respond_to?(:cloned_from_id) })
+```
+
+_Note_: Specifying a postprocessor is essentially the same as specifying an optional block (see below).
+
+_Note_: Using `deep_clone` with a processors will pass all associated objects that are being cloned to the processor, so be sure to check whether the object actually responds to your method of choice.
+
 ### Optional Block
 
 Pass a block to `deep_clone` to modify a duped object after duplication:
@@ -119,7 +134,7 @@ pirate.deep_clone include: :parrot do |original, kopy|
 end
 ```
 
-*Note*: Using `deep_clone` with a block will also pass the associated objects that are being cloned to the block, so be sure to check whether the object actually responds to your method of choice.
+_Note_: Using `deep_clone` with a block will also pass the associated objects that are being cloned to the block, so be sure to check whether the object actually responds to your method of choice.
 
 ### Cloning models with files
 
@@ -128,6 +143,7 @@ end
 If you are cloning models that have associated files through Carrierwave these will not get transferred automatically. To overcome the issue you need to explicitly set the file attribute.
 
 Easiest solution is to add the code in a clone block as described above.
+
 ```ruby
 pirate.deep_clone include: :parrot do |original, kopy|
   kopy.thumbnail = original.thumbnail
@@ -154,7 +170,6 @@ pirate.deep_clone include: :parrot do |original, kopy|
 end
 ```
 
-
 ##### Shallow copy example
 
 ```ruby
@@ -173,13 +188,13 @@ pirate.deep_clone include: [:parrot, :rum], skip_missing_associations: true
 
 ### Note on Patches/Pull Requests
 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
+- Fork the project.
+- Make your feature addition or bug fix.
+- Add tests for it. This is important so I don't break it in a
   future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
+- Commit, do not mess with rakefile, version, or history.
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+- Send me a pull request. Bonus points for topic branches.
 
 ### Copyright
 

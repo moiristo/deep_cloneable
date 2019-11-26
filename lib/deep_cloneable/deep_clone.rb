@@ -15,6 +15,8 @@ module DeepCloneable
                dup
              end
 
+      options[:preprocessor].call(self, kopy) if options.key?(:preprocessor)
+
       deep_exceptions = {}
       if options[:except]
         exceptions = Array.wrap(options[:except])
@@ -61,7 +63,7 @@ module DeepCloneable
           dup_options[:only] = deep_onlinesses[association] if deep_onlinesses[association]
           dup_options[:dictionary] = dictionary if dictionary
 
-          [:skip_missing_associations, :validate].each do |option|
+          [:skip_missing_associations, :validate, :preprocessor, :postprocessor].each do |option|
             dup_options[option] = options[option] if options.key?(option)
           end
 
@@ -83,6 +85,7 @@ module DeepCloneable
       end
 
       yield(self, kopy) if block
+      options[:postprocessor].call(self, kopy) if options.key?(:postprocessor)
 
       kopy
     end

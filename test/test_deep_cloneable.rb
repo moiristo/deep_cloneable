@@ -264,6 +264,24 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_equal @jack.parrot.id, deep_clone.parrot.cloned_from_id
   end
 
+  def test_should_deep_clone_with_preprocessor
+    deep_clone = @jack.deep_clone(:include => :parrot, preprocessor: lambda { |original, kopy| kopy.cloned_from_id = original.id })
+
+    assert deep_clone.new_record?
+    assert deep_clone.save
+    assert_equal @jack.id, deep_clone.cloned_from_id
+    assert_equal @jack.parrot.id, deep_clone.parrot.cloned_from_id
+  end
+
+  def test_should_deep_clone_with_postprocessor
+    deep_clone = @jack.deep_clone(:include => :parrot, postprocessor: lambda { |original, kopy| kopy.cloned_from_id = original.id })
+
+    assert deep_clone.new_record?
+    assert deep_clone.save
+    assert_equal @jack.id, deep_clone.cloned_from_id
+    assert_equal @jack.parrot.id, deep_clone.parrot.cloned_from_id
+  end
+
   def test_should_deep_clone_habtm_associations
     @person1 = Person.create :name => 'Bill'
     @person2 = Person.create :name => 'Ted'
