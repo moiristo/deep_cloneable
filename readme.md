@@ -157,11 +157,25 @@ For ActiveStorage, you have two options: you can either make a full copy, or sha
 ##### Full copy example
 
 ```ruby
+# Rails 5
 pirate.deep_clone include: :parrot do |original, kopy|
   if kopy.is_a?(Pirate) && original.avatar.attached?
     ActiveStorage::Downloader.new(original.avatar).download_blob_to_tempfile do |tempfile|
       kopy.avatar.attach({
         io: tempfile,
+        filename: original.avatar.blob.filename,
+        content_type: original.avatar.blob.content_type
+      })
+    end
+  end
+end
+
+# Rails 6
+pirate.deep_clone include: :parrot do |original, kopy|
+  if kopy.is_a?(Pirate) && original.avatar.attached?
+    original.avatar.open do |tempfile|
+      kopy.avatar.attach({
+        io: File.open(tempfile.path),
         filename: original.avatar.blob.filename,
         content_type: original.avatar.blob.content_type
       })
