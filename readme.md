@@ -157,16 +157,43 @@ For ActiveStorage, you have two options: you can either make a full copy, or sha
 ##### Full copy example
 
 ```ruby
-# Rails 5
+# Rails 5.2, has_one_attached example 1
+pirate.deep_clone include: [:parrot, :avatar_attachment, :avatar_blob]
+
+# Rails 5.2, has_one_attached example 2
 pirate.deep_clone include: :parrot do |original, kopy|
   if kopy.is_a?(Pirate) && original.avatar.attached?
-    ActiveStorage::Downloader.new(original.avatar).download_blob_to_tempfile do |tempfile|
-      kopy.avatar.attach({
-        io: tempfile,
-        filename: original.avatar.blob.filename,
-        content_type: original.avatar.blob.content_type
-      })
+    attachment = original.avatar
+    kopy.avatar.attach \
+      :io           => StringIO.new(attachment.download),
+      :filename     => attachment.filename,
+      :content_type => attachment.content_type
+  end
+end
+
+# Rails 5.2, has_many_attached example 1 (attach one by one)
+pirate.deep_clone include: :parrot do |original, kopy|
+  if kopy.is_a?(Pirate) && original.crew_members_images.attached?
+    original.crew_members_images.each do |attachment|
+      kopy.crew_members_images.attach \
+        :io           => StringIO.new(attachment.download),
+        :filename     => attachment.filename,
+        :content_type => attachment.content_type
     end
+  end
+end
+
+# Rails 5.2, has_many_attached example 2 (attach bulk)
+pirate.deep_clone include: :parrot do |original, kopy|
+  if kopy.is_a?(Pirate) && original.crew_members_images.attached?
+    all_attachments_arr = original.crew_members_images.map do |attachment|
+      {
+        :io           => StringIO.new(attachment.download),
+        :filename     => attachment.filename,
+        :content_type => attachment.content_type
+      }
+    end
+    kopy.crew_members_images.attach(all_attachments_arr) # attach all at once
   end
 end
 
