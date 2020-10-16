@@ -12,6 +12,7 @@ rvm:
   - 2.4.4
   - 2.5.5
   - 2.6.3
+  - truffleruby-head
 
 before_install:
   - gem update --system 2.7.8
