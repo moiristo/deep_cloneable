@@ -99,3 +99,11 @@ matrix:
       gemfile: gemfiles/4.1.gemfile
     - rvm: 2.6.3
       gemfile: gemfiles/4.2.gemfile
+    - rvm: truffleruby-head
+      gemfile: gemfiles/3.1.gemfile
+    - rvm: truffleruby-head
+      gemfile: gemfiles/3.2.gemfile
+    - rvm: truffleruby-head
+      gemfile: gemfiles/4.0.gemfile
+    - rvm: truffleruby-head
+      gemfile: gemfiles/4.1.gemfile
