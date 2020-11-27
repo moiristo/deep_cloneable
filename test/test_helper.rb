@@ -15,12 +15,12 @@ require 'active_record'
 I18n.enforce_available_locales = true
 
 def load_schema
-  config = YAML.load(IO.read(File.dirname(__FILE__) + '/database.yml'))
+  config = YAML.load(IO.read("#{File.dirname(__FILE__)}/database.yml"))
 
   ActiveRecord::Base.logger = if defined?(ActiveSupport::BufferedLogger)
-                                ActiveSupport::BufferedLogger.new(File.dirname(__FILE__) + '/debug.log')
+                                ActiveSupport::BufferedLogger.new("#{File.dirname(__FILE__)}/debug.log")
                               else
-                                ActiveSupport::Logger.new(File.dirname(__FILE__) + '/debug.log')
+                                ActiveSupport::Logger.new("#{File.dirname(__FILE__)}/debug.log")
                               end
 
   db_adapter = ENV['DB']
@@ -29,9 +29,9 @@ def load_schema
   raise 'No DB Adapter selected. Pass the DB= option to pick one, or install Sqlite or Sqlite3.' if db_adapter.nil?
 
   ActiveRecord::Base.establish_connection(config[db_adapter])
-  load(File.dirname(__FILE__) + '/schema.rb')
+  load("#{File.dirname(__FILE__)}/schema.rb")
 end
 
 load_schema
-require File.dirname(__FILE__) + '/../init.rb'
+require "#{File.dirname(__FILE__)}/../init.rb"
 require 'models'

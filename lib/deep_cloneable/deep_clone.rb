@@ -48,11 +48,12 @@ module DeepCloneable
             association = association.keys.first
           end
 
-          if conditions_or_deep_associations.is_a?(Hash)
+          case conditions_or_deep_associations
+          when Hash
             conditions_or_deep_associations = conditions_or_deep_associations.dup
             conditions[:if]     = conditions_or_deep_associations.delete(:if)     if conditions_or_deep_associations[:if]
             conditions[:unless] = conditions_or_deep_associations.delete(:unless) if conditions_or_deep_associations[:unless]
-          elsif conditions_or_deep_associations.is_a?(Array)
+          when Array
             conditions_or_deep_associations = conditions_or_deep_associations.dup
             conditions_or_deep_associations.delete_if { |entry| conditions.merge!(entry) if entry.is_a?(Hash) && (entry.key?(:if) || entry.key?(:unless)) }
           end

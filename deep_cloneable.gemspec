@@ -57,6 +57,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = 'https://github.com/moiristo/deep_cloneable'
   s.licenses = ['MIT']
+  s.required_ruby_version = '>= 1.9.3'
   s.rubygems_version = '3.0.2'
   s.summary = 'This gem gives every ActiveRecord::Base object the possibility to do a deep clone.'
 

@@ -37,7 +37,9 @@ module Animal
 end
 
 class GoldPiece < ActiveRecord::Base;   belongs_to :treasure  end
+
 class Matey < ActiveRecord::Base;       belongs_to :pirate    end
+
 class BattleShip < ActiveRecord::Base;  has_many   :pirates, :as => :ship end
 
 class Parrot < ActiveRecord::Base

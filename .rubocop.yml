@@ -1,3 +1,12 @@
+AllCops:
+  NewCops: enable
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+
+Layout/LineLength:
+  Enabled: false
+
 Metrics:
   Enabled: false
 
@@ -11,6 +20,9 @@ Style/Documentation:
   Enabled: false
 
 Style/AccessModifierDeclarations:
+  Enabled: false
+
+Style/OptionalBooleanParameter:
   Enabled: false
 
 Style/SafeNavigation:

@@ -265,7 +265,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   end
 
   def test_should_deep_clone_with_preprocessor
-    deep_clone = @jack.deep_clone(:include => :parrot, preprocessor: lambda { |original, kopy| kopy.cloned_from_id = original.id })
+    deep_clone = @jack.deep_clone(:include => :parrot, :preprocessor => lambda { |original, kopy| kopy.cloned_from_id = original.id })
 
     assert deep_clone.new_record?
     assert deep_clone.save
@@ -274,7 +274,7 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
   end
 
   def test_should_deep_clone_with_postprocessor
-    deep_clone = @jack.deep_clone(:include => :parrot, postprocessor: lambda { |original, kopy| kopy.cloned_from_id = original.id })
+    deep_clone = @jack.deep_clone(:include => :parrot, :postprocessor => lambda { |original, kopy| kopy.cloned_from_id = original.id })
 
     assert deep_clone.new_record?
     assert deep_clone.save
