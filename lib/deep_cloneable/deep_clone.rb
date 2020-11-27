@@ -7,7 +7,7 @@ module DeepCloneable
       options = args[0] || {}
 
       dictionary = options[:dictionary]
-      dictionary ||= {} if options.delete(:use_dictionary)
+      dictionary ||= {} if options[:use_dictionary]
 
       kopy = if dictionary
                find_in_dictionary_or_dup(dictionary)

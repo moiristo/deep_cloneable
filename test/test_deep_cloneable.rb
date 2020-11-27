@@ -526,4 +526,12 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert_nil deep_clone.name
     refute deep_clone.name_changed?
   end
+
+  def test_should_not_modify_the_initial_options_hash
+    options = { :include => [:pirates => [:treasures, :mateys, { :if => lambda { |pirate| pirate.name == 'Jack Sparrow' } }]], :use_dictionary => true }.freeze
+    assert @ship.deep_clone(options)
+
+    options = { :include => [:pirates => [:if => lambda { |pirate| pirate.name == 'Jack Sparrow' }]] }.freeze
+    assert @ship.deep_clone(options)
+  end
 end

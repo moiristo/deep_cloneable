@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added a `preprocessor` option
 - Added a `postprocessor` option
 
+### Fixed
+
+- Ensure the initial options hash is never modified
+
 ### Removed
 
 - Removed jeweler as a gem dependency

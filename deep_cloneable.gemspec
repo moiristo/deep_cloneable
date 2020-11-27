@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
   s.require_paths = ['lib']
   s.authors = ['Reinier de Lange']
-  s.date = '2019-08-18'
+  s.date = '2020-11-27'
   s.description = 'Extends the functionality of ActiveRecord::Base#dup to perform a deep clone that includes user specified associations. '
   s.email = 'rjdelange@icloud.com'
   s.extra_rdoc_files = [
