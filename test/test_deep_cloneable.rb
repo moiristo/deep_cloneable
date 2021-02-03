@@ -469,10 +469,12 @@ class TestDeepCloneable < MiniTest::Unit::TestCase
     assert deep_clone.save
     assert_equal 0, deep_clone.pirates.size
 
-    deep_clone = @ship.deep_clone(:include => [:pirates => [:treasures, :mateys, { :if => lambda { |pirate| pirate.name == 'Jack Sparrow' } }]])
+    deep_clone = @ship.deep_clone(:include => { pirates: [:mateys, treasures: :gold_pieces, if: lambda { |pirate| pirate.name == 'Jack Sparrow' }] })
     assert deep_clone.new_record?
     assert deep_clone.save
     assert_equal 1, deep_clone.pirates.size
+    assert_equal 1, deep_clone.pirates.first.treasures.size
+    assert_equal 1, deep_clone.pirates.first.treasures.first.gold_pieces.size
   end
 
   def test_should_reject_copies_if_conditionals_are_passed_with_nested_many_to_many_associations

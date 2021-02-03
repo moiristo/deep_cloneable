@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 - Ensure the initial options hash is never modified
+- When using conditions in combination with array includes, ensure nested includes are not accidentally deleted  
 
 ### Removed
 
