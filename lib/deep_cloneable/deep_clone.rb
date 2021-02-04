@@ -54,7 +54,7 @@ module DeepCloneable
             conditions[:if]     = conditions_or_deep_associations.delete(:if)     if conditions_or_deep_associations[:if]
             conditions[:unless] = conditions_or_deep_associations.delete(:unless) if conditions_or_deep_associations[:unless]
           when Array
-            conditions_or_deep_associations = conditions_or_deep_associations.map(&:dup)
+            conditions_or_deep_associations = conditions_or_deep_associations.map { |entry| entry.is_a?(Hash) ? entry.dup : entry }
             conditions_or_deep_associations.each_with_index do |entry, index|
               if entry.is_a?(Hash)
                 conditions[:if] = entry.delete(:if) if entry[:if]
