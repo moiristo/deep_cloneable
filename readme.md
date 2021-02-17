@@ -240,4 +240,4 @@ pirate.deep_clone include: [:parrot, :rum], skip_missing_associations: true
 
 ### Copyright
 
-Copyright &copy; 2020 Reinier de Lange. See LICENSE for details.
+Copyright &copy; 2021 Reinier de Lange. See LICENSE for details.
