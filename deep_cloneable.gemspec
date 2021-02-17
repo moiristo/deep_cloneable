@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
+$:.unshift File.expand_path('../lib', __FILE__)
+require 'deep_cloneable/version'
+
 Gem::Specification.new do |s|
   s.name = 'deep_cloneable'
-  s.version = DeepCloneable::Version
+  s.version = DeepCloneable::VERSION
   s.authors = ['Reinier de Lange']
   s.description = 'Extends the functionality of ActiveRecord::Base#dup to perform a deep clone that includes user specified associations. '
   s.email = 'rjdelange@icloud.com'
