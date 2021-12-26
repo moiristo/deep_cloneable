@@ -32,7 +32,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord (>= 3.1.0, < 7)
+  activerecord (>= 3.1.0, < 8)
   appraisal
   bundler (~> 1.17.3)
   minitest
