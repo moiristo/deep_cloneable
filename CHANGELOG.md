@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 - Added GitHub Actions integration & badge
+- Added Ruby 2.7.5 support
+- Added Rails 7.0 support
 
 ### Removed
 
