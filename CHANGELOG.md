@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.2.0] - 2021-12-28
+
 ### Added
 
 - Added GitHub Actions integration & badge
@@ -305,7 +307,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Convert existing code to a gem
 
-[unreleased]: https://github.com/moiristo/deep_cloneable/compare/v3.1.0...HEAD
+[unreleased]: https://github.com/moiristo/deep_cloneable/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/moiristo/deep_cloneable/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/moiristo/deep_cloneable/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/moiristo/deep_cloneable/compare/v2.4.0...v3.0.0
 [2.4.0]: https://github.com/moiristo/deep_cloneable/compare/v2.3.2...v2.4.0
