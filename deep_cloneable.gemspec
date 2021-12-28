@@ -17,5 +17,5 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.required_ruby_version = '>= 1.9.3'
   s.require_paths = ['lib']
-  s.add_runtime_dependency('activerecord', ['>= 3.1.0', '< 7'])
+  s.add_runtime_dependency('activerecord', ['>= 3.1.0', '< 8'])
 end

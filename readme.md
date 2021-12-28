@@ -6,9 +6,9 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 ## Requirements
 
-- Ruby 1.9.3, 2.0.0, 2.1.5, 2.2.2, 2.3.0, 2.4.4, 2.5.5, 2.6.3 (tested)
+- Ruby 1.9.3, 2.0.0, 2.1.5, 2.2.2, 2.3.0, 2.4.4, 2.5.5, 2.6.3, 2.7.5 (tested)
 - TruffleRuby 20.2.0
-- Activerecord 3.1, 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2, 6.0 (tested)
+- Activerecord 3.1, 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2, 6.0, 7.0 (tested)
 - Rails 2.x/3.0 users, please check out the 'rails2.x-3.0' branch
 
 ## Installation
