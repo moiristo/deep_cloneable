@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-appraise '3.1' do
-  gem 'activerecord', '~> 3.1.0'
-  gem 'i18n', '~> 0.6.5'
-end
-
 appraise '3.2' do
   gem 'activerecord', '~> 3.2.0'
   gem 'i18n', '~> 0.6.5'
