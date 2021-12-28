@@ -1,14 +1,14 @@
 # deep_cloneable
 
-[![Build Status](https://travis-ci.org/moiristo/deep_cloneable.svg?branch=master)](https://travis-ci.org/moiristo/deep_cloneable)
+![Build Status](https://github.com/moiristo/deep_cloneable/actions/workflows/ruby.yml/badge.svg)
 
 This gem gives every ActiveRecord::Base object the possibility to do a deep clone that includes user specified associations. It is a rails 3+ upgrade of the [deep_cloning plugin](http://github.com/openminds/deep_cloning).
 
 ## Requirements
 
-- Ruby 1.9.3, 2.0.0, 2.1.5, 2.2.2, 2.3.0, 2.4.4, 2.5.5, 2.6.3, 2.7.5 (tested)
+- Ruby 2.3.0, 2.4.4, 2.5.5, 2.6.3, 2.7.5 (tested)
 - TruffleRuby 20.2.0
-- Activerecord 3.1, 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2, 6.0, 7.0 (tested)
+- Activerecord 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2, 6.0, 7.0 (tested)
 - Rails 2.x/3.0 users, please check out the 'rails2.x-3.0' branch
 
 ## Installation

@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Added GitHub Actions integration & badge
+
+### Removed
+
+- Removed Travis-ci integration
+- Remove EOL rubies from CI (ruby 1.9-2.2)
+
 ## [3.1.0] - 2021-02-17
 
 ### Added
