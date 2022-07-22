@@ -9,77 +9,77 @@ name: Ruby
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version: [2.3.0, 2.4.4, 2.5.5, 2.6.3, truffleruby]
-        appraisal: ['3.2', '4.0', '4.1', '4.2', '5.0', '5.1', '5.2', '6.0']
+        ruby-version: [2.3.0, 2.4.4, 2.5.5, 2.6.3, truffleruby-21.3.0]
+        appraisal: ["3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2", "6.0"]
         include:
           - ruby-version: 2.7.5
-            appraisal: '7.0'
+            appraisal: "7.0"
           - ruby-version: truffleruby
-            appraisal: '7.0'
+            appraisal: "7.0"
         exclude:
           - ruby-version: 2.3.0
-            appraisal: '4.2'
+            appraisal: "4.2"
           - ruby-version: 2.3.0
-            appraisal: '6.0'
+            appraisal: "6.0"
           - ruby-version: 2.4.4
-            appraisal: '3.2'
+            appraisal: "3.2"
           - ruby-version: 2.4.4
-            appraisal: '4.0'
+            appraisal: "4.0"
           - ruby-version: 2.4.4
-            appraisal: '4.1'
+            appraisal: "4.1"
           - ruby-version: 2.4.4
-            appraisal: '4.2'
+            appraisal: "4.2"
           - ruby-version: 2.4.4
-            appraisal: '6.0'
+            appraisal: "6.0"
           - ruby-version: 2.5.5
-            appraisal: '3.2'
+            appraisal: "3.2"
           - ruby-version: 2.5.5
-            appraisal: '4.0'
+            appraisal: "4.0"
           - ruby-version: 2.5.5
-            appraisal: '4.1'
+            appraisal: "4.1"
           - ruby-version: 2.5.5
-            appraisal: '4.2'
+            appraisal: "4.2"
           - ruby-version: 2.6.3
-            appraisal: '3.2'
+            appraisal: "3.2"
           - ruby-version: 2.6.3
-            appraisal: '4.0'
+            appraisal: "4.0"
           - ruby-version: 2.6.3
-            appraisal: '4.1'
+            appraisal: "4.1"
           - ruby-version: 2.6.3
-            appraisal: '4.2'
-          - ruby-version: truffleruby
-            appraisal: '3.2'
-          - ruby-version: truffleruby
-            appraisal: '4.0'
-          - ruby-version: truffleruby
-            appraisal: '4.1'
-          - ruby-version: truffleruby
-            appraisal: '4.2'
+            appraisal: "4.2"
+          - ruby-version: truffleruby-21.3.0
+            appraisal: "3.2"
+          - ruby-version: truffleruby-21.3.0
+            appraisal: "4.0"
+          - ruby-version: truffleruby-21.3.0
+            appraisal: "4.1"
+          - ruby-version: truffleruby-21.3.0
+            appraisal: "4.2"
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
-    # change this to (see https://github.com/ruby/setup-ruby#versioning):
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby-version }}
-        bundler-cache: false # runs 'bundle install' and caches installed gems automatically
-    - name: Set system gem command
-      run: gem update --system
-    - name: Install compatible bundler for all envs
-      run: gem install bundler -v 1.17.3
-    - name: Bundle for Appraisal
-      run: bundle
-    - name: Install Appraisal dependencies
-      run: bundle exec appraisal ${{ matrix.appraisal }} bundle
-    - name: Run tests
-      run: bundle exec appraisal ${{ matrix.appraisal }} bundle exec rake test
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+        # change this to (see https://github.com/ruby/setup-ruby#versioning):
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: false # runs 'bundle install' and caches installed gems automatically
+      - name: Set system gem command
+        run: gem update --system
+      - name: Install compatible bundler for all envs
+        run: gem install bundler -v 1.17.3
+      - name: Bundle for Appraisal
+        run: bundle
+      - name: Install Appraisal dependencies
+        run: bundle exec appraisal ${{ matrix.appraisal }} bundle
+      - name: Run tests
+        run: bundle exec appraisal ${{ matrix.appraisal }} bundle exec rake test
