@@ -123,12 +123,15 @@ module DeepCloneable
       reverse_association = find_reverse_association(options[:reflection], foreign_key, :belongs_to)
       objects = deep_cloneable_objects_for(options[:association], options[:conditions])
 
-      objects.map do |object|
+      cloned_objects = []
+      objects.find_each do |object|
         object = object.deep_clone(options[:dup_options], &block)
         object.send("#{foreign_key}=", nil)
         object.send("#{reverse_association.name}=", options[:copy]) if reverse_association
-        object
+        cloned_objects << object
       end
+
+      cloned_objects
     end
 
     def dup_has_one_through_association(options, &block)
@@ -143,16 +146,26 @@ module DeepCloneable
       foreign_key = options[:reflection].through_reflection.foreign_key.to_s
       reverse_association = find_reverse_association(options[:reflection], foreign_key, :has_many, :association_foreign_key)
 
+      cloned_objects = []
       objects = deep_cloneable_objects_for(options[:association], options[:conditions])
-      objects.map { |object| process_joined_object_for_deep_clone(object, options.merge(:reverse_association => reverse_association), &block) }
+      objects.find_each do |object|
+        cloned_objects << process_joined_object_for_deep_clone(object, options.merge(:reverse_association => reverse_association), &block)
+      end
+
+      cloned_objects
     end
 
     def dup_has_and_belongs_to_many_association(options, &block)
       foreign_key = options[:reflection].foreign_key.to_s
       reverse_association = find_reverse_association(options[:reflection], foreign_key, :has_and_belongs_to_many, :association_foreign_key)
 
+      cloned_objects = []
       objects = deep_cloneable_objects_for(options[:association], options[:conditions])
-      objects.map { |object| process_joined_object_for_deep_clone(object, options.merge(:reverse_association => reverse_association), &block) }
+      objects.find_each do |object|
+        cloned_objects << process_joined_object_for_deep_clone(object, options.merge(:reverse_association => reverse_association), &block)
+      end
+
+      cloned_objects
     end
 
     def find_reverse_association(source_reflection, primary_key_name, macro, matcher = :foreign_key)
