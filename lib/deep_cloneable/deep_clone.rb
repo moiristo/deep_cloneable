@@ -171,7 +171,7 @@ module DeepCloneable
     end
 
     def deep_cloneable_objects_for(many_association, conditions)
-      send(many_association).select { |object| evaluate_conditions(object, conditions) }
+      send(many_association).send(:find_each).select { |object| evaluate_conditions(object, conditions) }
     end
 
     def process_joined_object_for_deep_clone(object, options, &block)
