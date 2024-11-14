@@ -23,8 +23,12 @@ jobs:
         include:
           - ruby-version: 2.7.5
             appraisal: "7.0"
+          - ruby-version: 3.3.5
+            appraisal: "8.0"
         exclude:
           - ruby-version: 2.3.0
+            appraisal: "4.0"
+          - ruby-version: 2.3.0
             appraisal: "4.2"
           - ruby-version: 2.3.0
             appraisal: "6.0"
@@ -46,6 +50,8 @@ jobs:
             appraisal: "4.1"
           - ruby-version: 2.5.5
             appraisal: "4.2"
+          - ruby-version: 2.5.5
+            appraisal: "5.2"
           - ruby-version: 2.6.3
             appraisal: "3.2"
           - ruby-version: 2.6.3
@@ -62,12 +68,14 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
           rubygems: default
-          bundler: none
-      - name: Install compatible bundler for all envs
-        run: gem install bundler -v 1.17.3
-      - name: Bundle for Appraisal
-        run: bundle
-      - name: Install Appraisal dependencies
-        run: bundle exec appraisal ${{ matrix.appraisal }} bundle
+          bundler: "1.17.3"
+      - name: Remove default Gemfile
+        run: rm -f Gemfile
+      - name: Remove default Gemfile.lock
+        run: rm -f Gemfile.lock
+      - name: Set Gemfile
+        run: cp gemfiles/${{ matrix.appraisal }}.gemfile Gemfile
+      - name: Bundle
+        run: bundle install
       - name: Run tests
-        run: bundle exec appraisal ${{ matrix.appraisal }} bundle exec rake test
+        run: bundle exec rake
