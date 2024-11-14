@@ -66,7 +66,7 @@ jobs:
           rubygems: default
           bundler: none
       - name: Install compatible bundler for all envs
-        run: gem install bundler -v 1.17.3
+        run: gem install bundler -v 2.5.20
       - name: Bundle for Appraisal
         run: bundle
       - name: Install Appraisal dependencies
