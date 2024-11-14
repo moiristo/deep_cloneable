@@ -23,6 +23,8 @@ jobs:
         include:
           - ruby-version: 2.7.5
             appraisal: "7.0"
+          - ruby-version: 3.3.5
+            appraisal: "8.0"
         exclude:
           - ruby-version: 2.3.0
             appraisal: "4.2"
