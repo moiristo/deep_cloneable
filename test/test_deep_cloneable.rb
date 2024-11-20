@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class TestDeepCloneable < MiniTest::Unit::TestCase
+class TestDeepCloneable < Minitest::Test
   def setup
     @jack  = Pirate.create(:name => 'Jack Sparrow', :nick_name => 'Captain Jack', :age => 30)
     @polly = Parrot.create(:name => 'Polly', :age => 2, :pirate => @jack)
