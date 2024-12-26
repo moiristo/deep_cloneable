@@ -171,7 +171,7 @@ module DeepCloneable
     end
 
     def deep_cloneable_objects_for(many_association, conditions)
-      send(many_association).select { |object| evaluate_conditions(object, conditions) }
+      send(many_association).sort_by(&self.class.reflect_on_association(many_association).klass.primary_key.to_sym).select { |object| evaluate_conditions(object, conditions) }
     end
 
     def process_joined_object_for_deep_clone(object, options, &block)
