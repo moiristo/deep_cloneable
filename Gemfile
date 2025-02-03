@@ -9,3 +9,4 @@ gem 'rake', '~> 12.3', :group => :test
 gem 'appraisal', :group => :test
 gem 'minitest', :group => :test
 gem 'sqlite3', '~> 2.2', :group => :test
+gem 'concurrent-ruby', '1.3.4', :group => :test
