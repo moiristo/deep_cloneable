@@ -150,6 +150,23 @@ pirate.deep_clone include: :parrot do |original, kopy|
 end
 ```
 
+#### Shrine
+
+Shrine is similar to Carrierwave, but you have to clear the `image_data` hash attribute from the copy, otherwise Shrine will think there's an old attachment to clean up and will delete the original image.
+
+```ruby
+pirate.deep_clone include: [:photos, :parrot] do |original, kopy|
+  if kopy.is_a?(Photo)
+    kopy.image_data = nil
+    kopy.image = original.image
+  end
+end
+```
+
+Note you're not assigning `image_data` directly, otherwise this would result in both records sharing the same asset in your storage.
+
+Directly assigning `kopy.image` to `original.image` ensures you use your usual uploading mechanism, such as background jobs.
+
 #### ActiveStorage
 
 For ActiveStorage, you have two options: you can either make a full copy, or share data blobs between two records.
