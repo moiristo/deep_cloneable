@@ -5,6 +5,7 @@ require 'bundler/setup'
 require 'bundler/gem_tasks'
 require 'appraisal'
 require 'rake/testtask'
+require 'logger'
 
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
