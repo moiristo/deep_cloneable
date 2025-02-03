@@ -17,12 +17,6 @@ I18n.enforce_available_locales = true
 def load_schema
   config = YAML.load(IO.read("#{File.dirname(__FILE__)}/database.yml"))
 
-  ActiveRecord::Base.logger = if defined?(ActiveSupport::BufferedLogger)
-                                ActiveSupport::BufferedLogger.new("#{File.dirname(__FILE__)}/debug.log")
-                              else
-                                ActiveSupport::Logger.new("#{File.dirname(__FILE__)}/debug.log")
-                              end
-
   db_adapter = ENV['DB']
   db_adapter ||= 'sqlite3'
 
