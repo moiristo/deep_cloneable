@@ -6,8 +6,8 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 ## Requirements
 
-- Ruby 3.3.5, 3.4.4 (tested)
-- Activerecord 7.1, 8.0 (tested)
+- Ruby >= 2 (3.3.5, 3.4.4 tested)
+- Activerecord >= 3.1.0 (7.1, 8.0 tested)
 
 ## Installation
 
