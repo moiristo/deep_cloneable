@@ -6,9 +6,8 @@ This gem gives every ActiveRecord::Base object the possibility to do a deep clon
 
 ## Requirements
 
-- Ruby 2.3.0, 2.4.4, 2.5.5, 2.6.3, 2.7.5, 3.3.5 (tested)
-- Activerecord 3.2, 4.0, 4.1, 4.2, 5.0, 5.1, 5.2, 6.0, 7.0, 8.0 (tested)
-- Rails 2.x/3.0 users, please check out the 'rails2.x-3.0' branch
+- Ruby 3.3.5, 3.4.4 (tested)
+- Activerecord 7.1, 8.0 (tested)
 
 ## Installation
 
@@ -256,4 +255,4 @@ pirate.deep_clone include: [:parrot, :rum], skip_missing_associations: true
 
 ### Copyright
 
-Copyright &copy; 2024 Reinier de Lange. See LICENSE for details.
+Copyright &copy; 2025 Reinier de Lange. See LICENSE for details.

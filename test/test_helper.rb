@@ -3,6 +3,7 @@
 require 'rubygems'
 require 'yaml'
 require 'sqlite3'
+require 'logger'
 
 gem 'minitest'
 require 'minitest/autorun'
