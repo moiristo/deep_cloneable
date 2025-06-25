@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Removed
+
+- Removed EOL ruby versions from test build
+- Removed EOL rails versions from test build
+
 ## [3.2.1] - 2024-11-20
 
 ### Added

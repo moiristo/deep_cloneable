@@ -15,52 +15,11 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version: [2.3.0, 2.4.4, 2.5.5, 2.6.3]
-        appraisal: ["3.2", "4.0", "4.1", "4.2", "5.0", "5.1", "5.2", "6.0"]
-        include:
-          - ruby-version: 2.7.5
-            appraisal: "7.0"
-          - ruby-version: 3.3.5
-            appraisal: "8.0"
-        exclude:
-          - ruby-version: 2.3.0
-            appraisal: "4.0"
-          - ruby-version: 2.3.0
-            appraisal: "4.2"
-          - ruby-version: 2.3.0
-            appraisal: "6.0"
-          - ruby-version: 2.4.4
-            appraisal: "3.2"
-          - ruby-version: 2.4.4
-            appraisal: "4.0"
-          - ruby-version: 2.4.4
-            appraisal: "4.1"
-          - ruby-version: 2.4.4
-            appraisal: "4.2"
-          - ruby-version: 2.4.4
-            appraisal: "6.0"
-          - ruby-version: 2.5.5
-            appraisal: "3.2"
-          - ruby-version: 2.5.5
-            appraisal: "4.0"
-          - ruby-version: 2.5.5
-            appraisal: "4.1"
-          - ruby-version: 2.5.5
-            appraisal: "4.2"
-          - ruby-version: 2.5.5
-            appraisal: "5.2"
-          - ruby-version: 2.6.3
-            appraisal: "3.2"
-          - ruby-version: 2.6.3
-            appraisal: "4.0"
-          - ruby-version: 2.6.3
-            appraisal: "4.1"
-          - ruby-version: 2.6.3
-            appraisal: "4.2"
-
+        ruby-version: [3.3.5, 3.4.4]
+        appraisal: ["7.1", "8.0"]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Ruby

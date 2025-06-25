@@ -3,6 +3,8 @@
 source "http://rubygems.org"
 
 gem "activerecord", "~> 8.0.0"
+gem "bundler", group: :test
 gem "appraisal", group: :test
 gem "minitest", group: :test
-gem "sqlite3", "~> 2.2", group: :test
+gem "sqlite3", group: :test
+gem "logger", group: :test
