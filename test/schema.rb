@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 1) do
 
   create_table :planets, :force => true do |t|
     t.column :name, :string
+    t.column :birds_count, :integer, :default => 0, :null => false
   end
 
   create_table :birds, :force => true do |t|

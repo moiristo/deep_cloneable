@@ -85,6 +85,7 @@ module DeepCloneable
               &block
             )
 
+            kopy[association_reflection.counter_cache_column] = 0 if association_reflection.has_cached_counter?
             kopy.send("#{association}=", duped_object)
           elsif !options[:skip_missing_associations]
             raise ::DeepCloneable::AssociationNotFoundException, "#{self.class}##{association}"
