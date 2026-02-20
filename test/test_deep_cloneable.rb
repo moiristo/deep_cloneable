@@ -253,6 +253,20 @@ class TestDeepCloneable < Minitest::Test
     assert deep_clone_earth.birds.detect { |bird| bird.is_a?(Animal::Chicken) }.ownerships.any?
   end
 
+  def test_should_reset_counter_cache
+    @earth = Animal::Planet.create :name => 'Earth'
+
+    assert_equal 0, @earth.birds_count
+
+    @dove1 = @earth.birds.create!(:name => 'Dovey 1')
+    @dove2 = @earth.birds.create!(:name => 'Dovey 2')
+
+    assert_equal 2, @earth.birds_count
+
+    deep_clone_earth = @earth.deep_clone(:include => :birds)
+    assert_equal 2, deep_clone_earth.birds_count
+  end
+
   def test_should_deep_clone_with_block
     deep_clone = @jack.deep_clone(:include => :parrot) do |original, kopy|
       kopy.cloned_from_id = original.id

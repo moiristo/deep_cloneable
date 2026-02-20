@@ -25,7 +25,7 @@ module Animal
   end
 
   class Planet < ActiveRecord::Base
-    has_many :birds
+    has_many :birds, :counter_cache => :birds_count
   end
 
   class Ownership < ActiveRecord::Base
