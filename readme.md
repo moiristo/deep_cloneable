@@ -173,10 +173,10 @@ For ActiveStorage, you have two options: you can either make a full copy, or sha
 ##### Full copy example
 
 ```ruby
-# Rails 5.2, has_one_attached example 1
+# has_one_attached example 1
 pirate.deep_clone include: [:parrot, :avatar_attachment, :avatar_blob]
 
-# Rails 5.2, has_one_attached example 2
+# has_one_attached example 2
 pirate.deep_clone include: :parrot do |original, kopy|
   if kopy.is_a?(Pirate) && original.avatar.attached?
     attachment = original.avatar
@@ -187,7 +187,7 @@ pirate.deep_clone include: :parrot do |original, kopy|
   end
 end
 
-# Rails 5.2, has_many_attached example 1 (attach one by one)
+# has_many_attached example 1 (attach one by one)
 pirate.deep_clone include: :parrot do |original, kopy|
   if kopy.is_a?(Pirate) && original.crew_members_images.attached?
     original.crew_members_images.each do |attachment|
@@ -199,7 +199,7 @@ pirate.deep_clone include: :parrot do |original, kopy|
   end
 end
 
-# Rails 5.2, has_many_attached example 2 (attach bulk)
+# has_many_attached example 2 (attach bulk)
 pirate.deep_clone include: :parrot do |original, kopy|
   if kopy.is_a?(Pirate) && original.crew_members_images.attached?
     all_attachments_arr = original.crew_members_images.map do |attachment|
@@ -210,17 +210,6 @@ pirate.deep_clone include: :parrot do |original, kopy|
       }
     end
     kopy.crew_members_images.attach(all_attachments_arr) # attach all at once
-  end
-end
-
-# Rails 6.1
-pirate.deep_clone include: :parrot do |original, kopy|
-  if kopy.is_a?(Pirate) && original.avatar.attached?
-      kopy.avatar.attach({
-        io: StringIO.new(original.avatar.download),
-        filename: original.avatar.filename,
-        content_type: original.avatar.content_type
-      })
   end
 end
 ```
