@@ -213,16 +213,14 @@ pirate.deep_clone include: :parrot do |original, kopy|
   end
 end
 
-# Rails 6
+# Rails 6.1
 pirate.deep_clone include: :parrot do |original, kopy|
   if kopy.is_a?(Pirate) && original.avatar.attached?
-    original.avatar.open do |tempfile|
       kopy.avatar.attach({
-        io: File.open(tempfile.path),
-        filename: original.avatar.blob.filename,
-        content_type: original.avatar.blob.content_type
+        io: StringIO.new(original.avatar.download),
+        filename: original.avatar.filename,
+        content_type: original.avatar.content_type
       })
-    end
   end
 end
 ```
